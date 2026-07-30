@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oscar Compliment Services — Distributor, Engineer & Developer</title>
   <meta name="description" content="Premium distributor of building materials, water purification systems, frozen foods, and general goods. Engineering, construction & real estate development.">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
@@ -27,10 +27,9 @@
 </nav>
 
 <section class="hero">
-  <div class="hero-pattern"></div>
   <div class="container hero-inner">
     <div class="hero-label">Distributor · Engineer · Developer</div>
-    <h1>Everything your project needs, delivered with precision.</h1>
+    <h1>Everything your project needs, <span>delivered with precision.</span></h1>
     <p>From building materials and water purification to frozen food supply, engineering, and land development — Oscar Compliment Services is your single partner for scale.</p>
     <div class="hero-btns">
       <a href="quote.html" class="btn btn-primary">Request a quote</a>
@@ -43,46 +42,143 @@
   <div class="container">
     <div class="section-header reveal">
       <div class="section-label">Our Business Units</div>
-      <h2>Six divisions. One standard of excellence.</h2>
+      <h2>Six divisions. <span class="gradient-text">One standard of excellence.</span></h2>
       <p>Each unit operates with deep expertise, reliable supply chains, and a commitment to quality that spans every industry we serve.</p>
     </div>
     <div class="card-grid card-grid-3">
-      <a href="water.html" class="card reveal">
-        <div class="card-icon">💧</div>
-        <h3>Water Purification</h3>
-        <p>RO systems, UV sterilizers, industrial filtration, and domestic purifiers. Clean water solutions for homes and industry.</p>
-        <span class="card-link">Explore unit →</span>
-      </a>
-      <a href="materials.html" class="card reveal">
-        <div class="card-icon">🏗️</div>
-        <h3>Building Materials</h3>
-        <p>Cement, steel, roofing, tiles, plumbing, paint, timber, and more. Bulk orders with contractor pricing and fast delivery.</p>
-        <span class="card-link">Explore unit →</span>
-      </a>
-      <a href="engineering.html" class="card reveal">
-        <div class="card-icon">🏗️</div>
-        <h3>Engineering & Construction</h3>
-        <p>Land development, civil works, structural engineering, and full project management from foundation to finish.</p>
-        <span class="card-link">Explore unit →</span>
-      </a>
-      <a href="realestate.html" class="card reveal">
-        <div class="card-icon">🏡</div>
-        <h3>Real Estate & Land Sales</h3>
-        <p>Residential and commercial plots, developed properties, and investment opportunities with flexible payment plans.</p>
-        <span class="card-link">Explore unit →</span>
-      </a>
-      <a href="frozen.html" class="card reveal">
-        <div class="card-icon">❄️</div>
-        <h3>Frozen Food Distribution</h3>
-        <p>Poultry, seafood, vegetables, ready-meals, and desserts. Cold-chain guaranteed supply for Horeca and retail.</p>
-        <span class="card-link">Explore unit →</span>
-      </a>
-      <a href="distribution.html" class="card reveal">
-        <div class="card-icon">🚛</div>
-        <h3>General Distribution</h3>
-        <p>Any product, any quantity. Consumer goods, industrial supplies, import services, warehousing, and last-mile delivery.</p>
-        <span class="card-link">Explore unit →</span>
-      </a>
+
+      <!-- Flip Card 1: Water -->
+      <div class="flip-card reveal" style="min-height:420px;">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-img">
+              <img src="images/water.jpg" alt="Water Purification" onerror="this.style.display='none';this.parentElement.innerText='[Water purification image]'" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="flip-body">
+              <div class="flip-icon">💧</div>
+              <h3>Water Purification</h3>
+              <p>RO systems, UV sterilizers, industrial filtration, and domestic purifiers.</p>
+              <span class="card-link">Hover to see more →</span>
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <h3>Water Purification</h3>
+            <p>Clean water solutions for homes and industry. We supply, install, and maintain world-class purification systems with certified quality.</p>
+            <a href="water.html" class="btn-small">Explore unit</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flip Card 2: Materials -->
+      <div class="flip-card reveal" style="min-height:420px;">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-img">
+              <img src="images/materials.jpg" alt="Building Materials" onerror="this.style.display='none';this.parentElement.innerText='[Building materials image]'" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="flip-body">
+              <div class="flip-icon">🏗️</div>
+              <h3>Building Materials</h3>
+              <p>Cement, steel, roofing, tiles, plumbing, paint, timber, and more.</p>
+              <span class="card-link">Hover to see more →</span>
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <h3>Building Materials</h3>
+            <p>Bulk orders with contractor pricing and fast delivery. From foundation to finish, we stock everything your construction site needs.</p>
+            <a href="materials.html" class="btn-small">Explore unit</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flip Card 3: Engineering -->
+      <div class="flip-card reveal" style="min-height:420px;">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-img">
+              <img src="images/engineering.jpg" alt="Engineering" onerror="this.style.display='none';this.parentElement.innerText='[Engineering image]'" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="flip-body">
+              <div class="flip-icon">🏗️</div>
+              <h3>Engineering & Construction</h3>
+              <p>Land development, civil works, structural engineering, and project management.</p>
+              <span class="card-link">Hover to see more →</span>
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <h3>Engineering</h3>
+            <p>From bare land to finished building. We handle clearing, foundations, structural works, roads, drainage, and full project delivery.</p>
+            <a href="engineering.html" class="btn-small">Explore unit</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flip Card 4: Real Estate -->
+      <div class="flip-card reveal" style="min-height:420px;">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-img">
+              <img src="images/realestate.jpg" alt="Real Estate" onerror="this.style.display='none';this.parentElement.innerText='[Real estate image]'" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="flip-body">
+              <div class="flip-icon">🏡</div>
+              <h3>Real Estate & Land Sales</h3>
+              <p>Residential and commercial plots, developed properties, and investments.</p>
+              <span class="card-link">Hover to see more →</span>
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <h3>Real Estate</h3>
+            <p>Verified land titles, flexible payment plans, and prime locations. Buy to build, rent, or invest with confidence.</p>
+            <a href="realestate.html" class="btn-small">Explore unit</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flip Card 5: Frozen Food -->
+      <div class="flip-card reveal" style="min-height:420px;">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-img">
+              <img src="images/frozen.jpg" alt="Frozen Food" onerror="this.style.display='none';this.parentElement.innerText='[Frozen food image]'" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="flip-body">
+              <div class="flip-icon">❄️</div>
+              <h3>Frozen Food Distribution</h3>
+              <p>Poultry, seafood, vegetables, ready-meals, and desserts. Cold-chain guaranteed.</p>
+              <span class="card-link">Hover to see more →</span>
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <h3>Frozen Food</h3>
+            <p>Quality frozen products for hotels, restaurants, and retail. Temperature-controlled from warehouse to your door.</p>
+            <a href="frozen.html" class="btn-small">Explore unit</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flip Card 6: Distribution -->
+      <div class="flip-card reveal" style="min-height:420px;">
+        <div class="flip-card-inner">
+          <div class="flip-card-front">
+            <div class="flip-img">
+              <img src="images/distribution.jpg" alt="Distribution" onerror="this.style.display='none';this.parentElement.innerText='[Distribution image]'" style="width:100%;height:100%;object-fit:cover;">
+            </div>
+            <div class="flip-body">
+              <div class="flip-icon">🚛</div>
+              <h3>General Distribution</h3>
+              <p>Any product, any quantity. Consumer goods, industrial supplies, and imports.</p>
+              <span class="card-link">Hover to see more →</span>
+            </div>
+          </div>
+          <div class="flip-card-back">
+            <h3>Distribution</h3>
+            <p>If you need it, we can source and deliver it. Consumer goods, industrial supplies, imports, warehousing, and last-mile delivery.</p>
+            <a href="distribution.html" class="btn-small">Explore unit</a>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -91,8 +187,8 @@
   <div class="container">
     <div class="feature-row reveal">
       <div class="feature-content">
-        <div class="section-label">Why Oscar Compliment Services</div>
-        <h2>Built on reliability. Scaled for volume.</h2>
+        <div class="section-label">Why Oscar Compliment</div>
+        <h2>Built on reliability. <span>Scaled for volume.</span></h2>
         <p>We do not just distribute — we engineer, construct, develop, and deliver. Our integrated model means fewer vendors, tighter coordination, and better pricing for your projects.</p>
         <ul class="feature-list">
           <li>Any quantity available — from single units to container loads</li>
@@ -103,7 +199,7 @@
         </ul>
       </div>
       <div class="feature-img">
-        <span>[Project imagery — construction site or warehouse]</span>
+        <img src="images/team.jpg" alt="Our Team" onerror="this.style.display='none';this.parentElement.innerText='[Team / facility image]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
       </div>
     </div>
   </div>
@@ -113,7 +209,7 @@
   <div class="container">
     <div class="section-header reveal">
       <div class="section-label">By the Numbers</div>
-      <h2>Trusted at scale.</h2>
+      <h2>Trusted at <span class="gradient-text">scale.</span></h2>
     </div>
     <div class="stats-grid reveal">
       <div class="stat-card">
@@ -140,12 +236,14 @@
   <div class="container">
     <div class="section-header reveal">
       <div class="section-label">Featured Projects</div>
-      <h2>Work that speaks for itself.</h2>
+      <h2>Work that <span class="gradient-text">speaks for itself.</span></h2>
       <p>From land clearing to finished buildings, our engineering and real estate portfolio reflects the quality we bring to every engagement.</p>
     </div>
     <div class="card-grid card-grid-3 reveal">
       <div class="listing-card">
-        <div class="listing-img">[Project photo]</div>
+        <div class="listing-img">
+          <img src="images/project1.jpg" alt="Project 1" onerror="this.style.display='none';this.parentElement.innerText='[Project photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        </div>
         <div class="listing-body">
           <h4>Residential Estate Development</h4>
           <p>Full land clearing, foundation, and construction of a 12-unit residential estate.</p>
@@ -156,7 +254,9 @@
         </div>
       </div>
       <div class="listing-card">
-        <div class="listing-img">[Project photo]</div>
+        <div class="listing-img">
+          <img src="images/project2.jpg" alt="Project 2" onerror="this.style.display='none';this.parentElement.innerText='[Project photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        </div>
         <div class="listing-body">
           <h4>Commercial Warehouse Complex</h4>
           <p>Structural engineering and construction of a 5,000 sqm storage and logistics facility.</p>
@@ -167,7 +267,9 @@
         </div>
       </div>
       <div class="listing-card">
-        <div class="listing-img">[Project photo]</div>
+        <div class="listing-img">
+          <img src="images/project3.jpg" alt="Project 3" onerror="this.style.display='none';this.parentElement.innerText='[Project photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        </div>
         <div class="listing-body">
           <h4>Land Subdivision & Sales</h4>
           <p>Development and sale of 40 residential plots with road access and utilities.</p>
@@ -178,8 +280,8 @@
         </div>
       </div>
     </div>
-    <div style="text-align:center; margin-top:32px;">
-      <a href="projects.html" class="btn btn-outline">View all projects</a>
+    <div style="text-align:center; margin-top:40px;">
+      <a href="projects.html" class="btn btn-outline" style="color:var(--primary);border-color:var(--border);">View all projects</a>
     </div>
   </div>
 </section>
@@ -235,6 +337,6 @@
   </div>
 </footer>
 
-<script src="main.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
