@@ -5,7 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oscar Compliment Services — Distributor, Engineer & Developer</title>
   <meta name="description" content="Premium distributor of building materials, water purification systems, frozen foods, and general goods. Engineering, construction & real estate development.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+<base target="_blank">
 </head>
 <body>
 
@@ -20,15 +24,225 @@
       <li><a href="contact.html">Contact</a></li>
     </ul>
     <a href="quote.html" class="nav-cta">Get a quote</a>
-    <div class="mobile-toggle" id="mobileToggle" onclick="toggleMenu()">
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu" aria-expanded="false">
       <span></span><span></span><span></span>
-    </div>
+    </button>
   </div>
 </nav>
 
 <section class="hero">
   <div class="container hero-inner">
     <div class="hero-label">Distributor · Engineer · Developer</div>
+
+    <!-- 3D Moving Truck Animation -->
+    <div class="truck-scene">
+      <div class="wind-lines">
+        <div class="wind-line"></div>
+        <div class="wind-line"></div>
+        <div class="wind-line"></div>
+        <div class="wind-line"></div>
+        <div class="wind-line"></div>
+      </div>
+      <div class="truck-road"></div>
+      <div class="road-lines">
+        <div class="road-line"></div>
+        <div class="road-line"></div>
+        <div class="road-line"></div>
+        <div class="road-line"></div>
+        <div class="road-line"></div>
+        <div class="road-line"></div>
+        <div class="road-line"></div>
+        <div class="road-line"></div>
+      </div>
+      <div class="truck-shadow"></div>
+      <div class="truck-container">
+        <svg class="truck-svg" viewBox="0 0 340 130" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="trailerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.18)"/>
+              <stop offset="30%" stop-color="rgba(255,255,255,0.08)"/>
+              <stop offset="70%" stop-color="rgba(255,255,255,0.05)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0.12)"/>
+            </linearGradient>
+            <linearGradient id="cabGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="rgba(255,255,255,0.2)"/>
+              <stop offset="50%" stop-color="rgba(255,255,255,0.1)"/>
+              <stop offset="100%" stop-color="rgba(255,255,255,0.15)"/>
+            </linearGradient>
+            <linearGradient id="windowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="rgba(59,130,246,0.5)"/>
+              <stop offset="50%" stop-color="rgba(30,64,175,0.4)"/>
+              <stop offset="100%" stop-color="rgba(15,27,61,0.6)"/>
+            </linearGradient>
+            <radialGradient id="tireGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="60%" stop-color="#0d1117"/>
+              <stop offset="85%" stop-color="#1a1f2e"/>
+              <stop offset="100%" stop-color="#0a0e1a"/>
+            </radialGradient>
+            <radialGradient id="rimGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#b8860b"/>
+              <stop offset="70%" stop-color="#8b6914"/>
+              <stop offset="100%" stop-color="#5a4a0a"/>
+            </radialGradient>
+            <linearGradient id="beamGrad" x1="0%" y1="50%" x2="100%" y2="50%">
+              <stop offset="0%" stop-color="rgba(212,160,23,0.5)"/>
+              <stop offset="40%" stop-color="rgba(212,160,23,0.15)"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </linearGradient>
+            <radialGradient id="smokeGrad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(200,200,200,0.6)"/>
+              <stop offset="50%" stop-color="rgba(180,180,180,0.3)"/>
+              <stop offset="100%" stop-color="transparent"/>
+            </radialGradient>
+          </defs>
+
+          <g transform="translate(12, 52)">
+            <circle class="smoke-particle" cx="0" cy="0" r="5" fill="url(#smokeGrad)"/>
+            <circle class="smoke-particle" cx="0" cy="0" r="7" fill="url(#smokeGrad)"/>
+            <circle class="smoke-particle" cx="0" cy="0" r="4" fill="url(#smokeGrad)"/>
+            <circle class="smoke-particle" cx="0" cy="0" r="6" fill="url(#smokeGrad)"/>
+          </g>
+
+          <path class="headlight-beam" d="M 328 62 L 380 48 L 380 76 Z" fill="url(#beamGrad)"/>
+
+          <g class="truck-body-group">
+            <rect x="52" y="82" width="200" height="6" rx="2" fill="rgba(100,100,100,0.4)"/>
+            <rect x="52" y="88" width="180" height="3" rx="1" fill="rgba(80,80,80,0.3)"/>
+            <rect x="48" y="12" width="195" height="70" rx="5" fill="url(#trailerGrad)" stroke="rgba(255,255,255,0.2)" stroke-width="1.2"/>
+            <rect x="50" y="13" width="191" height="3" rx="1.5" fill="rgba(212,160,23,0.35)"/>
+            <rect x="48" y="75" width="195" height="5" rx="1" fill="rgba(212,160,23,0.6)"/>
+            <text x="145" y="45" text-anchor="middle" fill="rgba(212,160,23,0.7)" font-size="11" font-weight="700" font-family="system-ui, sans-serif" letter-spacing="2">OSCAR COMPLIMENT</text>
+            <text x="145" y="58" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-size="7" font-weight="500" font-family="system-ui, sans-serif" letter-spacing="3">DISTRIBUTION SERVICES</text>
+            <line x1="85" y1="18" x2="85" y2="75" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="120" y1="18" x2="120" y2="75" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="155" y1="18" x2="155" y2="75" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="190" y1="18" x2="190" y2="75" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <line x1="225" y1="18" x2="225" y2="75" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <rect x="50" y="15" width="8" height="8" rx="2" fill="rgba(212,160,23,0.2)"/>
+            <rect x="233" y="15" width="8" height="8" rx="2" fill="rgba(212,160,23,0.2)"/>
+            <rect x="50" y="68" width="8" height="5" rx="1" fill="rgba(212,160,23,0.2)"/>
+            <rect x="233" y="68" width="8" height="5" rx="1" fill="rgba(212,160,23,0.2)"/>
+            <rect x="243" y="78" width="12" height="8" rx="2" fill="rgba(80,80,80,0.5)"/>
+            <path d="M 252 82 L 252 32 Q252 16 268 16 L 298 16 Q315 16 318 32 L 322 55 Q324 68 320 82 Z" fill="url(#cabGrad)" stroke="rgba(255,255,255,0.25)" stroke-width="1.2"/>
+            <rect x="253" y="14" width="65" height="4" rx="2" fill="rgba(212,160,23,0.3)"/>
+            <path d="M 268 22 L 295 22 Q302 22 304 30 L 306 45 L 268 45 Z" fill="url(#windowGrad)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+            <path d="M 270 25 L 290 25" stroke="rgba(255,255,255,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M 272 30 L 285 30" stroke="rgba(255,255,255,0.15)" stroke-width="1" stroke-linecap="round"/>
+            <rect x="315" y="28" width="4" height="10" rx="2" fill="rgba(150,150,150,0.5)"/>
+            <rect x="318" y="26" width="3" height="14" rx="1" fill="rgba(180,180,180,0.4)"/>
+            <rect x="308" y="50" width="6" height="2" rx="1" fill="rgba(212,160,23,0.5)"/>
+            <rect x="320" y="52" width="4" height="18" rx="1" fill="rgba(100,100,100,0.5)"/>
+            <line x1="321" y1="55" x2="323" y2="55" stroke="rgba(150,150,150,0.4)" stroke-width="0.8"/>
+            <line x1="321" y1="60" x2="323" y2="60" stroke="rgba(150,150,150,0.4)" stroke-width="0.8"/>
+            <line x1="321" y1="65" x2="323" y2="65" stroke="rgba(150,150,150,0.4)" stroke-width="0.8"/>
+            <ellipse cx="322" cy="58" rx="4" ry="7" fill="rgba(40,40,40,0.6)" stroke="rgba(212,160,23,0.3)" stroke-width="1"/>
+            <ellipse cx="323" cy="58" rx="2.5" ry="5" fill="rgba(255,255,255,0.9)"/>
+            <ellipse cx="323.5" cy="57" rx="1" ry="2" fill="#fff"/>
+            <ellipse cx="323" cy="58" rx="5" ry="9" fill="rgba(212,160,23,0.25)"/>
+            <rect x="318" y="78" width="10" height="10" rx="3" fill="rgba(80,80,80,0.6)" stroke="rgba(212,160,23,0.3)" stroke-width="1"/>
+            <rect x="320" y="80" width="6" height="2" rx="1" fill="rgba(212,160,23,0.4)"/>
+            <rect x="238" y="82" width="6" height="12" rx="1" fill="rgba(60,60,60,0.6)"/>
+            <rect x="14" y="42" width="6" height="18" rx="2" fill="linear-gradient(180deg, #666, #333)"/>
+            <rect x="13" y="40" width="8" height="4" rx="2" fill="#444"/>
+            <ellipse cx="17" cy="40" rx="4" ry="2" fill="#222"/>
+            <rect x="255" y="72" width="22" height="12" rx="6" fill="rgba(60,60,60,0.5)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <rect x="258" y="74" width="16" height="2" rx="1" fill="rgba(212,160,23,0.2)"/>
+            <rect x="310" y="72" width="8" height="2" rx="1" fill="rgba(100,100,100,0.4)"/>
+            <rect x="312" y="76" width="6" height="2" rx="1" fill="rgba(100,100,100,0.4)"/>
+          </g>
+
+          <g transform="translate(82, 96)">
+            <circle cx="0" cy="0" r="16" fill="url(#tireGrad)" stroke="#0a0e1a" stroke-width="2"/>
+            <circle cx="0" cy="0" r="14" fill="none" stroke="#1a1f2e" stroke-width="1" stroke-dasharray="3,2"/>
+            <circle cx="0" cy="0" r="12" fill="none" stroke="#0d1117" stroke-width="2"/>
+            <circle cx="0" cy="0" r="9" fill="url(#rimGrad)" stroke="#5a4a0a" stroke-width="1"/>
+            <circle cx="0" cy="0" r="6" fill="#1a1a2e" stroke="#b8860b" stroke-width="0.8"/>
+            <circle cx="0" cy="-3.5" r="1" fill="#888"/>
+            <circle cx="3" cy="-1.5" r="1" fill="#888"/>
+            <circle cx="3" cy="1.5" r="1" fill="#888"/>
+            <circle cx="0" cy="3.5" r="1" fill="#888"/>
+            <circle cx="-3" cy="1.5" r="1" fill="#888"/>
+            <circle cx="-3" cy="-1.5" r="1" fill="#888"/>
+            <circle cx="0" cy="0" r="2" fill="#b8860b"/>
+            <g class="wheel-spin">
+              <line x1="-6" y1="0" x2="6" y2="0" stroke="rgba(255,255,255,0.15)" stroke-width="1.2"/>
+              <line x1="0" y1="-6" x2="0" y2="6" stroke="rgba(255,255,255,0.15)" stroke-width="1.2"/>
+              <line x1="-4" y1="-4" x2="4" y2="4" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <line x1="4" y1="-4" x2="-4" y2="4" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            </g>
+          </g>
+
+          <g transform="translate(122, 96)">
+            <circle cx="0" cy="0" r="16" fill="url(#tireGrad)" stroke="#0a0e1a" stroke-width="2"/>
+            <circle cx="0" cy="0" r="14" fill="none" stroke="#1a1f2e" stroke-width="1" stroke-dasharray="3,2"/>
+            <circle cx="0" cy="0" r="12" fill="none" stroke="#0d1117" stroke-width="2"/>
+            <circle cx="0" cy="0" r="9" fill="url(#rimGrad)" stroke="#5a4a0a" stroke-width="1"/>
+            <circle cx="0" cy="0" r="6" fill="#1a1a2e" stroke="#b8860b" stroke-width="0.8"/>
+            <circle cx="0" cy="-3.5" r="1" fill="#888"/>
+            <circle cx="3" cy="-1.5" r="1" fill="#888"/>
+            <circle cx="3" cy="1.5" r="1" fill="#888"/>
+            <circle cx="0" cy="3.5" r="1" fill="#888"/>
+            <circle cx="-3" cy="1.5" r="1" fill="#888"/>
+            <circle cx="-3" cy="-1.5" r="1" fill="#888"/>
+            <circle cx="0" cy="0" r="2" fill="#b8860b"/>
+            <g class="wheel-spin">
+              <line x1="-6" y1="0" x2="6" y2="0" stroke="rgba(255,255,255,0.15)" stroke-width="1.2"/>
+              <line x1="0" y1="-6" x2="0" y2="6" stroke="rgba(255,255,255,0.15)" stroke-width="1.2"/>
+              <line x1="-4" y1="-4" x2="4" y2="4" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <line x1="4" y1="-4" x2="-4" y2="4" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            </g>
+          </g>
+
+          <g transform="translate(162, 96)">
+            <circle cx="0" cy="0" r="16" fill="url(#tireGrad)" stroke="#0a0e1a" stroke-width="2"/>
+            <circle cx="0" cy="0" r="14" fill="none" stroke="#1a1f2e" stroke-width="1" stroke-dasharray="3,2"/>
+            <circle cx="0" cy="0" r="12" fill="none" stroke="#0d1117" stroke-width="2"/>
+            <circle cx="0" cy="0" r="9" fill="url(#rimGrad)" stroke="#5a4a0a" stroke-width="1"/>
+            <circle cx="0" cy="0" r="6" fill="#1a1a2e" stroke="#b8860b" stroke-width="0.8"/>
+            <circle cx="0" cy="-3.5" r="1" fill="#888"/>
+            <circle cx="3" cy="-1.5" r="1" fill="#888"/>
+            <circle cx="3" cy="1.5" r="1" fill="#888"/>
+            <circle cx="0" cy="3.5" r="1" fill="#888"/>
+            <circle cx="-3" cy="1.5" r="1" fill="#888"/>
+            <circle cx="-3" cy="-1.5" r="1" fill="#888"/>
+            <circle cx="0" cy="0" r="2" fill="#b8860b"/>
+            <g class="wheel-spin">
+              <line x1="-6" y1="0" x2="6" y2="0" stroke="rgba(255,255,255,0.15)" stroke-width="1.2"/>
+              <line x1="0" y1="-6" x2="0" y2="6" stroke="rgba(255,255,255,0.15)" stroke-width="1.2"/>
+              <line x1="-4" y1="-4" x2="4" y2="4" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <line x1="4" y1="-4" x2="-4" y2="4" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            </g>
+          </g>
+
+          <g transform="translate(268, 96)">
+            <circle cx="0" cy="0" r="16" fill="url(#tireGrad)" stroke="#0a0e1a" stroke-width="2"/>
+            <circle cx="0" cy="0" r="14" fill="none" stroke="#1a1f2e" stroke-width="1" stroke-dasharray="3,2"/>
+            <circle cx="0" cy="0" r="12" fill="none" stroke="#0d1117" stroke-width="2"/>
+            <circle cx="0" cy="0" r="9" fill="url(#rimGrad)" stroke="#5a4a0a" stroke-width="1"/>
+            <circle cx="0" cy="0" r="6" fill="#1a1a2e" stroke="#b8860b" stroke-width="0.8"/>
+            <circle cx="0" cy="-3.5" r="1" fill="#888"/>
+            <circle cx="3" cy="-1.5" r="1" fill="#888"/>
+            <circle cx="3" cy="1.5" r="1" fill="#888"/>
+            <circle cx="0" cy="3.5" r="1" fill="#888"/>
+            <circle cx="-3" cy="1.5" r="1" fill="#888"/>
+            <circle cx="-3" cy="-1.5" r="1" fill="#888"/>
+            <circle cx="0" cy="0" r="2" fill="#b8860b"/>
+            <g class="wheel-spin">
+              <line x1="-6" y1="0" x2="6" y2="0" stroke="rgba(255,255,255,0.15)" stroke-width="1.2"/>
+              <line x1="0" y1="-6" x2="0" y2="6" stroke="rgba(255,255,255,0.15)" stroke-width="1.2"/>
+              <line x1="-4" y1="-4" x2="4" y2="4" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <line x1="4" y1="-4" x2="-4" y2="4" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            </g>
+          </g>
+
+          <ellipse cx="82" cy="112" rx="14" ry="3" fill="rgba(0,0,0,0.3)"/>
+          <ellipse cx="122" cy="112" rx="14" ry="3" fill="rgba(0,0,0,0.3)"/>
+          <ellipse cx="162" cy="112" rx="14" ry="3" fill="rgba(0,0,0,0.3)"/>
+          <ellipse cx="268" cy="112" rx="14" ry="3" fill="rgba(0,0,0,0.3)"/>
+        </svg>
+      </div>
+    </div>
+
     <h1>Everything your project needs, <span>delivered with precision.</span></h1>
     <p>From building materials and water purification to frozen food supply, engineering, and land development — Oscar Compliment Services is your single partner for scale.</p>
     <div class="hero-btns">
@@ -45,136 +259,154 @@
       <h2>Six divisions. <span class="gradient-text">One standard of excellence.</span></h2>
       <p>Each unit operates with deep expertise, reliable supply chains, and a commitment to quality that spans every industry we serve.</p>
     </div>
-    <div class="card-grid card-grid-3">
+    <div class="card-grid card-grid-3 stagger-children">
 
-      <!-- Flip Card 1: Water -->
-      <div class="flip-card reveal" style="min-height:420px;">
+      <div class="flip-card">
         <div class="flip-card-inner">
           <div class="flip-card-front">
+            <div class="flip-hint" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+              Flip
+            </div>
             <div class="flip-img">
-              <img src="images/water.jpg" alt="Water Purification" onerror="this.style.display='none';this.parentElement.innerText='[Water purification image]'" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/water.jpg" alt="Water Purification" loading="lazy" onerror="this.style.display='none';this.parentElement.innerText='[Water purification image]'" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">💧</div>
               <h3>Water Purification</h3>
               <p>RO systems, UV sterilizers, industrial filtration, and domestic purifiers.</p>
-              <span class="card-link">Hover to see more →</span>
+              <span class="card-link">Hover to see more</span>
             </div>
           </div>
           <div class="flip-card-back">
             <h3>Water Purification</h3>
             <p>Clean water solutions for homes and industry. We supply, install, and maintain world-class purification systems with certified quality.</p>
-            <a href="water.html" class="btn-small">Explore unit</a>
+            <a href="water.html" class="btn-small">Explore unit →</a>
           </div>
         </div>
       </div>
 
-      <!-- Flip Card 2: Materials -->
-      <div class="flip-card reveal" style="min-height:420px;">
+      <div class="flip-card">
         <div class="flip-card-inner">
           <div class="flip-card-front">
+            <div class="flip-hint" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+              Flip
+            </div>
             <div class="flip-img">
-              <img src="images/materials.jpg" alt="Building Materials" onerror="this.style.display='none';this.parentElement.innerText='[Building materials image]'" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/materials.jpg" alt="Building Materials" loading="lazy" onerror="this.style.display='none';this.parentElement.innerText='[Building materials image]'" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">🏗️</div>
               <h3>Building Materials</h3>
               <p>Cement, steel, roofing, tiles, plumbing, paint, timber, and more.</p>
-              <span class="card-link">Hover to see more →</span>
+              <span class="card-link">Hover to see more</span>
             </div>
           </div>
           <div class="flip-card-back">
             <h3>Building Materials</h3>
             <p>Bulk orders with contractor pricing and fast delivery. From foundation to finish, we stock everything your construction site needs.</p>
-            <a href="materials.html" class="btn-small">Explore unit</a>
+            <a href="materials.html" class="btn-small">Explore unit →</a>
           </div>
         </div>
       </div>
 
-      <!-- Flip Card 3: Engineering -->
-      <div class="flip-card reveal" style="min-height:420px;">
+      <div class="flip-card">
         <div class="flip-card-inner">
           <div class="flip-card-front">
+            <div class="flip-hint" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+              Flip
+            </div>
             <div class="flip-img">
-              <img src="images/engineering.jpg" alt="Engineering" onerror="this.style.display='none';this.parentElement.innerText='[Engineering image]'" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/engineering.jpg" alt="Engineering" loading="lazy" onerror="this.style.display='none';this.parentElement.innerText='[Engineering image]'" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">🏗️</div>
               <h3>Engineering & Construction</h3>
               <p>Land development, civil works, structural engineering, and project management.</p>
-              <span class="card-link">Hover to see more →</span>
+              <span class="card-link">Hover to see more</span>
             </div>
           </div>
           <div class="flip-card-back">
             <h3>Engineering</h3>
             <p>From bare land to finished building. We handle clearing, foundations, structural works, roads, drainage, and full project delivery.</p>
-            <a href="engineering.html" class="btn-small">Explore unit</a>
+            <a href="engineering.html" class="btn-small">Explore unit →</a>
           </div>
         </div>
       </div>
 
-      <!-- Flip Card 4: Real Estate -->
-      <div class="flip-card reveal" style="min-height:420px;">
+      <div class="flip-card">
         <div class="flip-card-inner">
           <div class="flip-card-front">
+            <div class="flip-hint" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+              Flip
+            </div>
             <div class="flip-img">
-              <img src="images/realestate.jpg" alt="Real Estate" onerror="this.style.display='none';this.parentElement.innerText='[Real estate image]'" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/realestate.jpg" alt="Real Estate" loading="lazy" onerror="this.style.display='none';this.parentElement.innerText='[Real estate image]'" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">🏡</div>
               <h3>Real Estate & Land Sales</h3>
               <p>Residential and commercial plots, developed properties, and investments.</p>
-              <span class="card-link">Hover to see more →</span>
+              <span class="card-link">Hover to see more</span>
             </div>
           </div>
           <div class="flip-card-back">
             <h3>Real Estate</h3>
             <p>Verified land titles, flexible payment plans, and prime locations. Buy to build, rent, or invest with confidence.</p>
-            <a href="realestate.html" class="btn-small">Explore unit</a>
+            <a href="realestate.html" class="btn-small">Explore unit →</a>
           </div>
         </div>
       </div>
 
-      <!-- Flip Card 5: Frozen Food -->
-      <div class="flip-card reveal" style="min-height:420px;">
+      <div class="flip-card">
         <div class="flip-card-inner">
           <div class="flip-card-front">
+            <div class="flip-hint" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+              Flip
+            </div>
             <div class="flip-img">
-              <img src="images/frozen.jpg" alt="Frozen Food" onerror="this.style.display='none';this.parentElement.innerText='[Frozen food image]'" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/frozen.jpg" alt="Frozen Food" loading="lazy" onerror="this.style.display='none';this.parentElement.innerText='[Frozen food image]'" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">❄️</div>
               <h3>Frozen Food Distribution</h3>
               <p>Poultry, seafood, vegetables, ready-meals, and desserts. Cold-chain guaranteed.</p>
-              <span class="card-link">Hover to see more →</span>
+              <span class="card-link">Hover to see more</span>
             </div>
           </div>
           <div class="flip-card-back">
             <h3>Frozen Food</h3>
             <p>Quality frozen products for hotels, restaurants, and retail. Temperature-controlled from warehouse to your door.</p>
-            <a href="frozen.html" class="btn-small">Explore unit</a>
+            <a href="frozen.html" class="btn-small">Explore unit →</a>
           </div>
         </div>
       </div>
 
-      <!-- Flip Card 6: Distribution -->
-      <div class="flip-card reveal" style="min-height:420px;">
+      <div class="flip-card">
         <div class="flip-card-inner">
           <div class="flip-card-front">
+            <div class="flip-hint" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+              Flip
+            </div>
             <div class="flip-img">
-              <img src="images/distribution.jpg" alt="Distribution" onerror="this.style.display='none';this.parentElement.innerText='[Distribution image]'" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/distribution.jpg" alt="Distribution" loading="lazy" onerror="this.style.display='none';this.parentElement.innerText='[Distribution image]'" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">🚛</div>
               <h3>General Distribution</h3>
               <p>Any product, any quantity. Consumer goods, industrial supplies, and imports.</p>
-              <span class="card-link">Hover to see more →</span>
+              <span class="card-link">Hover to see more</span>
             </div>
           </div>
           <div class="flip-card-back">
             <h3>Distribution</h3>
             <p>If you need it, we can source and deliver it. Consumer goods, industrial supplies, imports, warehousing, and last-mile delivery.</p>
-            <a href="distribution.html" class="btn-small">Explore unit</a>
+            <a href="distribution.html" class="btn-small">Explore unit →</a>
           </div>
         </div>
       </div>
@@ -199,7 +431,7 @@
         </ul>
       </div>
       <div class="feature-img">
-        <img src="images/team.jpg" alt="Our Team" onerror="this.style.display='none';this.parentElement.innerText='[Team / facility image]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        <img src="images/team.jpg" alt="Our Team" loading="lazy" onerror="this.style.display='none';this.parentElement.innerText='[Team / facility image]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
       </div>
     </div>
   </div>
@@ -211,7 +443,7 @@
       <div class="section-label">By the Numbers</div>
       <h2>Trusted at <span class="gradient-text">scale.</span></h2>
     </div>
-    <div class="stats-grid reveal">
+    <div class="stats-grid reveal stagger-children">
       <div class="stat-card">
         <div class="stat-number">6</div>
         <div class="stat-label">Business Units</div>
@@ -239,10 +471,10 @@
       <h2>Work that <span class="gradient-text">speaks for itself.</span></h2>
       <p>From land clearing to finished buildings, our engineering and real estate portfolio reflects the quality we bring to every engagement.</p>
     </div>
-    <div class="card-grid card-grid-3 reveal">
+    <div class="card-grid card-grid-3 reveal stagger-children">
       <div class="listing-card">
         <div class="listing-img">
-          <img src="images/project1.jpg" alt="Project 1" onerror="this.style.display='none';this.parentElement.innerText='[Project photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+          <img src="images/project1.jpg" alt="Project 1" loading="lazy" onerror="this.style.display='none';this.parentElement.innerText='[Project photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
           <h4>Residential Estate Development</h4>
@@ -255,7 +487,7 @@
       </div>
       <div class="listing-card">
         <div class="listing-img">
-          <img src="images/project2.jpg" alt="Project 2" onerror="this.style.display='none';this.parentElement.innerText='[Project photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+          <img src="images/project2.jpg" alt="Project 2" loading="lazy" onerror="this.style.display='none';this.parentElement.innerText='[Project photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
           <h4>Commercial Warehouse Complex</h4>
@@ -268,7 +500,7 @@
       </div>
       <div class="listing-card">
         <div class="listing-img">
-          <img src="images/project3.jpg" alt="Project 3" onerror="this.style.display='none';this.parentElement.innerText='[Project photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+          <img src="images/project3.jpg" alt="Project 3" loading="lazy" onerror="this.style.display='none';this.parentElement.innerText='[Project photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
           <h4>Land Subdivision & Sales</h4>
@@ -280,7 +512,7 @@
         </div>
       </div>
     </div>
-    <div style="text-align:center; margin-top:40px;">
+    <div style="text-align:center; margin-top:48px;">
       <a href="projects.html" class="btn btn-outline" style="color:var(--primary);border-color:var(--border);">View all projects</a>
     </div>
   </div>
@@ -337,6 +569,6 @@
   </div>
 </footer>
 
-<script src="main.js"></script>
+<script src="main.js" defer></script>
 </body>
 </html>
