@@ -31,13 +31,13 @@ revealElements.forEach(el => revealObserver.observe(el));
 const nav = document.querySelector('.nav');
 window.addEventListener('scroll', () => {
   if (window.scrollY > 20) {
-    nav.style.boxShadow = '0 2px 20px rgba(0,0,0,0.06)';
+    nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.15)';
   } else {
     nav.style.boxShadow = 'none';
   }
 });
 
-// Form submission handler (placeholder)
+// Form submission handler
 document.querySelectorAll('form').forEach(form => {
   form.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -54,5 +54,16 @@ document.querySelectorAll('form').forEach(form => {
       this.reset();
       alert('Thank you! We will respond within 24 hours.');
     }, 2000);
+  });
+});
+
+// Flip card tap support for mobile
+document.querySelectorAll('.flip-card').forEach(card => {
+  card.addEventListener('click', function(e) {
+    if (window.innerWidth <= 900) {
+      // Don't flip if clicking the button on the back
+      if (e.target.closest('.btn-small')) return;
+      this.classList.toggle('flipped');
+    }
   });
 });
