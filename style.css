@@ -12,6 +12,7 @@
   --accent: #c9971c;
   --accent-light: #e4b43a;
   --accent-glow: rgba(201, 151, 28, 0.12);
+  --accent-glow-strong: rgba(201, 151, 28, 0.22);
 
   /* Extended Palette */
   --blue: #1e3a8a;
@@ -35,6 +36,7 @@
   --shadow-lg: 0 16px 48px rgba(11, 18, 38, 0.12);
   --shadow-gold: 0 8px 32px rgba(201, 151, 28, 0.18);
   --shadow-inset: inset 0 2px 4px rgba(11, 18, 38, 0.04);
+  --shadow-focus: 0 0 0 3px rgba(201, 151, 28, 0.35);
 
   /* Radii */
   --radius-sm: 10px;
@@ -83,6 +85,29 @@ body {
 a { text-decoration: none; color: inherit; }
 img { max-width: 100%; display: block; }
 
+::selection {
+  background: var(--accent);
+  color: var(--primary);
+}
+
+/* Visible keyboard focus everywhere, without disturbing mouse users */
+:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.nav-cta:focus-visible,
+.btn:focus-visible,
+.btn-small:focus-visible {
+  outline-offset: 3px;
+  box-shadow: var(--shadow-focus);
+}
+
 .container {
   max-width: var(--max-width);
   margin: 0 auto;
@@ -96,15 +121,32 @@ img { max-width: 100%; display: block; }
   position: fixed;
   top: 0; left: 0; right: 0;
   height: var(--nav-height);
-  background: rgba(11, 18, 38, 0.82);
-  backdrop-filter: blur(20px) saturate(1.4);
-  -webkit-backdrop-filter: blur(20px) saturate(1.4);
   border-bottom: 1px solid rgba(255,255,255,0.06);
   z-index: 1000;
   transition: var(--transition-base);
 }
 
-.nav.scrolled {
+/*
+  The translucent nav background + blur live on a pseudo-element rather
+  than on .nav itself. backdrop-filter/filter/transform on an ancestor
+  creates a new containing block for position:fixed descendants — since
+  .nav-links (the mobile menu) is fixed and lives inside .nav, it was
+  being pulled into that same blurred compositing layer instead of
+  painting as a solid opaque panel. Isolating the blur on ::before keeps
+  .nav-links fully opaque.
+*/
+.nav::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: rgba(11, 18, 38, 0.82);
+  backdrop-filter: blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  transition: var(--transition-base);
+}
+
+.nav.scrolled::before {
   background: rgba(11, 18, 38, 0.95);
   box-shadow: 0 4px 30px rgba(0,0,0,0.2);
 }
@@ -328,6 +370,19 @@ img { max-width: 100%; display: block; }
   align-items: center;
 }
 
+/* Fine grain texture for a less "flat digital gradient" premium feel */
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(rgba(255,255,255,0.035) 1px, transparent 1px);
+  background-size: 3px 3px;
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .hero::before {
   content: '';
   position: absolute;
@@ -338,18 +393,6 @@ img { max-width: 100%; display: block; }
   background: radial-gradient(circle, rgba(201,151,28,0.1) 0%, transparent 65%);
   border-radius: 50%;
   animation: float 8s ease-in-out infinite;
-}
-
-.hero::after {
-  content: '';
-  position: absolute;
-  bottom: -20%;
-  left: -10%;
-  width: 700px;
-  height: 700px;
-  background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 65%);
-  border-radius: 50%;
-  animation: float 10s ease-in-out infinite reverse;
 }
 
 @keyframes float {
@@ -447,9 +490,22 @@ img { max-width: 100%; display: block; }
   box-shadow: 0 4px 16px rgba(201,151,28,0.25);
 }
 
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.3), transparent 60%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
 .btn-primary:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-gold);
+}
+
+.btn-primary:hover::before {
+  opacity: 1;
 }
 
 .btn-outline {
@@ -521,13 +577,25 @@ img { max-width: 100%; display: block; }
 }
 
 .section-label {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 2.5px;
   text-transform: uppercase;
   color: var(--accent);
   margin-bottom: 16px;
+}
+
+/* Small hairline that gives .section-label an intentional, engineered
+   feel rather than a floating caption */
+.section-label::before {
+  content: '';
+  width: 22px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  border-radius: 1px;
 }
 
 /* ============================================
@@ -571,11 +639,12 @@ img { max-width: 100%; display: block; }
   border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  transition: box-shadow 0.3s var(--ease-out);
+  transition: box-shadow 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
 }
 
 .flip-card:hover .flip-card-front {
   box-shadow: var(--shadow-lg);
+  border-color: rgba(201,151,28,0.2);
 }
 
 .flip-card-back {
@@ -1237,6 +1306,21 @@ img { max-width: 100%; display: block; }
   color: var(--primary);
   background: var(--bg);
   transition: var(--transition-fast);
+}
+
+/* Native <select> dropdown panel: force a light, opaque scheme so the
+   OS/browser doesn't render it with dark or transparent system colors
+   inherited from a dark ancestor. This is the most common cause of a
+   "dropdown menu color not showing properly" complaint. */
+.form-group select {
+  color-scheme: light;
+  background-color: var(--bg);
+  color: var(--primary);
+}
+
+.form-group select option {
+  background-color: var(--bg);
+  color: var(--primary);
 }
 
 .form-group input:focus,
