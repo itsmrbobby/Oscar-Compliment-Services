@@ -543,9 +543,11 @@ img { max-width: 100%; display: block; }
   gap: 6px;
 }
 
-.btn-small:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 16px rgba(201,151,28,0.3);
+@media (hover: hover) and (pointer: fine) {
+  .btn-small:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px rgba(201,151,28,0.3);
+  }
 }
 
 /* ============================================
@@ -621,8 +623,10 @@ img { max-width: 100%; display: block; }
   transform-style: preserve-3d;
 }
 
-.flip-card:hover .flip-card-inner {
-  transform: rotateY(180deg);
+@media (hover: hover) and (pointer: fine) {
+  .flip-card:hover .flip-card-inner {
+    transform: rotateY(180deg);
+  }
 }
 
 .flip-card.flipped .flip-card-inner {
@@ -647,9 +651,11 @@ img { max-width: 100%; display: block; }
   transition: box-shadow 0.3s var(--ease-out), border-color 0.3s var(--ease-out);
 }
 
-.flip-card:hover .flip-card-front {
-  box-shadow: var(--shadow-lg);
-  border-color: rgba(201,151,28,0.2);
+@media (hover: hover) and (pointer: fine) {
+  .flip-card:hover .flip-card-front {
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(201,151,28,0.2);
+  }
 }
 
 .flip-card-back {
@@ -714,8 +720,10 @@ img { max-width: 100%; display: block; }
   transition: transform 0.6s var(--ease-out);
 }
 
-.flip-card:hover .flip-img img {
-  transform: scale(1.08);
+@media (hover: hover) and (pointer: fine) {
+  .flip-card:hover .flip-img img {
+    transform: scale(1.08);
+  }
 }
 
 .flip-body {
@@ -774,8 +782,10 @@ img { max-width: 100%; display: block; }
   transition: transform 0.3s var(--ease-out);
 }
 
-.flip-card:hover .card-link {
-  gap: 10px;
+@media (hover: hover) and (pointer: fine) {
+  .flip-card:hover .card-link {
+    gap: 10px;
+  }
 }
 
 /* Flip hint badge */
@@ -1269,6 +1279,19 @@ img { max-width: 100%; display: block; }
   align-items: center;
   font-size: 13px;
   color: var(--muted);
+}
+
+.credit-link {
+  color: var(--muted);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(148,163,184,0.4);
+  transition: var(--transition-fast);
+}
+
+.credit-link:hover {
+  color: var(--accent-light);
+  text-decoration-color: var(--accent-light);
 }
 
 @media (max-width: 900px) {
