@@ -7,8 +7,8 @@
   /* Core Palette */
   --primary: #0b1226;
   --primary-light: #162044;
-  --secondary: #475569;
-  --muted: #64748b;
+  --secondary: #57534a;
+  --muted: #78716a;
   --accent: #c9971c;
   --accent-light: #e4b43a;
   --accent-glow: rgba(201, 151, 28, 0.12);
@@ -22,12 +22,12 @@
   --teal-light: #14b8a6;
 
   /* Surfaces */
-  --bg: #ffffff;
-  --bg-soft: #f8fafc;
-  --bg-muted: #f1f5f9;
-  --bg-warm: #fffbeb;
-  --border: #e2e8f0;
-  --border-light: #f1f5f9;
+  --bg: #fdfcfa;
+  --bg-soft: #f7f4ee;
+  --bg-muted: #efe9dc;
+  --bg-warm: #fbf3de;
+  --border: #e6ded0;
+  --border-light: #f0ebe0;
 
   /* Shadows */
   --shadow-sm: 0 1px 2px rgba(11, 18, 38, 0.04);
@@ -165,12 +165,17 @@ img { max-width: 100%; display: block; }
   color: #fff;
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 10px;
 }
 
 .logo span {
   color: var(--accent);
   font-weight: 800;
+}
+
+.logo-mark {
+  flex-shrink: 0;
+  display: block;
 }
 
 .nav-links {
@@ -552,7 +557,7 @@ img { max-width: 100%; display: block; }
 }
 
 .section-alt {
-  background: var(--bg-soft);
+  background: var(--bg-warm);
 }
 
 .section-header {
@@ -689,7 +694,7 @@ img { max-width: 100%; display: block; }
 .flip-img {
   width: 100%;
   height: 210px;
-  background: linear-gradient(135deg, var(--bg-muted), #e2e8f0);
+  background: linear-gradient(135deg, var(--bg-muted), var(--border));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -745,6 +750,12 @@ img { max-width: 100%; display: block; }
   margin-bottom: 16px;
   background: linear-gradient(135deg, var(--accent-glow), var(--blue-glow));
   border: 1px solid rgba(201,151,28,0.1);
+}
+
+.flip-icon svg {
+  width: 26px;
+  height: 26px;
+  color: var(--primary);
 }
 
 .card-link {
@@ -895,7 +906,7 @@ img { max-width: 100%; display: block; }
 .feature-img {
   border-radius: var(--radius-lg);
   overflow: hidden;
-  background: linear-gradient(135deg, var(--bg-muted), #e2e8f0);
+  background: linear-gradient(135deg, var(--bg-muted), var(--border));
   min-height: 420px;
   display: flex;
   align-items: center;
@@ -1076,7 +1087,7 @@ img { max-width: 100%; display: block; }
 
 .listing-img {
   height: 220px;
-  background: linear-gradient(135deg, var(--bg-muted), #e2e8f0);
+  background: linear-gradient(135deg, var(--bg-muted), var(--border));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1257,7 +1268,7 @@ img { max-width: 100%; display: block; }
   justify-content: space-between;
   align-items: center;
   font-size: 13px;
-  color: #64748b;
+  color: var(--muted);
 }
 
 @media (max-width: 900px) {
