@@ -1,5 +1,5 @@
 /**
- * Oscar Compliment Services — Main JavaScript
+ * Osca Complement Services — Main JavaScript
  * Professional, Lively, Responsive
  */
 
@@ -18,6 +18,7 @@
     menuOpen = !menuOpen;
     navLinks.classList.toggle('open', menuOpen);
     mobileToggle.classList.toggle('active', menuOpen);
+    mobileToggle.setAttribute('aria-expanded', String(menuOpen));
     document.body.style.overflow = menuOpen ? 'hidden' : '';
   }
 
@@ -147,7 +148,7 @@
   });
 
   /* ============================================
-     FLIP CARDS — TAP SUPPORT
+     FLIP CARDS — TAP + KEYBOARD SUPPORT
      ============================================ */
   const flipCards = document.querySelectorAll('.flip-card');
 
@@ -166,6 +167,22 @@
         this.classList.toggle('flipped');
       }
     });
+
+    // Keyboard support: the HTML gives these cards tabindex="0" and
+    // role="button", so Enter/Space must actually do something or that
+    // accessibility markup is just decoration. Desktop mouse users still
+    // get the CSS hover-flip; this covers keyboard-only navigation at
+    // any screen width, since a keyboard user can't "hover".
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        if (e.target.closest('.btn-small')) return;
+        e.preventDefault();
+        flipCards.forEach(other => {
+          if (other !== card) other.classList.remove('flipped');
+        });
+        this.classList.toggle('flipped');
+      }
+    });
   });
 
   // Close flipped cards when clicking outside
@@ -179,6 +196,12 @@
 
   /* ============================================
      FORM HANDLING
+     ============================================
+     NOTE: this currently fakes a successful submission
+     (preventDefault + setTimeout) without sending data anywhere.
+     Left unchanged pending Formspree vs. mailto: decision — see
+     conversation. Do not treat "Sent ✓" as proof of real delivery
+     until this block is rewired.
      ============================================ */
   document.querySelectorAll('form').forEach(form => {
     form.addEventListener('submit', function(e) {
@@ -281,29 +304,5 @@
       }
     }, { passive: true });
   }
-
-  /* ============================================
-     ACTIVE NAV LINK HIGHLIGHTING
-     ============================================ */
-  const sections = document.querySelectorAll('section[id]');
-  const navLinksAll = document.querySelectorAll('.nav-links a');
-
-  window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop;
-      const sectionHeight = section.offsetHeight;
-      if (pageYOffset >= sectionTop - 200) {
-        current = section.getAttribute('id');
-      }
-    });
-
-    navLinksAll.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === '#' + current) {
-        link.classList.add('active');
-      }
-    });
-  }, { passive: true });
 
 })();
