@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us — Osca Complement Services</title>
+  <meta name="description" content="Get in touch with Osca Complement Services. Office locations, phone, email, and contact form for inquiries across all business units.">
+
+  <link rel="canonical" href="https://itsmrbobby.github.io/Oscar-Compliment-Services/contact.html">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://itsmrbobby.github.io/Oscar-Compliment-Services/contact.html">
+  <meta property="og:title" content="Contact Us — Osca Complement Services">
+  <meta property="og:description" content="Get in touch with Osca Complement Services. Office locations, phone, email, and contact form for inquiries across all business units.">
+  <meta property="og:image" content="https://itsmrbobby.github.io/Oscar-Compliment-Services/images/og-cover.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Contact Us — Osca Complement Services">
+  <meta name="twitter:description" content="Get in touch with Osca Complement Services. Office locations, phone, email, and contact form for inquiries across all business units.">
+  <meta name="twitter:image" content="https://itsmrbobby.github.io/Oscar-Compliment-Services/images/og-cover.jpg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="logo">
+      <svg class="logo-mark" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+        <defs>
+          <linearGradient id="logoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#c9971c"/>
+            <stop offset="100%" stop-color="#e4b43a"/>
+          </linearGradient>
+        </defs>
+        <circle cx="16" cy="16" r="14" fill="none" stroke="url(#logoGrad)" stroke-width="1.8"/>
+        <path d="M16,2 A14,14 0 0,1 16,30 A7,7 0 0,1 16,16 A7,7 0 0,0 16,2 Z" fill="url(#logoGrad)"/>
+        <circle cx="16" cy="9" r="2.6" fill="#0b1226"/>
+        <circle cx="16" cy="23" r="2.6" fill="#0b1226"/>
+      </svg>
+      Osca<span>Complement</span>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="projects.html">Projects</a></li>
+      <li><a href="distribution.html">Distribution</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+    </ul>
+    <a href="quote.html" class="nav-cta">Get a quote</a>
+    <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="container">
+    <div class="breadcrumb"><a href="index.html">Home</a> <span>/</span> Contact</div>
+    <h1>Contact Us</h1>
+    <p>Reach out for quotes, partnerships, site visits, or general inquiries. We respond to every message within 24 hours.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="feature-row reveal">
+      <div class="feature-content">
+        <div class="section-label">Get in Touch</div>
+        <h2>Send us a <span>message.</span></h2>
+        <p>Fill out the form and our team will route your inquiry to the right business unit. For urgent requests, call us directly.</p>
+        <!-- NOTE: action="#" is a placeholder. This form does not currently
+             send data anywhere — see conversation for Formspree/mailto fix. -->
+        <form action="#" method="POST" style="margin-top:28px;">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Full name</label>
+              <input type="text" name="name" placeholder="Your full name" required>
+            </div>
+            <div class="form-group">
+              <label>Email address</label>
+              <input type="email" name="email" placeholder="you@company.com" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Phone number</label>
+              <input type="tel" name="phone" placeholder="+234 ...">
+            </div>
+            <div class="form-group">
+              <label>Business unit</label>
+              <select name="unit">
+                <option value="">Select a unit (optional)</option>
+                <option>Water Purification</option>
+                <option>Building Materials</option>
+                <option>Engineering & Construction</option>
+                <option>Real Estate</option>
+                <option>Frozen Food</option>
+                <option>General Distribution</option>
+                <option>General Inquiry</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea name="message" placeholder="How can we help you?" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Send message</button>
+        </form>
+      </div>
+      <div>
+        <div class="card contact-card">
+          <h3 class="contact-card-heading">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M12 21s7-7.5 7-12a7 7 0 0 0-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg>
+            Office Address
+          </h3>
+          <p style="color:var(--secondary);font-size:15px;">[Your office address]<br>Lagos, Nigeria</p>
+        </div>
+        <div class="card contact-card">
+          <h3 class="contact-card-heading">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M4 5c0-1 1-2 2-2h2l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v2c0 1-1 2-2 2A16 16 0 0 1 4 5z"/></svg>
+            Phone
+          </h3>
+          <p style="color:var(--secondary);font-size:15px;">+234 XXX XXX XXXX<br>+234 XXX XXX XXXX</p>
+        </div>
+        <div class="card contact-card">
+          <h3 class="contact-card-heading">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
+            Email
+          </h3>
+          <p style="color:var(--secondary);font-size:15px;">info@oscarcomplementservices.com<br>quotes@oscarcomplementservices.com</p>
+        </div>
+        <div class="card contact-card contact-card-last">
+          <h3 class="contact-card-heading">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+            Business Hours
+          </h3>
+          <p style="color:var(--secondary);font-size:15px;">Monday – Friday: 8:00 AM – 6:00 PM<br>Saturday: 9:00 AM – 2:00 PM</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
+    <div class="feature-img" style="min-height:320px;">
+      <img src="images/map.jpg" alt="Osca Complement Services office location map" loading="lazy" width="1200" height="500" onerror="this.style.display='none';this.parentElement.innerText='[Map embed or location image]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="logo">
+          <svg class="logo-mark" viewBox="0 0 32 32" width="30" height="30" aria-hidden="true">
+            <circle cx="16" cy="16" r="14" fill="none" stroke="url(#logoGrad)" stroke-width="1.8"/>
+            <path d="M16,2 A14,14 0 0,1 16,30 A7,7 0 0,1 16,16 A7,7 0 0,0 16,2 Z" fill="url(#logoGrad)"/>
+            <circle cx="16" cy="9" r="2.6" fill="#0b1226"/>
+            <circle cx="16" cy="23" r="2.6" fill="#0b1226"/>
+          </svg>
+          Osca<span>Complement</span>
+        </a>
+        <p>Premium distributor, engineer, and developer. Water purification, building materials, frozen foods, real estate, and general distribution — delivered with quality and scale.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Business Units</h4>
+        <ul>
+          <li><a href="water.html">Water Purification</a></li>
+          <li><a href="materials.html">Building Materials</a></li>
+          <li><a href="engineering.html">Engineering</a></li>
+          <li><a href="realestate.html">Real Estate</a></li>
+          <li><a href="frozen.html">Frozen Food</a></li>
+          <li><a href="distribution.html">Distribution</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About us</a></li>
+          <li><a href="projects.html">Projects</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="quote.html">Get a quote</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li>info@oscarcomplementservices.com</li>
+          <li>+234 XXX XXX XXXX</li>
+          <li>Lagos, Nigeria</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>Osca Complement Services. All rights reserved.</span>
+      <span>Designed by <a href="mailto:vr@vibrantrevolve.com" class="credit-link">VibrantRevolve</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js" defer></script>
+</body>
+</html>
