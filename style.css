@@ -912,6 +912,13 @@ img { max-width: 100%; display: block; }
   overflow: hidden;
 }
 
+.step-number {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
 .card h3 {
   font-size: 19px;
   font-weight: 700;
