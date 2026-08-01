@@ -886,8 +886,30 @@ img { max-width: 100%; display: block; }
   transition: transform 0.3s var(--ease-spring);
 }
 
-.card:hover .card-icon {
-  transform: scale(1.1) rotate(-4deg);
+.card-icon svg {
+  width: 28px;
+  height: 28px;
+  color: var(--primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .card-icon {
+    transform: scale(1.1) rotate(-4deg);
+  }
+}
+
+.team-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--bg-muted), var(--border));
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 13px;
+  overflow: hidden;
 }
 
 .card h3 {
