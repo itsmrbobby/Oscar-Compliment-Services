@@ -919,6 +919,22 @@ img { max-width: 100%; display: block; }
   margin-bottom: 12px;
 }
 
+.contact-card {
+  margin-bottom: 18px;
+}
+
+.contact-card-last {
+  margin-bottom: 0;
+}
+
+.contact-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: var(--accent);
+}
+
 .card h3 {
   font-size: 19px;
   font-weight: 700;
