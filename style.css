@@ -892,6 +892,10 @@ img { max-width: 100%; display: block; }
   color: var(--primary);
 }
 
+.card-icon-center {
+  margin: 0 auto 16px;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .card:hover .card-icon {
     transform: scale(1.1) rotate(-4deg);
@@ -933,6 +937,16 @@ img { max-width: 100%; display: block; }
   gap: 8px;
   margin-bottom: 14px;
   color: var(--accent);
+}
+
+.process-step-number {
+  font-size: 36px;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--blue-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 14px;
 }
 
 .card h3 {
