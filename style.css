@@ -2278,3 +2278,21 @@ body.has-quote-bar .wa-float { bottom: 92px; }
 .product-info { flex-direction: row; align-items: center; gap: 12px; }
 .product-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .product-thumb { width: 64px; height: 48px; flex: none; object-fit: cover; border-radius: 6px; background: var(--border); }
+
+/* product photo cards */
+#catList { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+#catList > *:not(.product-row) { grid-column: 1 / -1; }
+.product-row { display: flex; flex-direction: column; align-items: stretch; gap: 10px; margin: 0; padding: 0 0 14px; overflow: hidden; }
+.product-info { flex-direction: column; align-items: stretch; gap: 10px; }
+.product-thumb { width: 100%; height: auto; aspect-ratio: 4 / 3; border-radius: 0; }
+.product-thumb.ph { display: flex; align-items: center; justify-content: center; font-size: 44px; font-weight: 800; color: rgba(255,255,255,.9); background: linear-gradient(135deg, var(--primary), #1a2d5c 60%, #c9971c); }
+.product-text, .product-price { padding: 0 14px; }
+.product-price { text-align: left; min-width: 0; }
+.product-row .badge, .product-row .btn-add { margin: 0 14px; align-self: flex-start; }
+.product-row { transition: transform .2s ease, box-shadow .2s ease; }
+@media (hover: hover) { .product-row:hover { transform: translateY(-3px); } }
+@media (prefers-reduced-motion: reduce) { .product-row { transition: none; } .product-row:hover { transform: none; } }
+
+.proj-update:empty { display: none; }
+.proj-update { font-size: 13px; color: var(--accent-text); font-weight: 600; margin: 8px 0 0; }
+#catNote { display: inline-block; padding: 6px 12px; border-radius: 999px; background: rgba(201,151,28,.12); font-weight: 600; }

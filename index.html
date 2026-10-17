@@ -578,6 +578,37 @@
   </div>
 </section>
 
+<section class="section" id="homeProjectsSec" hidden>
+  <div class="container">
+    <div class="section-header reveal"><div class="section-label" id="hpLabel">Our work</div><h2>Happening <span class="gradient-text">now.</span></h2></div>
+    <div class="card-grid card-grid-3" id="homeProjects"></div>
+    <p style="text-align:center;margin-top:24px;"><a href="projects.html" class="btn btn-outline" style="color:var(--primary);border-color:var(--border);">See all projects</a></p>
+  </div>
+</section>
+<script>
+(function(){
+  fetch('data/projects.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(list){
+    var cur=list.filter(function(p){return p.status!=='Completed'}),show=cur.length?cur:list.slice().reverse();
+    if(!cur.length)document.getElementById('hpLabel').textContent='Recent work';
+    show=show.slice(0,3);if(!show.length)return;
+    var g=document.getElementById('homeProjects');
+    show.forEach(function(p){
+      var c=document.createElement('div');c.className='listing-card';
+      var im=document.createElement('div');im.className='listing-img';
+      if(p.image){var i=document.createElement('img');i.src=p.image;i.alt=p.title||'';i.loading='lazy';i.onerror=function(){i.remove()};i.style.cssText='width:100%;height:100%;object-fit:cover;position:absolute;inset:0;';im.appendChild(i);}
+      var b=document.createElement('div');b.className='listing-body';
+      var t=document.createElement('h4');t.textContent=p.title||'';
+      var d=document.createElement('p');d.textContent=p.description||'';
+      var mt=document.createElement('div');mt.className='listing-meta';
+      var a=document.createElement('span');a.className='listing-tag';a.textContent=p.type||'';
+      var s=document.createElement('span');s.className='listing-price';s.textContent=p.status||'';
+      mt.append(a,s);var u=document.createElement('p');u.className='proj-update';if(p.update&&p.status!=='Completed'){u.textContent='Latest update'+(p.updatedOn?' ('+p.updatedOn+')':'')+': '+p.update;}b.append(t,d,u,mt);c.append(im,b);g.appendChild(c);
+    });
+    document.getElementById('homeProjectsSec').hidden=false;
+  }).catch(function(){});
+})();
+</script>
+
 <section class="section section-alt">
   <div class="container">
     <div class="section-header reveal">

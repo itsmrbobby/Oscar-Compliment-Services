@@ -362,3 +362,27 @@
   }
 
 })();
+
+/* Footer "Follow us" links, from data/settings.json (edited in the admin dashboard). Only filled-in ones show. */
+(function () {
+  function url(v, base) { v = String(v || '').trim(); if (!v) return ''; if (/^https?:\/\//i.test(v)) return v; return base ? base + encodeURIComponent(v.replace(/^@/, '')) : ''; }
+  fetch('data/settings.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (s) {
+    var links = [
+      ['TikTok', url(s.tiktok, 'https://www.tiktok.com/@')],
+      ['Instagram', url(s.instagram, 'https://www.instagram.com/')],
+      ['Facebook', url(s.facebook, 'https://www.facebook.com/')],
+      ['WhatsApp channel \u2014 get price updates', url(s.whatsappChannel, '')]
+    ].filter(function (l) { return l[1]; });
+    var grid = document.querySelector('.footer-grid');
+    if (!links.length || !grid) return;
+    var col = document.createElement('div'); col.className = 'footer-col';
+    var h = document.createElement('h4'); h.textContent = 'Follow us'; col.appendChild(h);
+    var ul = document.createElement('ul');
+    links.forEach(function (l) {
+      var li = document.createElement('li'), a = document.createElement('a');
+      a.href = l[1]; a.textContent = l[0]; a.target = '_blank'; a.rel = 'noopener';
+      li.appendChild(a); ul.appendChild(li);
+    });
+    col.appendChild(ul); grid.appendChild(col);
+  }).catch(function () {});
+})();

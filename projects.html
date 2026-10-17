@@ -95,7 +95,7 @@
     var m=document.createElement('div');m.className='listing-meta';
     var t=document.createElement('span');t.className='listing-tag';t.textContent=p.type||'';
     var s=document.createElement('span');s.className='listing-price';s.textContent=p.status||'';
-    m.append(t,s);b.append(h,d,m);c.append(im,b);return c;
+    m.append(t,s);var u=document.createElement('p');u.className='proj-update';if(p.update&&p.status!=='Completed'){u.textContent='Latest update'+(p.updatedOn?' ('+p.updatedOn+')':'')+': '+p.update;}b.append(h,d,u,m);c.append(im,b);return c;
   }
   fetch('data/projects.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(list){
     var cur=document.getElementById('projCurrent'),done=document.getElementById('projDone');

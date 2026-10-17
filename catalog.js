@@ -385,7 +385,7 @@
       thumb.addEventListener('error', function () {
         tried++;
         if (tried === 1) thumb.src = 'images/categories/' + p.unitSlug + '/' + slugify(p.category) + '.jpg';
-        else thumb.remove();
+        else { var ph = el('div', 'product-thumb ph', (p.name || '?').charAt(0).toUpperCase()); if (thumb.parentNode) thumb.parentNode.replaceChild(ph, thumb); }
       });
       thumb.src = p.sku ? 'images/products/' + encodeURIComponent(p.sku) + '.jpg' : 'images/categories/' + p.unitSlug + '/' + slugify(p.category) + '.jpg';
       info.appendChild(thumb);

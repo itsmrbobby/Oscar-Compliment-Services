@@ -16,6 +16,9 @@ Live: https://itsmrbobby.github.io/Oscar-Compliment-Services/
 ## Managing prices
 See **PRICE-UPDATE-GUIDE.md**. Prices are edited in a spreadsheet; no backend or developer is needed after one-time setup.
 
+## Social links
+Edited in the admin dashboard (Social links tab) or in `data/settings.json`. Empty ones are hidden.
+
 ## Before launch checklist
 - [ ] Connect the price sheet (PRICE-UPDATE-GUIDE.md, section A) and have the client fill in prices
 - [ ] Add real photos to `images/` (filenames in `images/README.txt`) and the 37 category pictures (`images/categories/README.txt`)
