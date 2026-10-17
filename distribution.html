@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a href="#main" class="skip-link">Skip to content</a>
 
 <nav class="nav">
   <div class="container nav-inner">
@@ -50,6 +51,7 @@
       <li><a href="about.html">About</a></li>
       <li><a href="projects.html">Projects</a></li>
       <li><a href="distribution.html" class="active">Distribution</a></li>
+      <li><a href="products.html">Products</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
     <a href="quote.html" class="nav-cta">Get a quote</a>
@@ -59,11 +61,14 @@
   </div>
 </nav>
 
+<main id="main">
+
 <section class="page-hero">
   <div class="container">
     <div class="breadcrumb"><a href="index.html">Home</a> <span>/</span> Distribution</div>
     <h1>General Distribution</h1>
     <p>Any product. Any quantity. Anywhere. Our distribution arm handles consumer goods, industrial supplies, imports, warehousing, and last-mile delivery with precision.</p>
+    <div class="hero-btns hero-cta-row"><a href="products.html?unit=general" class="btn btn-primary">View price list</a></div>
   </div>
 </section>
 
@@ -136,7 +141,7 @@
         </ul>
       </div>
       <div class="feature-img">
-        <img src="images/fleet.jpg" alt="Osca Complement Services logistics fleet" loading="lazy" width="800" height="600" onerror="this.style.display='none';this.parentElement.innerText='[Logistics / fleet photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        <img src="images/fleet.jpg" alt="Osca Complement Services logistics fleet" loading="lazy" width="800" height="600" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
       </div>
     </div>
   </div>
@@ -181,6 +186,8 @@
   </div>
 </section>
 
+</main>
+
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
@@ -212,6 +219,7 @@
         <ul>
           <li><a href="about.html">About us</a></li>
           <li><a href="projects.html">Projects</a></li>
+          <li><a href="products.html">Products &amp; prices</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="quote.html">Get a quote</a></li>
         </ul>
@@ -219,19 +227,21 @@
       <div class="footer-col">
         <h4>Contact</h4>
         <ul>
-          <li>info@oscarcomplementservices.com</li>
-          <li>+234 XXX XXX XXXX</li>
-          <li>Lagos, Nigeria</li>
+          <li><a href="mailto:info@oscarcomplementservices.com" data-sync="email">info@oscarcomplementservices.com</a></li>
+          <li><a href="tel:+2348105803774" data-sync="phone">0810 580 3774</a></li>
+          <li><a href="https://wa.me/2348105803774?text=Hello%20Osca%20Complement%20Services%2C%20I%20would%20like%20to%20make%20an%20enquiry." data-sync="whatsapp" target="_blank" rel="noopener">WhatsApp us</a></li>
+          <li><a href="https://www.google.com/maps/search/?api=1&query=Osca%20Complement%20Services%2C%20Sebele%20Hotel%20bus%20stop%2C%20Eledi%20Atala%2C%20Itele%20Rd%2C%20Oke%20Oke%2C%20Ota%20121101%2C%20Ogun%20State" data-sync="maps" target="_blank" rel="noopener"><span data-sync="address-short">Ota, Ogun State, Nigeria</span></a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>Osca Complement Services. All rights reserved.</span>
+      <span>Osca Complement Services. All rights reserved. &middot; <a href="privacy.html">Privacy policy</a></span>
       <span>Designed by <a href="mailto:vr@vibrantrevolve.com" class="credit-link">VibrantRevolve</a></span>
     </div>
   </div>
 </footer>
 
+<script src="config.js" defer></script>
 <script src="main.js" defer></script>
 </body>
 </html>

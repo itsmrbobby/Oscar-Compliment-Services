@@ -195,99 +195,155 @@
   });
 
   /* ============================================
-     FORM HANDLING
+     FORM HANDLING + TOAST
      ============================================
-     NOTE: this currently fakes a successful submission
-     (preventDefault + setTimeout) without sending data anywhere.
-     Left unchanged pending Formspree vs. mailto: decision — see
-     conversation. Do not treat "Sent ✓" as proof of real delivery
-     until this block is rewired.
+     Forms only report success when the request really succeeds.
+     To connect a form, set its data-endpoint attribute to a form
+     service URL (e.g. Formspree: https://formspree.io/f/xxxx).
+     With no endpoint set, visitors are told to contact you directly
+     instead of being shown a false "Sent" message.
      ============================================ */
-  document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      const btn = this.querySelector('button[type="submit"]');
-      if (!btn) return;
-
-      const originalText = btn.textContent;
-      const originalWidth = btn.offsetWidth;
-
-      btn.style.width = originalWidth + 'px';
-      btn.textContent = 'Sending...';
-      btn.disabled = true;
-      btn.style.opacity = '0.8';
-      btn.style.cursor = 'wait';
-
-      // Simulate send
-      setTimeout(() => {
-        btn.textContent = 'Sent ✓';
-        btn.style.background = 'linear-gradient(135deg, #10b981, #34d399)';
-
-        setTimeout(() => {
-          btn.textContent = originalText;
-          btn.disabled = false;
-          btn.style.opacity = '1';
-          btn.style.cursor = 'pointer';
-          btn.style.width = '';
-          btn.style.background = '';
-          this.reset();
-
-          // Show toast notification instead of alert
-          showToast('Thank you! We will respond within 24 hours.');
-        }, 1500);
-      }, 1200);
-    });
-  });
-
-  /* ============================================
-     TOAST NOTIFICATION
-     ============================================ */
-  function showToast(message) {
+  function showToast(message, type) {
+    const isError = type === 'error';
     const existing = document.querySelector('.toast-notification');
     if (existing) existing.remove();
 
     const toast = document.createElement('div');
     toast.className = 'toast-notification';
-    toast.innerHTML = `
-      <div style="
-        position: fixed;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%) translateY(100px);
-        background: linear-gradient(135deg, var(--primary), #1a2d5c);
-        color: #fff;
-        padding: 16px 32px;
-        border-radius: 12px;
-        font-size: 14px;
-        font-weight: 600;
-        box-shadow: 0 12px 40px rgba(0,0,0,0.2);
-        border: 1px solid rgba(255,255,255,0.1);
-        z-index: 10000;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        backdrop-filter: blur(12px);
-        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        max-width: 90vw;
-        text-align: center;
-      ">
-        <span style="font-size: 18px;">✓</span>
-        <span>${message}</span>
-      </div>
-    `;
+    toast.setAttribute('role', isError ? 'alert' : 'status');
 
+    const box = document.createElement('div');
+    box.style.cssText = [
+      'position:fixed', 'bottom:30px', 'left:50%',
+      'transform:translateX(-50%) translateY(100px)',
+      'background:' + (isError ? 'linear-gradient(135deg,#7f1d1d,#b91c1c)' : 'linear-gradient(135deg,var(--primary),#1a2d5c)'),
+      'color:#fff', 'padding:16px 32px', 'border-radius:12px',
+      'font-size:14px', 'font-weight:600',
+      'box-shadow:0 12px 40px rgba(0,0,0,0.2)',
+      'border:1px solid rgba(255,255,255,0.1)', 'z-index:10000',
+      'display:flex', 'align-items:center', 'gap:10px',
+      'transition:transform 0.5s cubic-bezier(0.34,1.56,0.64,1)',
+      'max-width:90vw', 'text-align:center'
+    ].join(';');
+
+    const icon = document.createElement('span');
+    icon.style.fontSize = '18px';
+    icon.textContent = isError ? '!' : '✓';
+    const text = document.createElement('span');
+    text.textContent = message;
+    box.append(icon, text);
+    toast.appendChild(box);
     document.body.appendChild(toast);
 
-    // Trigger animation
-    requestAnimationFrame(() => {
-      toast.firstElementChild.style.transform = 'translateX(-50%) translateY(0)';
-    });
-
+    requestAnimationFrame(() => { box.style.transform = 'translateX(-50%) translateY(0)'; });
     setTimeout(() => {
-      toast.firstElementChild.style.transform = 'translateX(-50%) translateY(100px)';
+      box.style.transform = 'translateX(-50%) translateY(100px)';
       setTimeout(() => toast.remove(), 500);
-    }, 3500);
+    }, isError ? 5500 : 3500);
   }
+
+  document.querySelectorAll('form').forEach(form => {
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = this.querySelector('button[type="submit"]');
+      if (!btn) return;
+
+      const C = window.OSCA_CONFIG || {};
+      const endpoint = (this.dataset.endpoint || C.formEndpoint || '').trim();
+      if (!endpoint) {
+        // No form service connected yet: hand the message to the visitor's email app.
+        const to = (C.business && C.business.email) || '';
+        if (!to) {
+          showToast('Our online form is being connected. Please call or email us directly for now.', 'error');
+          return;
+        }
+        const lines = [];
+        new FormData(this).forEach(function (v, k) {
+          if (k.charAt(0) === '_' || !String(v).trim()) return;
+          lines.push(k.replace(/[-_]/g, ' ') + ': ' + v);
+        });
+        const subject = (document.title.split('—')[0] || 'Enquiry').trim() + ' - website enquiry';
+        window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) +
+          '&body=' + encodeURIComponent(lines.join('\n'));
+        showToast('Opening your email app. Press send there to deliver your message.');
+        return;
+      }
+
+      const originalText = btn.textContent;
+      btn.style.width = btn.offsetWidth + 'px';
+      btn.textContent = 'Sending...';
+      btn.disabled = true;
+      btn.style.opacity = '0.8';
+      btn.style.cursor = 'wait';
+
+      const restore = () => {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+        btn.style.width = '';
+        btn.style.background = '';
+      };
+
+      try {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          body: new FormData(this),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (!res.ok) throw new Error('Request failed: ' + res.status);
+        btn.textContent = 'Sent ✓';
+        btn.style.background = 'linear-gradient(135deg, #10b981, #34d399)';
+        this.reset();
+        window.dispatchEvent(new CustomEvent('osca:form-sent'));
+        showToast('Thank you! We will respond within 24 hours.');
+        setTimeout(restore, 1800);
+      } catch (err) {
+        restore();
+        showToast('Sorry, your message could not be sent. Please try again or contact us directly.', 'error');
+      }
+    });
+  });
+
+  /* ============================================
+     CONTACT SYNC — single source: config.js
+     Every element marked data-sync="..." is linked to the business
+     details in config.js, so changing them there updates every page.
+     ============================================ */
+  (function syncContact() {
+    var C = window.OSCA_CONFIG;
+    if (!C || !C.business) return;
+    var B = C.business;
+    function each(key, fn) { document.querySelectorAll('[data-sync="' + key + '"]').forEach(fn); }
+    function ext(a, href) { a.href = href; a.target = '_blank'; a.rel = 'noopener'; }
+    var waText = encodeURIComponent('Hello ' + (B.name || '') + ', I would like to make an enquiry.');
+
+    if (C.phoneTel) each('phone', function (a) { a.href = 'tel:' + C.phoneTel; a.textContent = C.phoneDisplay; });
+    if (C.whatsappDigits) each('whatsapp', function (a) { ext(a, 'https://wa.me/' + C.whatsappDigits + '?text=' + waText); });
+    if (B.email) each('email', function (a) { a.href = 'mailto:' + B.email; a.textContent = B.email; });
+    if (C.mapsUrl) each('maps', function (a) { ext(a, C.mapsUrl); });
+    if (C.directionsUrl) each('directions', function (a) { ext(a, C.directionsUrl); });
+    if (B.addressShort) each('address-short', function (n) { n.textContent = B.addressShort; });
+    if (B.addressLines && B.addressLines.length) each('address-full-static', function (n) {
+      n.textContent = '';
+      B.addressLines.forEach(function (line, i) {
+        if (i) n.appendChild(document.createElement('br'));
+        n.appendChild(document.createTextNode(line));
+      });
+    });
+    if (C.mapsEmbed) each('map-embed', function (f) { if (f.getAttribute('src') !== C.mapsEmbed) f.setAttribute('src', C.mapsEmbed); });
+
+    // Floating WhatsApp button on every page (only when a number is configured)
+    if (C.whatsappDigits && !document.querySelector('.wa-float')) {
+      var a = document.createElement('a');
+      a.className = 'wa-float';
+      a.href = 'https://wa.me/' + C.whatsappDigits + '?text=' + waText;
+      a.target = '_blank'; a.rel = 'noopener';
+      a.setAttribute('aria-label', 'Chat with us on WhatsApp');
+      a.innerHTML = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4 3h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9.5L5 21v-4H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/></svg><span class="wa-float-label">WhatsApp</span>';
+      document.body.appendChild(a);
+    }
+  })();
 
   /* ============================================
      PARALLAX HERO EFFECT (subtle)

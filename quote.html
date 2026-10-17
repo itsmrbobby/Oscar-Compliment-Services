@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a href="#main" class="skip-link">Skip to content</a>
 
 <nav class="nav">
   <div class="container nav-inner">
@@ -50,6 +51,7 @@
       <li><a href="about.html">About</a></li>
       <li><a href="projects.html">Projects</a></li>
       <li><a href="distribution.html">Distribution</a></li>
+      <li><a href="products.html">Products</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
     <a href="quote.html" class="nav-cta">Get a quote</a>
@@ -58,6 +60,8 @@
     </button>
   </div>
 </nav>
+
+<main id="main">
 
 <section class="page-hero">
   <div class="container">
@@ -77,13 +81,21 @@
       <div class="quote-step"><div class="step-num">3</div><span>Submit</span></div>
     </div>
 
-    <!-- NOTE: action="#" is a placeholder. This form does not currently
+    <div id="quoteItems" class="quote-items" hidden>
+      <h3>Your selected items <span id="quoteItemsCount"></span></h3>
+      <ul id="quoteItemsList"></ul>
+      <a href="products.html" class="quote-add-more">+ Add more products</a>
+    </div>
+
+    <!-- SET data-endpoint on the <form> to your Formspree URL (https://formspree.io/f/xxxx). This form does not currently
          send data anywhere — same fix needed as contact.html, see
          conversation for Formspree/mailto decision. -->
-    <form action="#" method="POST" class="reveal">
+    <form method="POST" data-endpoint="" class="reveal">
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;">
+      <input type="hidden" name="selected_items" id="f-selected_items">
       <div class="form-group">
-        <label>Business unit *</label>
-        <select name="unit" required>
+        <label for="f-unit">Business unit *</label>
+        <select id="f-unit" name="unit" required>
           <option value="">Select the unit you need</option>
           <option>Water Purification</option>
           <option>Building Materials</option>
@@ -95,29 +107,29 @@
       </div>
 
       <div class="form-group">
-        <label>Product or service needed *</label>
-        <input type="text" name="product" placeholder="e.g., 500 bags of Dangote cement, RO system for 50 staff, 4-bedroom duplex construction..." required>
+        <label for="f-product">Product or service needed *</label>
+        <input type="text" id="f-product" name="product" placeholder="e.g., 500 bags of Dangote cement, RO system for 50 staff, 4-bedroom duplex construction..." required>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>Quantity / Size</label>
-          <input type="text" name="quantity" placeholder="e.g., 100 units, 500 sqm, 1 plot">
+          <label for="f-quantity">Quantity / Size</label>
+          <input type="text" id="f-quantity" name="quantity" placeholder="e.g., 100 units, 500 sqm, 1 plot">
         </div>
         <div class="form-group">
-          <label>Budget range (optional)</label>
-          <input type="text" name="budget" placeholder="e.g., ₦500,000 - ₦1,000,000">
+          <label for="f-budget">Budget range (optional)</label>
+          <input type="text" id="f-budget" name="budget" placeholder="e.g., ₦500,000 - ₦1,000,000">
         </div>
       </div>
 
       <div class="form-group">
-        <label>Delivery location *</label>
-        <input type="text" name="location" placeholder="Full address or city" required>
+        <label for="f-location">Delivery location *</label>
+        <input type="text" id="f-location" name="location" placeholder="Full address or city" required>
       </div>
 
       <div class="form-group">
-        <label>Timeline</label>
-        <select name="timeline">
+        <label for="f-timeline">Timeline</label>
+        <select id="f-timeline" name="timeline">
           <option>As soon as possible</option>
           <option>Within 1 week</option>
           <option>Within 2 weeks</option>
@@ -127,31 +139,31 @@
       </div>
 
       <div class="form-group">
-        <label>Additional details</label>
-        <textarea name="details" placeholder="Any specifications, brand preferences, site conditions, or other requirements..."></textarea>
+        <label for="f-details">Additional details</label>
+        <textarea id="f-details" name="details" placeholder="Any specifications, brand preferences, site conditions, or other requirements..."></textarea>
       </div>
 
       <hr style="border:0;border-top:1px solid var(--border);margin:36px 0;">
 
       <div class="form-row">
         <div class="form-group">
-          <label>Full name *</label>
-          <input type="text" name="name" required>
+          <label for="f-name">Full name *</label>
+          <input type="text" id="f-name" name="name" required autocomplete="name">
         </div>
         <div class="form-group">
-          <label>Company name</label>
-          <input type="text" name="company" placeholder="If applicable">
+          <label for="f-company">Company name</label>
+          <input type="text" id="f-company" name="company" placeholder="If applicable">
         </div>
       </div>
 
       <div class="form-row">
         <div class="form-group">
-          <label>Email *</label>
-          <input type="email" name="email" required>
+          <label for="f-email">Email *</label>
+          <input type="email" id="f-email" name="email" required autocomplete="email">
         </div>
         <div class="form-group">
-          <label>Phone *</label>
-          <input type="tel" name="phone" required>
+          <label for="f-phone">Phone *</label>
+          <input type="tel" id="f-phone" name="phone" required autocomplete="tel">
         </div>
       </div>
 
@@ -159,6 +171,7 @@
         <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;padding:18px;font-size:16px;">Submit quote request</button>
       </div>
       <p style="text-align:center;font-size:13px;color:var(--muted);margin-top:14px;">We will respond within 24 hours with a detailed quote.</p>
+      <p class="form-alt">Prefer to talk? Call <a data-sync="phone" href="tel:+2348105803774">0810 580 3774</a> or <a data-sync="whatsapp" href="https://wa.me/2348105803774?text=Hello%20Osca%20Complement%20Services%2C%20I%20would%20like%20to%20make%20an%20enquiry." target="_blank" rel="noopener">message us on WhatsApp</a>.</p>
     </form>
   </div>
 </section>
@@ -194,6 +207,8 @@
   </div>
 </section>
 
+</main>
+
 <footer class="footer">
   <div class="container">
     <div class="footer-grid">
@@ -225,6 +240,7 @@
         <ul>
           <li><a href="about.html">About us</a></li>
           <li><a href="projects.html">Projects</a></li>
+          <li><a href="products.html">Products &amp; prices</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="quote.html">Get a quote</a></li>
         </ul>
@@ -232,19 +248,22 @@
       <div class="footer-col">
         <h4>Contact</h4>
         <ul>
-          <li>info@oscarcomplementservices.com</li>
-          <li>+234 XXX XXX XXXX</li>
-          <li>Lagos, Nigeria</li>
+          <li><a href="mailto:info@oscarcomplementservices.com" data-sync="email">info@oscarcomplementservices.com</a></li>
+          <li><a href="tel:+2348105803774" data-sync="phone">0810 580 3774</a></li>
+          <li><a href="https://wa.me/2348105803774?text=Hello%20Osca%20Complement%20Services%2C%20I%20would%20like%20to%20make%20an%20enquiry." data-sync="whatsapp" target="_blank" rel="noopener">WhatsApp us</a></li>
+          <li><a href="https://www.google.com/maps/search/?api=1&query=Osca%20Complement%20Services%2C%20Sebele%20Hotel%20bus%20stop%2C%20Eledi%20Atala%2C%20Itele%20Rd%2C%20Oke%20Oke%2C%20Ota%20121101%2C%20Ogun%20State" data-sync="maps" target="_blank" rel="noopener"><span data-sync="address-short">Ota, Ogun State, Nigeria</span></a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>Osca Complement Services. All rights reserved.</span>
+      <span>Osca Complement Services. All rights reserved. &middot; <a href="privacy.html">Privacy policy</a></span>
       <span>Designed by <a href="mailto:vr@vibrantrevolve.com" class="credit-link">VibrantRevolve</a></span>
     </div>
   </div>
 </footer>
 
+<script src="config.js" defer></script>
+<script src="catalog.js" defer></script>
 <script src="main.js" defer></script>
 </body>
 </html>

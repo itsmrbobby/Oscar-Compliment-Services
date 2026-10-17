@@ -1,0 +1,62 @@
+[
+  {
+    "id": "p1",
+    "title": "12-Unit Residential Estate",
+    "type": "Construction",
+    "status": "Completed",
+    "location": "",
+    "year": "",
+    "description": "Full land development, foundation, and construction of a gated residential community.",
+    "image": "images/project1.jpg"
+  },
+  {
+    "id": "p2",
+    "title": "5,000 sqm Warehouse Complex",
+    "type": "Construction",
+    "status": "Completed",
+    "location": "",
+    "year": "",
+    "description": "Industrial warehouse with reinforced concrete foundation, steel structure, loading bay, and office block.",
+    "image": "images/project2.jpg"
+  },
+  {
+    "id": "p3",
+    "title": "40-Plot Land Subdivision",
+    "type": "Real Estate",
+    "status": "Ongoing",
+    "location": "",
+    "year": "",
+    "description": "Land clearing, road construction, drainage, and utility installation for a residential development.",
+    "image": "images/project3.jpg"
+  },
+  {
+    "id": "p4",
+    "title": "Commercial Plaza",
+    "type": "Construction",
+    "status": "Completed",
+    "location": "",
+    "year": "",
+    "description": "Three-story commercial building with retail spaces, offices, and parking. Foundation to handover.",
+    "image": "images/project4.jpg"
+  },
+  {
+    "id": "p5",
+    "title": "Duplex Construction (4 units)",
+    "type": "Construction",
+    "status": "Completed",
+    "location": "",
+    "year": "",
+    "description": "Semi-detached duplexes with modern architecture, full MEP, and landscaped compounds.",
+    "image": "images/project5.jpg"
+  },
+  {
+    "id": "p6",
+    "title": "Access Road & Drainage",
+    "type": "Engineering",
+    "status": "Completed",
+    "location": "",
+    "year": "",
+    "description": "Civil works including 2km access road, culverts, and stormwater drainage for a new estate.",
+    "image": "images/project6.jpg"
+  }
+]

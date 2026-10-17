@@ -27,6 +27,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<a href="#main" class="skip-link">Skip to content</a>
 
 <nav class="nav">
   <div class="container nav-inner">
@@ -50,6 +51,7 @@
       <li><a href="about.html">About</a></li>
       <li><a href="projects.html">Projects</a></li>
       <li><a href="distribution.html">Distribution</a></li>
+      <li><a href="products.html">Products</a></li>
       <li><a href="contact.html" class="active">Contact</a></li>
     </ul>
     <a href="quote.html" class="nav-cta">Get a quote</a>
@@ -58,6 +60,8 @@
     </button>
   </div>
 </nav>
+
+<main id="main">
 
 <section class="page-hero">
   <div class="container">
@@ -74,27 +78,28 @@
         <div class="section-label">Get in Touch</div>
         <h2>Send us a <span>message.</span></h2>
         <p>Fill out the form and our team will route your inquiry to the right business unit. For urgent requests, call us directly.</p>
-        <!-- NOTE: action="#" is a placeholder. This form does not currently
+        <!-- SET data-endpoint on the <form> to your Formspree URL (https://formspree.io/f/xxxx). This form does not currently
              send data anywhere — see conversation for Formspree/mailto fix. -->
-        <form action="#" method="POST" style="margin-top:28px;">
+        <form method="POST" data-endpoint="" style="margin-top:28px;">
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;">
           <div class="form-row">
             <div class="form-group">
-              <label>Full name</label>
-              <input type="text" name="name" placeholder="Your full name" required>
+              <label for="f-name">Full name</label>
+              <input type="text" id="f-name" name="name" placeholder="Your full name" required autocomplete="name">
             </div>
             <div class="form-group">
-              <label>Email address</label>
-              <input type="email" name="email" placeholder="you@company.com" required>
+              <label for="f-email">Email address</label>
+              <input type="email" id="f-email" name="email" placeholder="you@company.com" required autocomplete="email">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Phone number</label>
-              <input type="tel" name="phone" placeholder="+234 ...">
+              <label for="f-phone">Phone number</label>
+              <input type="tel" id="f-phone" name="phone" placeholder="+234 ..." autocomplete="tel">
             </div>
             <div class="form-group">
-              <label>Business unit</label>
-              <select name="unit">
+              <label for="f-unit">Business unit</label>
+              <select id="f-unit" name="unit">
                 <option value="">Select a unit (optional)</option>
                 <option>Water Purification</option>
                 <option>Building Materials</option>
@@ -107,8 +112,8 @@
             </div>
           </div>
           <div class="form-group">
-            <label>Message</label>
-            <textarea name="message" placeholder="How can we help you?" required></textarea>
+            <label for="f-message">Message</label>
+            <textarea id="f-message" name="message" placeholder="How can we help you?" required></textarea>
           </div>
           <button type="submit" class="btn btn-primary">Send message</button>
         </form>
@@ -119,21 +124,23 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M12 21s7-7.5 7-12a7 7 0 0 0-14 0c0 4.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.3"/></svg>
             Office Address
           </h3>
-          <p style="color:var(--secondary);font-size:15px;">[Your office address]<br>Lagos, Nigeria</p>
+          <p style="color:var(--secondary);font-size:15px;"><span data-sync="address-full-static">Sebele Hotel bus stop, Eledi Atala,<br>Itele Rd, Oke Oke, Ota 121101,<br>Ogun State, Nigeria</span></p>
+          <p class="contact-actions"><a class="contact-link" data-sync="directions" href="https://www.google.com/maps/dir/?api=1&destination=Osca%20Complement%20Services%2C%20Sebele%20Hotel%20bus%20stop%2C%20Eledi%20Atala%2C%20Itele%20Rd%2C%20Oke%20Oke%2C%20Ota%20121101%2C%20Ogun%20State" target="_blank" rel="noopener">Get directions →</a></p>
         </div>
         <div class="card contact-card">
           <h3 class="contact-card-heading">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><path d="M4 5c0-1 1-2 2-2h2l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v2c0 1-1 2-2 2A16 16 0 0 1 4 5z"/></svg>
             Phone
           </h3>
-          <p style="color:var(--secondary);font-size:15px;">+234 XXX XXX XXXX<br>+234 XXX XXX XXXX</p>
+          <p style="color:var(--secondary);font-size:15px;"><a class="contact-link" data-sync="phone" href="tel:+2348105803774">0810 580 3774</a></p>
+          <p class="contact-actions"><a class="contact-link" data-sync="whatsapp" href="https://wa.me/2348105803774?text=Hello%20Osca%20Complement%20Services%2C%20I%20would%20like%20to%20make%20an%20enquiry." target="_blank" rel="noopener">Chat on WhatsApp →</a></p>
         </div>
         <div class="card contact-card">
           <h3 class="contact-card-heading">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>
             Email
           </h3>
-          <p style="color:var(--secondary);font-size:15px;">info@oscarcomplementservices.com<br>quotes@oscarcomplementservices.com</p>
+          <p style="color:var(--secondary);font-size:15px;"><a class="contact-link" data-sync="email" href="mailto:info@oscarcomplementservices.com">info@oscarcomplementservices.com</a></p>
         </div>
         <div class="card contact-card contact-card-last">
           <h3 class="contact-card-heading">
@@ -149,11 +156,22 @@
 
 <section class="section section-alt">
   <div class="container">
-    <div class="feature-img" style="min-height:320px;">
-      <img src="images/map.jpg" alt="Osca Complement Services office location map" loading="lazy" width="1200" height="500" onerror="this.style.display='none';this.parentElement.innerText='[Map embed or location image]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+    <div class="section-header reveal">
+      <div class="section-label">Find Us</div>
+      <h2>Visit our office.</h2>
+      <p>Near Sebele Hotel bus stop, Eledi Atala, along Itele Road, Ota.</p>
+    </div>
+    <div class="map-embed">
+      <iframe data-sync="map-embed" title="Osca Complement Services on Google Maps" src="https://www.google.com/maps?q=Osca%20Complement%20Services%2C%20Sebele%20Hotel%20bus%20stop%2C%20Eledi%20Atala%2C%20Itele%20Rd%2C%20Oke%20Oke%2C%20Ota%20121101%2C%20Ogun%20State&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+    </div>
+    <div class="map-actions">
+      <a class="btn btn-primary" data-sync="maps" href="https://www.google.com/maps/search/?api=1&query=Osca%20Complement%20Services%2C%20Sebele%20Hotel%20bus%20stop%2C%20Eledi%20Atala%2C%20Itele%20Rd%2C%20Oke%20Oke%2C%20Ota%20121101%2C%20Ogun%20State" target="_blank" rel="noopener">View on Google Maps</a>
+      <a class="btn btn-outline-dark" data-sync="directions" href="https://www.google.com/maps/dir/?api=1&destination=Osca%20Complement%20Services%2C%20Sebele%20Hotel%20bus%20stop%2C%20Eledi%20Atala%2C%20Itele%20Rd%2C%20Oke%20Oke%2C%20Ota%20121101%2C%20Ogun%20State" target="_blank" rel="noopener">Get directions</a>
     </div>
   </div>
 </section>
+
+</main>
 
 <footer class="footer">
   <div class="container">
@@ -186,6 +204,7 @@
         <ul>
           <li><a href="about.html">About us</a></li>
           <li><a href="projects.html">Projects</a></li>
+          <li><a href="products.html">Products &amp; prices</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="quote.html">Get a quote</a></li>
         </ul>
@@ -193,19 +212,21 @@
       <div class="footer-col">
         <h4>Contact</h4>
         <ul>
-          <li>info@oscarcomplementservices.com</li>
-          <li>+234 XXX XXX XXXX</li>
-          <li>Lagos, Nigeria</li>
+          <li><a href="mailto:info@oscarcomplementservices.com" data-sync="email">info@oscarcomplementservices.com</a></li>
+          <li><a href="tel:+2348105803774" data-sync="phone">0810 580 3774</a></li>
+          <li><a href="https://wa.me/2348105803774?text=Hello%20Osca%20Complement%20Services%2C%20I%20would%20like%20to%20make%20an%20enquiry." data-sync="whatsapp" target="_blank" rel="noopener">WhatsApp us</a></li>
+          <li><a href="https://www.google.com/maps/search/?api=1&query=Osca%20Complement%20Services%2C%20Sebele%20Hotel%20bus%20stop%2C%20Eledi%20Atala%2C%20Itele%20Rd%2C%20Oke%20Oke%2C%20Ota%20121101%2C%20Ogun%20State" data-sync="maps" target="_blank" rel="noopener"><span data-sync="address-short">Ota, Ogun State, Nigeria</span></a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>Osca Complement Services. All rights reserved.</span>
+      <span>Osca Complement Services. All rights reserved. &middot; <a href="privacy.html">Privacy policy</a></span>
       <span>Designed by <a href="mailto:vr@vibrantrevolve.com" class="credit-link">VibrantRevolve</a></span>
     </div>
   </div>
 </footer>
 
+<script src="config.js" defer></script>
 <script src="main.js" defer></script>
 </body>
 </html>

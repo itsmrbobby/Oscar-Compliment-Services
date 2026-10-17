@@ -30,22 +30,70 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "LocalBusiness",
     "name": "Osca Complement Services",
     "url": "https://itsmrbobby.github.io/Oscar-Compliment-Services/",
+    "image": "https://itsmrbobby.github.io/Oscar-Compliment-Services/images/og-cover.jpg",
+    "telephone": "+2348105803774",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Sebele Hotel bus stop, Eledi Atala, Itele Rd, Oke Oke",
+      "addressLocality": "Ota",
+      "addressRegion": "Ogun State",
+      "postalCode": "121101",
+      "addressCountry": "NG"
+    },
+    "hasMap": "https://www.google.com/maps/search/?api=1&query=Osca%20Complement%20Services%2C%20Sebele%20Hotel%20bus%20stop%2C%20Eledi%20Atala%2C%20Itele%20Rd%2C%20Oke%20Oke%2C%20Ota%20121101%2C%20Ogun%20State",
     "description": "Distributor of building materials, water purification systems, frozen foods and general goods; engineering, construction and real estate development.",
     "makesOffer": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Water Purification Systems" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Building Materials Distribution" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Engineering & Construction" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Real Estate & Land Sales" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Frozen Food Distribution" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "General Distribution" } }
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Water Purification Systems"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Building Materials Distribution"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Engineering & Construction"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Real Estate & Land Sales"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Frozen Food Distribution"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "General Distribution"
+        }
+      }
     ]
   }
   </script>
 </head>
 <body>
+<a href="#main" class="skip-link">Skip to content</a>
 
 <nav class="nav">
   <div class="container nav-inner">
@@ -69,6 +117,7 @@
       <li><a href="about.html">About</a></li>
       <li><a href="projects.html">Projects</a></li>
       <li><a href="distribution.html">Distribution</a></li>
+      <li><a href="products.html">Products</a></li>
       <li><a href="contact.html">Contact</a></li>
     </ul>
     <a href="quote.html" class="nav-cta">Get a quote</a>
@@ -77,6 +126,8 @@
     </button>
   </div>
 </nav>
+
+<main id="main">
 
 <section class="hero">
   <div class="container hero-inner">
@@ -347,7 +398,7 @@
               Flip
             </div>
             <div class="flip-img">
-              <img src="images/water.jpg" alt="Water purification unit" loading="lazy" width="600" height="400" onerror="this.style.display='none';this.parentElement.innerText='[Water purification image]'" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/water.jpg" alt="Water purification unit" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">
@@ -360,7 +411,7 @@
           </div>
           <div class="flip-card-back">
             <h3>Water Purification</h3>
-            <p>Clean water solutions for homes and industry. We supply, install, and maintain world-class purification systems with certified quality.</p>
+            <p>Clean water solutions for homes and industry. We supply, install, and maintain world-class purification systems.</p>
             <a href="water.html" class="btn-small">Explore unit →</a>
           </div>
         </div>
@@ -374,7 +425,7 @@
               Flip
             </div>
             <div class="flip-img">
-              <img src="images/materials.jpg" alt="Building materials stock" loading="lazy" width="600" height="400" onerror="this.style.display='none';this.parentElement.innerText='[Building materials image]'" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/materials.jpg" alt="Building materials stock" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">
@@ -401,7 +452,7 @@
               Flip
             </div>
             <div class="flip-img">
-              <img src="images/engineering.jpg" alt="Engineering and construction site" loading="lazy" width="600" height="400" onerror="this.style.display='none';this.parentElement.innerText='[Engineering image]'" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/engineering.jpg" alt="Engineering and construction site" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">
@@ -428,7 +479,7 @@
               Flip
             </div>
             <div class="flip-img">
-              <img src="images/realestate.jpg" alt="Real estate development plot" loading="lazy" width="600" height="400" onerror="this.style.display='none';this.parentElement.innerText='[Real estate image]'" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/realestate.jpg" alt="Real estate development plot" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">
@@ -455,7 +506,7 @@
               Flip
             </div>
             <div class="flip-img">
-              <img src="images/frozen.jpg" alt="Frozen food distribution cold storage" loading="lazy" width="600" height="400" onerror="this.style.display='none';this.parentElement.innerText='[Frozen food image]'" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/frozen.jpg" alt="Frozen food distribution cold storage" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">
@@ -482,7 +533,7 @@
               Flip
             </div>
             <div class="flip-img">
-              <img src="images/distribution.jpg" alt="General distribution warehouse" loading="lazy" width="600" height="400" onerror="this.style.display='none';this.parentElement.innerText='[Distribution image]'" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/distribution.jpg" alt="General distribution warehouse" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">
@@ -521,7 +572,7 @@
         </ul>
       </div>
       <div class="feature-img">
-        <img src="images/team.jpg" alt="Osca Complement Services team and facility" loading="lazy" width="800" height="600" onerror="this.style.display='none';this.parentElement.innerText='[Team / facility image]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        <img src="images/team.jpg" alt="Osca Complement Services team and facility" loading="lazy" width="800" height="600" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
       </div>
     </div>
   </div>
@@ -539,12 +590,12 @@
         <div class="stat-label">Business Units</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number">500+</div>
-        <div class="stat-label">Products Distributed</div>
+        <div class="stat-number">345</div>
+        <div class="stat-label">Products Listed</div>
       </div>
       <div class="stat-card">
-        <div class="stat-number">50+</div>
-        <div class="stat-label">Projects Completed</div>
+        <div class="stat-number">37</div>
+        <div class="stat-label">Product Categories</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">24h</div>
@@ -564,7 +615,7 @@
     <div class="card-grid card-grid-3 reveal stagger-children">
       <div class="listing-card">
         <div class="listing-img">
-          <img src="images/project1.jpg" alt="Residential estate development project" loading="lazy" width="600" height="400" onerror="this.style.display='none';this.parentElement.innerText='[Project photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+          <img src="images/project1.jpg" alt="Residential estate development project" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
           <h4>Residential Estate Development</h4>
@@ -577,7 +628,7 @@
       </div>
       <div class="listing-card">
         <div class="listing-img">
-          <img src="images/project2.jpg" alt="Commercial warehouse complex project" loading="lazy" width="600" height="400" onerror="this.style.display='none';this.parentElement.innerText='[Project photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+          <img src="images/project2.jpg" alt="Commercial warehouse complex project" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
           <h4>Commercial Warehouse Complex</h4>
@@ -590,7 +641,7 @@
       </div>
       <div class="listing-card">
         <div class="listing-img">
-          <img src="images/project3.jpg" alt="Land subdivision and sales project" loading="lazy" width="600" height="400" onerror="this.style.display='none';this.parentElement.innerText='[Project photo]'" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+          <img src="images/project3.jpg" alt="Land subdivision and sales project" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
           <h4>Land Subdivision & Sales</h4>
@@ -615,6 +666,8 @@
     <a href="quote.html" class="btn btn-primary">Get a free quote</a>
   </div>
 </section>
+
+</main>
 
 <footer class="footer">
   <div class="container">
@@ -647,6 +700,7 @@
         <ul>
           <li><a href="about.html">About us</a></li>
           <li><a href="projects.html">Projects</a></li>
+          <li><a href="products.html">Products &amp; prices</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="quote.html">Get a quote</a></li>
         </ul>
@@ -654,19 +708,21 @@
       <div class="footer-col">
         <h4>Contact</h4>
         <ul>
-          <li>info@oscarcomplementservices.com</li>
-          <li>+234 XXX XXX XXXX</li>
-          <li>Lagos, Nigeria</li>
+          <li><a href="mailto:info@oscarcomplementservices.com" data-sync="email">info@oscarcomplementservices.com</a></li>
+          <li><a href="tel:+2348105803774" data-sync="phone">0810 580 3774</a></li>
+          <li><a href="https://wa.me/2348105803774?text=Hello%20Osca%20Complement%20Services%2C%20I%20would%20like%20to%20make%20an%20enquiry." data-sync="whatsapp" target="_blank" rel="noopener">WhatsApp us</a></li>
+          <li><a href="https://www.google.com/maps/search/?api=1&query=Osca%20Complement%20Services%2C%20Sebele%20Hotel%20bus%20stop%2C%20Eledi%20Atala%2C%20Itele%20Rd%2C%20Oke%20Oke%2C%20Ota%20121101%2C%20Ogun%20State" data-sync="maps" target="_blank" rel="noopener"><span data-sync="address-short">Ota, Ogun State, Nigeria</span></a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>Osca Complement Services. All rights reserved.</span>
+      <span>Osca Complement Services. All rights reserved. &middot; <a href="privacy.html">Privacy policy</a></span>
       <span>Designed by <a href="mailto:vr@vibrantrevolve.com" class="credit-link">VibrantRevolve</a></span>
     </div>
   </div>
 </footer>
 
+<script src="config.js" defer></script>
 <script src="main.js" defer></script>
 </body>
 </html>
