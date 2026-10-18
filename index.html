@@ -91,6 +91,16 @@
     ]
   }
   </script>
+<script>
+/* Photo loader: tries .jpg, .jpeg, .png, .webp (and CAPITAL versions) before giving up, so a photo saved as
+   water.jpeg or Water.JPG still shows. If none exist the branded placeholder stays. */
+(function(){var E=['jpg','jpeg','png','webp','JPG','JPEG','PNG','WEBP'];
+document.addEventListener('error',function(ev){var i=ev.target;if(!i||i.tagName!=='IMG')return;
+var s=i.getAttribute('src')||'',m=s.match(/^(images\/.+)\.(jpg|jpeg|png|webp)$/i);if(!m)return;
+ev.stopImmediatePropagation();var t=i.__tried||(i.__tried=[]);t.push(s.split('.').pop());
+for(var k=0;k<E.length;k++){if(t.indexOf(E[k])<0){i.src=m[1]+'.'+E[k];return;}}
+i.remove();},true);})();
+</script>
 </head>
 <body>
 <a href="#main" class="skip-link">Skip to content</a>
@@ -403,7 +413,7 @@
               Flip
             </div>
             <div class="flip-img">
-              <img src="images/water.jpg" alt="Water purification unit" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/water.jpg" alt="Water purification unit" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">
@@ -430,7 +440,7 @@
               Flip
             </div>
             <div class="flip-img">
-              <img src="images/materials.jpg" alt="Building materials stock" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/materials.jpg" alt="Building materials stock" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">
@@ -457,7 +467,7 @@
               Flip
             </div>
             <div class="flip-img">
-              <img src="images/engineering.jpg" alt="Engineering and construction site" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/engineering.jpg" alt="Engineering and construction site" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">
@@ -484,7 +494,7 @@
               Flip
             </div>
             <div class="flip-img">
-              <img src="images/realestate.jpg" alt="Real estate development plot" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/realestate.jpg" alt="Real estate development plot" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">
@@ -511,7 +521,7 @@
               Flip
             </div>
             <div class="flip-img">
-              <img src="images/frozen.jpg" alt="Frozen food distribution cold storage" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/frozen.jpg" alt="Frozen food distribution cold storage" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">
@@ -538,7 +548,7 @@
               Flip
             </div>
             <div class="flip-img">
-              <img src="images/distribution.jpg" alt="General distribution warehouse" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;">
+              <img src="images/distribution.jpg" alt="General distribution warehouse" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;">
             </div>
             <div class="flip-body">
               <div class="flip-icon">
@@ -577,7 +587,7 @@
         </ul>
       </div>
       <div class="feature-img">
-        <img src="images/team.jpg" alt="Osca Complement Services team and facility" loading="lazy" width="800" height="600" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        <img src="images/team.jpg" alt="Osca Complement Services team and facility" loading="lazy" width="800" height="600" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
       </div>
     </div>
   </div>
@@ -620,7 +630,7 @@
     <div class="card-grid card-grid-3 reveal stagger-children">
       <div class="listing-card">
         <div class="listing-img">
-          <img src="images/project1.jpg" alt="Residential estate development project" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+          <img src="images/project1.jpg" alt="Residential estate development project" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
           <h4>Residential Estate Development</h4>
@@ -633,7 +643,7 @@
       </div>
       <div class="listing-card">
         <div class="listing-img">
-          <img src="images/project2.jpg" alt="Commercial warehouse complex project" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+          <img src="images/project2.jpg" alt="Commercial warehouse complex project" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
           <h4>Commercial Warehouse Complex</h4>
@@ -646,7 +656,7 @@
       </div>
       <div class="listing-card">
         <div class="listing-img">
-          <img src="images/project3.jpg" alt="Land subdivision and sales project" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+          <img src="images/project3.jpg" alt="Land subdivision and sales project" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
           <h4>Land Subdivision & Sales</h4>

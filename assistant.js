@@ -419,7 +419,7 @@
     var head = el('header', 'bot-head');
     var avatar = el('span', 'bot-avatar'); avatar.innerHTML = LOGO;
     var title = el('div', 'bot-title'); title.append(el('strong', null, A.name || 'Osca Assistant'), el('span', null, 'Automated guide · replies instantly'));
-    var human = el('a', 'bot-human'); human.target = '_blank'; human.rel = 'noopener'; human.innerHTML = PHONE; human.append(el('span', null, 'Talk to a person'));
+    var human = el('a', 'bot-human'); human.target = '_blank'; human.rel = 'noopener'; human.setAttribute('aria-label', 'Talk to a person'); human.innerHTML = PHONE; human.append(el('span', null, 'Talk to a person'));
     var closeBtn = el('button', 'bot-close'); closeBtn.type = 'button'; closeBtn.setAttribute('aria-label', 'Close chat'); closeBtn.innerHTML = CLOSE;
     head.append(avatar, title, human, closeBtn);
     var log = el('div', 'bot-log'); log.setAttribute('role', 'log'); log.setAttribute('aria-live', 'polite');
@@ -459,10 +459,10 @@
     function renderMsg(m) {
       var wrap;
       if (m.from === 'user') { wrap = el('div', 'bot-msg user'); wrap.appendChild(el('div', 'bubble', m.text)); return wrap; }
-      wrap = el('div', 'bot-msg bot');
+      wrap = el('div', 'bot-msg from-bot');
       if (m.kind === 'text') wrap.appendChild(el('div', 'bubble', m.text));
       else if (m.kind === 'chips') {
-        wrap.className = 'bot-msg bot chips';
+        wrap.className = 'bot-msg from-bot chips';
         var row = el('div', 'bot-chips');
         m.chips.forEach(function (c) {
           var b = el('button', 'bot-chip', c.label); b.type = 'button';
@@ -504,7 +504,7 @@
       if (persist !== false) { store.msgs.push(m); save(); }
     }
     function typing() {
-      var t = el('div', 'bot-msg bot typing'); var b = el('div', 'bubble');
+      var t = el('div', 'bot-msg from-bot typing'); var b = el('div', 'bubble');
       for (var i = 0; i < 3; i++) b.appendChild(el('span', 'dot'));
       t.appendChild(b); t.setAttribute('aria-label', 'Assistant is typing'); log.appendChild(t); scrollDown(); return t;
     }
