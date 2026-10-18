@@ -334,7 +334,8 @@
      PARALLAX HERO EFFECT (subtle)
      ============================================ */
   const hero = document.querySelector('.hero');
-  if (hero && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  // Desktop only: on phones the hero is taller than the screen, so fading it made the text look washed out.
+  if (hero && !window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.matchMedia('(min-width: 901px)').matches) {
     window.addEventListener('scroll', () => {
       const scrolled = window.pageYOffset;
       const rate = scrolled * 0.15;

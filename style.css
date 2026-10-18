@@ -2158,8 +2158,18 @@ img { max-width: 100%; display: block; }
   font: inherit; font-size: 13px; background: none; border: none; color: rgba(255,255,255,0.7);
   cursor: pointer; text-decoration: underline; padding: 8px;
 }
-@media (max-width: 480px) {
-  .quote-bar-inner { justify-content: center; text-align: center; }
+@media (max-width: 600px) {
+  /* Phone layout: count + Clear on the first row, the two actions side by side below */
+  .quote-bar { padding: 10px 0 max(10px, env(safe-area-inset-bottom)); }
+  .quote-bar-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 10px; align-items: center; text-align: left; }
+  .quote-bar-actions { display: contents; }
+  #quoteBarCount { grid-column: 1; grid-row: 1; font-size: 14px; font-weight: 600; }
+  .quote-bar-clear { grid-column: 2; grid-row: 1; justify-self: end; padding: 4px 2px; font-size: 13px; }
+  .quote-bar .btn { grid-row: 2; width: 100%; align-self: stretch; min-height: 46px; padding: 10px 6px; font-size: 13px; line-height: 1.2; text-align: center; white-space: normal; }
+  #quoteBarWa { grid-column: 1; }
+  #quoteBarWa + .btn { grid-column: 2; }
+  #quoteBarWa[hidden] + .btn { grid-column: 1 / -1; }
+  body.has-quote-bar { padding-bottom: 112px; }
 }
 
 /* quote page: selected items */
@@ -2277,7 +2287,7 @@ body.has-quote-bar .wa-float { bottom: 92px; }
 @media (max-width: 600px) {
   .wa-float { right: 14px; bottom: 14px; padding: 14px; }
   .wa-float-label { display: none; }
-  body.has-quote-bar .wa-float { bottom: 128px; }
+  body.has-quote-bar .wa-float { bottom: 120px; }
 }
 
 /* ============================================
@@ -2454,7 +2464,7 @@ body.has-quote-bar .bot { bottom: 92px; }
 
 @media (max-width: 600px) {
   .bot { right: 14px; bottom: 14px; }
-  body.has-quote-bar .bot { bottom: 128px; }
+  body.has-quote-bar .bot { bottom: 120px; }
   .bot-launcher { padding: 9px; }
   .bot-launcher-label { display: none; }
   .bot.open { right: 0; bottom: 0; left: 0; top: 0; }
@@ -2480,3 +2490,18 @@ input, select, textarea { max-width: 100%; }
 .map-embed { width: 100%; max-width: 100%; min-width: 0; }
 @media (max-width: 640px) { .map-embed { min-height: 0; } }
 .contact-link { overflow-wrap: anywhere; min-width: 0; }
+
+/* Homepage hero: content can never be wider than the screen */
+.hero-inner { min-width: 0; width: 100%; max-width: 100%; }
+.hero-search { width: 100%; max-width: min(540px, 100%); box-sizing: border-box; }
+.hero-search input { min-width: 0; width: 100%; }
+.hero-search .btn { flex-shrink: 0; }
+@media (max-width: 480px) {
+  .hero-search { gap: 6px; }
+  .hero-search input { padding: 10px 12px; font-size: 14px; text-overflow: ellipsis; }
+}
+
+@media (max-width: 340px) {
+  .nav-inner .logo { font-size: 19px; gap: 6px; }
+  .nav-inner .logo svg { width: 26px; height: 26px; }
+}
