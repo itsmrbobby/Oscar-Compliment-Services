@@ -242,30 +242,15 @@
     }, isError ? 5500 : 3500);
   }
 
-  document.querySelectorAll('form').forEach(form => {
+  document.querySelectorAll('form[data-endpoint]').forEach(form => {
     form.addEventListener('submit', async function(e) {
       e.preventDefault();
       const btn = this.querySelector('button[type="submit"]');
       if (!btn) return;
 
-      const C = window.OSCA_CONFIG || {};
-      const endpoint = (this.dataset.endpoint || C.formEndpoint || '').trim();
+      const endpoint = (this.dataset.endpoint || (window.OSCA_CONFIG && window.OSCA_CONFIG.formEndpoint) || '').trim();
       if (!endpoint) {
-        // No form service connected yet: hand the message to the visitor's email app.
-        const to = (C.business && C.business.email) || '';
-        if (!to) {
-          showToast('Our online form is being connected. Please call or email us directly for now.', 'error');
-          return;
-        }
-        const lines = [];
-        new FormData(this).forEach(function (v, k) {
-          if (k.charAt(0) === '_' || !String(v).trim()) return;
-          lines.push(k.replace(/[-_]/g, ' ') + ': ' + v);
-        });
-        const subject = (document.title.split('—')[0] || 'Enquiry').trim() + ' - website enquiry';
-        window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) +
-          '&body=' + encodeURIComponent(lines.join('\n'));
-        showToast('Opening your email app. Press send there to deliver your message.');
+        showToast('Our online form is being connected. Please call or email us directly for now.', 'error');
         return;
       }
 
@@ -333,8 +318,8 @@
     });
     if (C.mapsEmbed) each('map-embed', function (f) { if (f.getAttribute('src') !== C.mapsEmbed) f.setAttribute('src', C.mapsEmbed); });
 
-    // Floating WhatsApp button on every page (only when a number is configured)
-    if (C.whatsappDigits && !document.querySelector('.wa-float')) {
+    // Plain floating WhatsApp button — only when the chat assistant is switched off in config.js
+    if (C.whatsappDigits && C.assistant && C.assistant.enabled === false && !document.querySelector('.wa-float')) {
       var a = document.createElement('a');
       a.className = 'wa-float';
       a.href = 'https://wa.me/' + C.whatsappDigits + '?text=' + waText;
@@ -361,28 +346,4 @@
     }, { passive: true });
   }
 
-})();
-
-/* Footer "Follow us" links, from data/settings.json (edited in the admin dashboard). Only filled-in ones show. */
-(function () {
-  function url(v, base) { v = String(v || '').trim(); if (!v) return ''; if (/^https?:\/\//i.test(v)) return v; return base ? base + encodeURIComponent(v.replace(/^@/, '')) : ''; }
-  fetch('data/settings.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (s) {
-    var links = [
-      ['TikTok', url(s.tiktok, 'https://www.tiktok.com/@')],
-      ['Instagram', url(s.instagram, 'https://www.instagram.com/')],
-      ['Facebook', url(s.facebook, 'https://www.facebook.com/')],
-      ['WhatsApp channel \u2014 get price updates', url(s.whatsappChannel, '')]
-    ].filter(function (l) { return l[1]; });
-    var grid = document.querySelector('.footer-grid');
-    if (!links.length || !grid) return;
-    var col = document.createElement('div'); col.className = 'footer-col';
-    var h = document.createElement('h4'); h.textContent = 'Follow us'; col.appendChild(h);
-    var ul = document.createElement('ul');
-    links.forEach(function (l) {
-      var li = document.createElement('li'), a = document.createElement('a');
-      a.href = l[1]; a.textContent = l[0]; a.target = '_blank'; a.rel = 'noopener';
-      li.appendChild(a); ul.appendChild(li);
-    });
-    col.appendChild(ul); grid.appendChild(col);
-  }).catch(function () {});
 })();

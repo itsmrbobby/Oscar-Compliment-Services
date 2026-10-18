@@ -16,7 +16,3 @@ Link-preview image:         og-cover.jpg  (1200x630, already provided)
 Tip: export photos as JPG, under ~250 KB each, so pages stay fast on mobile data.
 
 Category tile pictures (Products page): see  categories/README.txt  — 37 exact filenames.
-
-PRODUCT PHOTOS (one per product, optional)
-images/products/<SKU>.jpg   e.g. images/products/FF001.jpg   (SKUs are listed in osca-products-and-photo-checklist.xlsx)
-600 x 450 px JPG, ~50-80 KB. Missing ones fall back to the category photo. Use osca-admin/tools/prepare-photos.py to resize in bulk.

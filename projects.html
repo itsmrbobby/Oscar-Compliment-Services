@@ -73,38 +73,74 @@
 
 <section class="section">
   <div class="container">
-    <div class="section-header reveal"><div class="section-label">Portfolio</div><h2>Current <span class="gradient-text">projects.</span></h2></div>
-    <div class="card-grid card-grid-3" id="projCurrent"></div>
+    <div class="section-header reveal">
+      <div class="section-label">Portfolio</div>
+      <h2>Completed & <span class="gradient-text">ongoing work.</span></h2>
+    </div>
+    <div class="card-grid card-grid-3 reveal">
+      <div class="listing-card">
+        <div class="listing-img">
+          <img src="images/project1.jpg" alt="12-unit gated residential estate" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        </div>
+        <div class="listing-body">
+          <h4>12-Unit Residential Estate</h4>
+          <p>Full land development, foundation, and construction of a gated residential community.</p>
+          <div class="listing-meta"><span class="listing-tag">Construction</span><span class="listing-price">Completed</span></div>
+        </div>
+      </div>
+      <div class="listing-card">
+        <div class="listing-img">
+          <img src="images/project2.jpg" alt="5,000 square meter industrial warehouse complex" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        </div>
+        <div class="listing-body">
+          <h4>5,000 sqm Warehouse Complex</h4>
+          <p>Industrial warehouse with reinforced concrete foundation, steel structure, loading bay, and office block.</p>
+          <div class="listing-meta"><span class="listing-tag">Construction</span><span class="listing-price">Completed</span></div>
+        </div>
+      </div>
+      <div class="listing-card">
+        <div class="listing-img">
+          <img src="images/project3.jpg" alt="40-plot residential land subdivision" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        </div>
+        <div class="listing-body">
+          <h4>40-Plot Land Subdivision</h4>
+          <p>Land clearing, road construction, drainage, and utility installation for a residential development.</p>
+          <div class="listing-meta"><span class="listing-tag">Real Estate</span><span class="listing-price">Ongoing</span></div>
+        </div>
+      </div>
+      <div class="listing-card">
+        <div class="listing-img">
+          <img src="images/project4.jpg" alt="Three-story commercial plaza with retail and office space" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        </div>
+        <div class="listing-body">
+          <h4>Commercial Plaza</h4>
+          <p>Three-story commercial building with retail spaces, offices, and parking. Foundation to handover.</p>
+          <div class="listing-meta"><span class="listing-tag">Construction</span><span class="listing-price">Completed</span></div>
+        </div>
+      </div>
+      <div class="listing-card">
+        <div class="listing-img">
+          <img src="images/project5.jpg" alt="Four-unit semi-detached duplex construction" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        </div>
+        <div class="listing-body">
+          <h4>Duplex Construction (4 units)</h4>
+          <p>Semi-detached duplexes with modern architecture, full MEP, and landscaped compounds.</p>
+          <div class="listing-meta"><span class="listing-tag">Construction</span><span class="listing-price">Completed</span></div>
+        </div>
+      </div>
+      <div class="listing-card">
+        <div class="listing-img">
+          <img src="images/project6.jpg" alt="Access road and stormwater drainage civil works" loading="lazy" width="600" height="400" onerror="this.remove()" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        </div>
+        <div class="listing-body">
+          <h4>Access Road & Drainage</h4>
+          <p>Civil works including 2km access road, culverts, and stormwater drainage for a new estate.</p>
+          <div class="listing-meta"><span class="listing-tag">Engineering</span><span class="listing-price">Completed</span></div>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
-<section class="section section-alt">
-  <div class="container">
-    <div class="section-header reveal"><div class="section-label">Track record</div><h2>Previous <span class="gradient-text">projects.</span></h2></div>
-    <div class="card-grid card-grid-3" id="projDone"></div>
-  </div>
-</section>
-<script>
-(function(){
-  function card(p){
-    var c=document.createElement('div');c.className='listing-card';
-    var im=document.createElement('div');im.className='listing-img';
-    if(p.image){var i=document.createElement('img');i.src=p.image;i.alt=p.title||'';i.loading='lazy';i.onerror=function(){i.remove()};i.style.cssText='width:100%;height:100%;object-fit:cover;position:absolute;inset:0;';im.appendChild(i);}
-    var b=document.createElement('div');b.className='listing-body';
-    var h=document.createElement('h4');h.textContent=p.title||'';
-    var d=document.createElement('p');d.textContent=[p.description,[p.location,p.year].filter(Boolean).join(', ')].filter(Boolean).join(' \u2014 ');
-    var m=document.createElement('div');m.className='listing-meta';
-    var t=document.createElement('span');t.className='listing-tag';t.textContent=p.type||'';
-    var s=document.createElement('span');s.className='listing-price';s.textContent=p.status||'';
-    m.append(t,s);var u=document.createElement('p');u.className='proj-update';if(p.update&&p.status!=='Completed'){u.textContent='Latest update'+(p.updatedOn?' ('+p.updatedOn+')':'')+': '+p.update;}b.append(h,d,u,m);c.append(im,b);return c;
-  }
-  fetch('data/projects.json',{cache:'no-cache'}).then(function(r){return r.json()}).then(function(list){
-    var cur=document.getElementById('projCurrent'),done=document.getElementById('projDone');
-    list.forEach(function(p){(p.status==='Completed'?done:cur).appendChild(card(p));});
-    if(!cur.children.length)cur.parentNode.parentNode.hidden=true;
-    if(!done.children.length)done.parentNode.parentNode.hidden=true;
-  }).catch(function(){document.getElementById('projCurrent').textContent='Projects are temporarily unavailable. Please contact us.';});
-})();
-</script>
 
 <section class="section section-alt">
   <div class="container">
@@ -178,13 +214,15 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>Osca Complement Services. All rights reserved. &middot; <a href="privacy.html">Privacy policy</a></span>
+      <span>Osca Complement Services. All rights reserved.</span>
       <span>Designed by <a href="mailto:vr@vibrantrevolve.com" class="credit-link">VibrantRevolve</a></span>
     </div>
   </div>
 </footer>
 
 <script src="config.js" defer></script>
+<script src="catalog.js" defer></script>
+<script src="assistant.js" defer></script>
 <script src="main.js" defer></script>
 </body>
 </html>

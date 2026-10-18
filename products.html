@@ -85,6 +85,14 @@
       <div id="catGrid" class="cat-grid"></div>
       <nav id="catCrumbs" class="catalog-crumbs" aria-label="Breadcrumb" hidden></nav>
       <div class="catalog-chips" id="catChips" role="group" aria-label="Category" hidden></div>
+      <div class="catalog-tools" id="catTools" hidden>
+        <div class="view-toggle" role="group" aria-label="Layout">
+          <button type="button" class="vt" data-view="grid" aria-pressed="true">Grid</button>
+          <button type="button" class="vt" data-view="list" aria-pressed="false">List</button>
+        </div>
+        <button type="button" class="print-btn" id="printBtn">Print / save as PDF</button>
+      </div>
+      <div id="printHeader" class="print-only"></div>
       <div id="catList" class="catalog-list"></div>
       <p class="catalog-note" id="catNote"></p>
       <noscript><p class="catalog-empty">Please enable JavaScript to browse the product list, or <a href="quote.html">request a quote</a> directly.</p></noscript>
@@ -151,7 +159,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <span>Osca Complement Services. All rights reserved. &middot; <a href="privacy.html">Privacy policy</a></span>
+      <span>Osca Complement Services. All rights reserved.</span>
       <span>Designed by <a href="mailto:vr@vibrantrevolve.com" class="credit-link">VibrantRevolve</a></span>
     </div>
   </div>
@@ -159,6 +167,7 @@
 
 <script src="config.js" defer></script>
 <script src="catalog.js" defer></script>
+<script src="assistant.js" defer></script>
 <script src="main.js" defer></script>
 </body>
 </html>

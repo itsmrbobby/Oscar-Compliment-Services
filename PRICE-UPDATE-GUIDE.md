@@ -1,5 +1,3 @@
-> **Superseded:** prices and projects are now edited in the Osca admin panel (see `osca-admin/SETUP.md`). Keep `priceSheetCsv` empty in `config.js`; the site reads `data/products.csv`. The Google Sheet steps below are only a fallback.
-
 # How prices work on this website
 
 The site has **no backend**. Prices live in a spreadsheet, and the website reads them.
@@ -63,6 +61,41 @@ The Products page opens on a grid of **category tiles** (like an online shop). E
 `images/categories/<unit>/<category>.jpg` — the exact filename for all 37 categories is listed in
 `images/categories/README.txt`. Until a photo is added the tile shows a neat icon, so photos can be added one by one.
 If the client adds a **new category** in the sheet, a tile appears automatically; its photo name follows the same pattern.
+
+## Product photos vs category pictures
+
+These are two separate sets, so a category tile never reuses a product's photo:
+
+* **Category tiles:** `images/categories/<unit>/<category>.jpg` (list: `images/categories/README.txt`).
+* **Product cards:** `images/products/<SKU>.jpg`, e.g. `FF001.jpg` (see `images/products/README.txt`).
+
+Until a photo exists, each category tile and its products show unique generated artwork in that category's own
+colours and pattern, so nothing looks repeated or broken. Add photos gradually, bestsellers first.
+
+## The chat assistant (replaces the WhatsApp icon)
+
+The round button at the bottom-right opens **Osca Assistant**, an automated guide that follows the visitor across
+every page. It runs entirely in the browser — no server, nothing to pay for. It can:
+
+* search all 345 products (understands typos and local words like "pure water" and "zinc"), and add items to the quote list;
+* take a quote request in chat (name, phone, need) and send it to the team;
+* give the address, directions, phone and WhatsApp, and open Google Maps;
+* point people to the right page, and hand over to a real person on WhatsApp with the conversation summarised.
+
+It is honest by design: it says it is automated, shows "Price on request" when a price isn't in the sheet, and never
+invents delivery terms, payment terms, brands, certifications or opening hours — it sends those questions to the team.
+
+**Settings** (`config.js`): `assistant.enabled` (false = plain WhatsApp button instead), `assistant.name`,
+`typingDelay`. Chat history lives only in the visitor's own browser tab.
+
+**To make quote requests actually arrive:** set `formEndpoint` in `config.js` to your Formspree address. The contact
+form, the quote form and the assistant all use that one setting. Until it is set, the assistant only offers
+"Send on WhatsApp" (it never claims something was sent when it wasn't).
+
+**Optional — real AI answers.** Set `assistant.endpoint` to a small web service you host that accepts
+`POST {message, page, history:[{role,text}]}` and returns `{"reply":"…"}`. The assistant only calls it for questions
+its built-in knowledge can't answer, and falls back to its normal reply if the service is slow or down. Keep any AI
+API key inside that service, never in this website's files.
 
 ## What visitors can do
 

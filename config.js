@@ -26,9 +26,18 @@ window.OSCA_CONFIG = {
   // Or set a different WhatsApp number, e.g. "2348012345678".
   whatsapp: "",
 
-  // Form service URL (e.g. Formspree: "https://formspree.io/f/xxxx"). While empty, the contact
-  // and quote forms open the visitor's email app with the message ready to send to the business email.
+  /* ---------- FORMS ---------- */
+  // Paste your Formspree address here (https://formspree.io/f/xxxx). The contact form,
+  // the quote form and the chat assistant all send through it. Leave "" until it is set.
   formEndpoint: "",
+
+  /* ---------- CHAT ASSISTANT ---------- */
+  assistant: {
+    enabled: true,                 // false = show a plain WhatsApp button instead
+    name: "Osca Assistant",
+    typingDelay: 450,              // milliseconds; just for a natural feel
+    endpoint: ""                   // optional: an AI service address (see PRICE-UPDATE-GUIDE.md)
+  },
 
   /* ---------- LIVE PRICES (optional) ---------- */
   priceSheetCsv: "",      // Google Sheet "Website Prices" tab, Publish to web -> CSV link

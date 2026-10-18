@@ -207,6 +207,48 @@
     return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[name] || ICONS.box) + '</svg>';
   }
 
+
+  function priceText(p) {
+    if (!p || !p.price) return 'Price on request';
+    if (p.price.kind === 'number') return formatNaira(p.price.value) + (p.pricePer ? ' per ' + p.pricePer : '');
+    if (p.price.kind === 'text') return p.price.text;
+    return 'Price on request';
+  }
+
+  function hash(str) {
+    var h = 5381, s = String(str == null ? '' : str);
+    for (var i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
+    return h;
+  }
+  function matchIcon(str) {
+    var c = String(str || '').toLowerCase();
+    for (var i = 0; i < ICON_RULES.length; i++) if (ICON_RULES[i][0].test(c)) return ICON_RULES[i][1];
+    return null;
+  }
+  var PATTERNS = ['dots', 'diag', 'grid', 'waves', 'plus'];
+  function patternUri(kind, color) {
+    var c = color, body;
+    if (kind === 'dots') body = "<svg xmlns='http://www.w3.org/2000/svg' width='22' height='22'><circle cx='3' cy='3' r='1.6' fill='" + c + "' opacity='.22'/></svg>";
+    else if (kind === 'diag') body = "<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><path d='M-2,2 l4,-4 M0,16 l16,-16 M14,18 l4,-4' stroke='" + c + "' stroke-width='1.2' opacity='.2'/></svg>";
+    else if (kind === 'grid') body = "<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24'><path d='M24 0H0V24' fill='none' stroke='" + c + "' stroke-width='1' opacity='.2'/></svg>";
+    else if (kind === 'waves') body = "<svg xmlns='http://www.w3.org/2000/svg' width='40' height='14'><path d='M0 7 Q10 0 20 7 T40 7' fill='none' stroke='" + c + "' stroke-width='1.4' opacity='.2'/></svg>";
+    else body = "<svg xmlns='http://www.w3.org/2000/svg' width='26' height='26'><path d='M13 8v10M8 13h10' stroke='" + c + "' stroke-width='1.4' stroke-linecap='round' opacity='.2'/></svg>";
+    return 'data:image/svg+xml,' + encodeURIComponent(body);
+  }
+  // Deterministic, unique-looking placeholder art for a category (and, tinted the same, its products)
+  // so tiles never look alike while real photos are still being added.
+  function artFor(unitSlug, category, name) {
+    var h = hash(unitSlug + '|' + category), hue = h % 360, pattern = PATTERNS[(h >>> 3) % PATTERNS.length];
+    var fg = 'hsl(' + hue + ',45%,28%)';
+    var angle = name ? 120 + (hash(name) % 90) : 135;
+    return {
+      hue: hue, pattern: pattern, fg: fg,
+      icon: (name && matchIcon(name)) || matchIcon(category) || UNIT_ICON[unitSlug] || 'box',
+      gradient: 'linear-gradient(' + angle + 'deg, hsl(' + hue + ',55%,94%), hsl(' + ((hue + 28) % 360) + ',60%,85%))',
+      patternUri: patternUri(pattern, 'hsl(' + hue + ',45%,35%)')
+    };
+  }
+
   var UNIT_TO_QUOTE_OPTION = {
     'Frozen Food': 'Frozen Food Distribution', 'General Supplies': 'General Distribution',
     'Water Purification': 'Water Purification', 'Building Materials': 'Building Materials'
@@ -221,7 +263,8 @@
     parseDate: parseDate, formatDate: formatDate, unitSlug: unitSlug, normStatus: normStatus,
     normaliseProducts: normaliseProducts, normaliseListings: normaliseListings,
     filterProducts: filterProducts, uniqueInOrder: uniqueInOrder, quoteLines: quoteLines,
-    whatsappUrl: whatsappUrl, slugify: slugify, iconFor: iconFor, iconSvg: iconSvg, UNIT_TO_QUOTE_OPTION: UNIT_TO_QUOTE_OPTION, SLUG_TO_QUOTE_OPTION: SLUG_TO_QUOTE_OPTION
+    whatsappUrl: whatsappUrl, slugify: slugify, iconFor: iconFor, iconSvg: iconSvg,
+    priceText: priceText, artFor: artFor, patternUri: patternUri, hash: hash, ICONS: ICONS, ICON_RULES: ICON_RULES, UNIT_TO_QUOTE_OPTION: UNIT_TO_QUOTE_OPTION, SLUG_TO_QUOTE_OPTION: SLUG_TO_QUOTE_OPTION
   };
 
   /* ---------- browser behaviour ---------- */
@@ -249,7 +292,11 @@
     list.forEach(function (i, n) { if (i.sku === p.sku) idx = n; });
     if (idx > -1) list.splice(idx, 1);
     else list.push({ sku: p.sku, name: p.name, soldBy: p.soldBy, unit: p.unit });
-    setQuote(list); return list;
+    setQuote(list); announceQuote(); return list;
+  }
+  function clearQuote() { setQuote([]); announceQuote(); }
+  function announceQuote() {
+    try { window.dispatchEvent(new CustomEvent('osca:quote-changed')); } catch (e) {}
   }
 
   // --- data loading: live sheet first, bundled CSV as a safe fallback ---
@@ -273,6 +320,15 @@
     return tryUrl(local, 8000);
   }
 
+  var _prodPromise = null;
+  function loadProducts() {
+    if (!_prodPromise) {
+      _prodPromise = loadObjects(CFG.priceSheetCsv, 'data/products.csv', 'product').then(normaliseProducts)
+        .catch(function (e) { _prodPromise = null; throw e; });
+    }
+    return _prodPromise;
+  }
+
   function priceNode(p) {
     var wrap = el('div', 'product-price');
     if (p.price.kind === 'number') {
@@ -286,16 +342,24 @@
     return wrap;
   }
 
-  /* ---------- products page: category picture grid -> product list ---------- */
+  /* ---------- products page: category picture grid -> product list/cards ---------- */
+  function paintArt(node, art) {
+    node.style.backgroundImage = 'url("' + art.patternUri + '"), ' + art.gradient;
+    node.style.color = art.fg;
+  }
+
   function initCatalog(app) {
     var tabsEl = document.getElementById('unitTabs'), chipsEl = document.getElementById('catChips'),
         gridEl = document.getElementById('catGrid'), crumbsEl = document.getElementById('catCrumbs'),
         listEl = document.getElementById('catList'), metaEl = document.getElementById('catMeta'),
         noteEl = document.getElementById('catNote'), searchEl = document.getElementById('catSearch'),
+        toolsEl = document.getElementById('catTools'), printBtn = document.getElementById('printBtn'),
+        printHead = document.getElementById('printHeader'),
         bar = document.getElementById('quoteBar'), barCount = document.getElementById('quoteBarCount'),
         barWa = document.getElementById('quoteBarWa'), barClear = document.getElementById('quoteBarClear');
-    var items = [], units = [];
-    var state = { unit: '', cat: '', all: false, query: '' };
+    var items = [], units = [], paints = [];
+    var state = { unit: '', cat: '', all: false, query: '', view: 'grid' };
+    try { if (localStorage.getItem('osca_view') === 'list') state.view = 'list'; } catch (e) {}
 
     function refreshBar() {
       var q = getQuote();
@@ -328,6 +392,8 @@
       state.unit = slugs.indexOf(u) > -1 ? u : slugs[0];
       state.cat = catBySlug(state.unit, p.get('cat') || '');
       state.all = !state.cat && p.get('all') === '1';
+      var q = p.get('q');
+      if (q && !state.query) { state.query = q.slice(0, 80); searchEl.value = state.query; }
     }
     function link(text, st, cls) {
       var a = el('a', cls, text); a.href = urlFor(Object.assign({ unit: state.unit }, st));
@@ -358,13 +424,16 @@
         chipsEl.appendChild(b);
       });
     }
+
+    // Category tile: its own photo (images/categories/...) over unique generated art
     function tile(c) {
       var count = items.filter(function (p) { return p.unitSlug === state.unit && p.category === c; }).length;
       var a = el('a', 'cat-tile'); a.href = urlFor({ unit: state.unit, cat: c });
       a.setAttribute('aria-label', c + ', ' + count + (count === 1 ? ' product' : ' products'));
       a.addEventListener('click', function (e) { e.preventDefault(); go({ cat: c }); });
       var media = el('div', 'cat-media');
-      var fb = el('div', 'cat-fallback'); fb.innerHTML = iconSvg(iconFor(state.unit, c)); media.appendChild(fb);
+      var art = artFor(state.unit, c);
+      var fb = el('div', 'cat-fallback'); paintArt(fb, art); fb.innerHTML = iconSvg(art.icon); media.appendChild(fb);
       var img = document.createElement('img');
       img.alt = ''; img.loading = 'lazy'; img.width = 400; img.height = 300;
       img.src = 'images/categories/' + state.unit + '/' + slugify(c) + '.jpg';
@@ -375,27 +444,11 @@
       body.appendChild(el('span', 'cat-count', count + (count === 1 ? ' product' : ' products')));
       a.appendChild(body); return a;
     }
-    function row(p) {
-      var r = el('div', 'product-row' + (p.status === 'out' ? ' is-out' : ''));
-      var info = el('div', 'product-info');
-      // Photo: images/products/<SKU>.jpg, else the category photo, else nothing.
-      var thumb = document.createElement('img');
-      thumb.alt = ''; thumb.loading = 'lazy'; thumb.width = 64; thumb.height = 48; thumb.className = 'product-thumb';
-      var tried = 0;
-      thumb.addEventListener('error', function () {
-        tried++;
-        if (tried === 1) thumb.src = 'images/categories/' + p.unitSlug + '/' + slugify(p.category) + '.jpg';
-        else { var ph = el('div', 'product-thumb ph', (p.name || '?').charAt(0).toUpperCase()); if (thumb.parentNode) thumb.parentNode.replaceChild(ph, thumb); }
-      });
-      thumb.src = p.sku ? 'images/products/' + encodeURIComponent(p.sku) + '.jpg' : 'images/categories/' + p.unitSlug + '/' + slugify(p.category) + '.jpg';
-      info.appendChild(thumb);
-      var text = el('div', 'product-text');
-      text.appendChild(el('span', 'product-name', p.name));
-      if (p.soldBy) text.appendChild(el('span', 'product-sold', 'Sold by: ' + p.soldBy));
-      info.appendChild(text);
-      r.appendChild(info);
-      r.appendChild(priceNode(p));
-      r.appendChild(el('span', 'badge ' + p.status, p.status === 'out' ? 'Out of stock' : p.status === 'limited' ? 'Limited stock' : 'Available'));
+
+    function statusBadge(p) {
+      return el('span', 'badge ' + p.status, p.status === 'out' ? 'Out of stock' : p.status === 'limited' ? 'Limited stock' : 'Available');
+    }
+    function addButton(p) {
       var add = el('button', 'btn-add'); add.type = 'button';
       function paint() {
         var on = inQuote(p.sku);
@@ -403,18 +456,55 @@
         add.setAttribute('aria-pressed', on ? 'true' : 'false'); add.classList.toggle('on', on);
         add.setAttribute('aria-label', (on ? 'Remove ' : 'Add ') + p.name + (on ? ' from' : ' to') + ' quote list');
       }
-      add.disabled = p.status === 'out'; paint();
-      add.addEventListener('click', function () { toggleQuote(p); paint(); refreshBar(); });
-      r.appendChild(add); return r;
+      add.disabled = p.status === 'out'; paint(); paints.push(paint);
+      add.addEventListener('click', function () { toggleQuote(p); });
+      return add;
+    }
+    // List row (compact, B2B style)
+    function row(p) {
+      var r = el('div', 'product-row product-item' + (p.status === 'out' ? ' is-out' : ''));
+      var info = el('div', 'product-info');
+      info.appendChild(el('span', 'product-name', p.name));
+      if (p.soldBy) info.appendChild(el('span', 'product-sold', 'Sold by: ' + p.soldBy));
+      r.appendChild(info); r.appendChild(priceNode(p)); r.appendChild(statusBadge(p)); r.appendChild(addButton(p));
+      return r;
+    }
+    // Product card: its OWN photo (images/products/<SKU>.jpg), separate from category pictures
+    function card(p) {
+      var c = el('article', 'product-card product-item' + (p.status === 'out' ? ' is-out' : ''));
+      var media = el('div', 'pc-media');
+      var art = artFor(p.unitSlug, p.category, p.name);
+      var fb = el('div', 'pc-art'); paintArt(fb, art); fb.innerHTML = iconSvg(art.icon); media.appendChild(fb);
+      var img = document.createElement('img');
+      img.alt = p.name; img.loading = 'lazy'; img.width = 300; img.height = 300;
+      img.src = 'images/products/' + encodeURIComponent(p.sku) + '.jpg';
+      img.addEventListener('error', function () { img.remove(); });
+      media.appendChild(img);
+      if (p.status !== 'available') media.appendChild(statusBadge(p));
+      c.appendChild(media);
+      var body = el('div', 'pc-body');
+      body.appendChild(el('h4', 'pc-name', p.name));
+      if (p.soldBy) body.appendChild(el('span', 'product-sold', 'Sold by: ' + p.soldBy));
+      body.appendChild(priceNode(p)); body.appendChild(addButton(p));
+      c.appendChild(body); return c;
+    }
+
+    function paintTools() {
+      Array.prototype.forEach.call(toolsEl.querySelectorAll('[data-view]'), function (b) {
+        var on = b.getAttribute('data-view') === state.view;
+        b.classList.toggle('active', on); b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
     }
 
     function render() {
+      paints = [];
       var searching = state.query.trim() !== '';
       var unitName = (units.filter(function (u) { return u.slug === state.unit; })[0] || {}).name || '';
       renderTabs();
       gridEl.textContent = ''; listEl.textContent = ''; crumbsEl.textContent = '';
       var showGrid = !searching && !state.cat && !state.all;
       gridEl.hidden = !showGrid; chipsEl.hidden = showGrid || searching; crumbsEl.hidden = showGrid || searching;
+      toolsEl.hidden = showGrid; if (!showGrid) paintTools();
 
       if (showGrid) {
         var cats = catsOf(state.unit), frag = document.createDocumentFragment();
@@ -431,15 +521,18 @@
         crumbsEl.appendChild(el('span', 'crumb-now', state.cat ? unitName + ' · ' + state.cat : unitName + ' · All products'));
       }
       var shown = filterProducts(items, { unit: searching ? '' : state.unit, category: searching ? '' : state.cat, query: state.query });
-      var frag2 = document.createDocumentFragment();
+      var frag2 = document.createDocumentFragment(), grid = state.view === 'grid', holder = null, last = null;
       if (!shown.length) {
         frag2.appendChild(el('p', 'catalog-empty', 'No products match your search. Try a different word, or request any product — we source it for you.'));
       } else {
-        var last = null;
         shown.forEach(function (p) {
           var head = searching ? p.unit + ' · ' + p.category : p.category;
-          if ((searching || !state.cat) && head !== last) { frag2.appendChild(el('h3', 'catalog-cat', head)); last = head; }
-          frag2.appendChild(row(p));
+          var newGroup = (searching || !state.cat) && head !== last;
+          if (newGroup) { frag2.appendChild(el('h3', 'catalog-cat', head)); last = head; holder = null; }
+          if (grid) {
+            if (!holder) { holder = el('div', 'product-grid'); frag2.appendChild(holder); }
+            holder.appendChild(card(p));
+          } else frag2.appendChild(row(p));
         });
       }
       listEl.appendChild(frag2);
@@ -464,10 +557,36 @@
       listEl.appendChild(el('p', 'catalog-empty', 'The product list could not be loaded right now. Please request a quote and tell us what you need — we will respond within 24 hours.'));
     });
 
+    // quote list changed anywhere (cards, assistant, another tab action): repaint buttons in place
+    window.addEventListener('osca:quote-changed', function () { refreshBar(); paints.forEach(function (f) { f(); }); });
+
     var t; searchEl.addEventListener('input', function () {
       clearTimeout(t); t = setTimeout(function () { state.query = searchEl.value; if (items.length) render(); }, 120);
     });
-    barClear.addEventListener('click', function () { setQuote([]); if (items.length) render(); refreshBar(); });
+    barClear.addEventListener('click', function () { clearQuote(); });
+    Array.prototype.forEach.call(toolsEl.querySelectorAll('[data-view]'), function (b) {
+      b.addEventListener('click', function () {
+        state.view = b.getAttribute('data-view');
+        try { localStorage.setItem('osca_view', state.view); } catch (e) {}
+        if (items.length) render();
+      });
+    });
+    // Print / save as PDF: temporarily show this unit's full list in compact form
+    printBtn.addEventListener('click', function () {
+      var prev = { unit: state.unit, cat: state.cat, all: state.all, query: state.query, view: state.view };
+      var unitName = (units.filter(function (u) { return u.slug === state.unit; })[0] || {}).name || 'Product';
+      state.query = ''; searchEl.value = ''; state.cat = ''; state.all = true; state.view = 'list'; render();
+      if (printHead) {
+        printHead.textContent = '';
+        var B = CFG.business || {};
+        printHead.appendChild(el('strong', null, (B.name || 'Price list') + ' — ' + unitName + ' price list'));
+        printHead.appendChild(el('span', null, 'Printed ' + new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) +
+          (CFG.phoneDisplay ? ' · ' + CFG.phoneDisplay : '') + (CFG.addressFull ? ' · ' + CFG.addressFull : '')));
+      }
+      var restore = function () { window.removeEventListener('afterprint', restore); Object.assign(state, prev); searchEl.value = prev.query; render(); };
+      window.addEventListener('afterprint', restore);
+      setTimeout(function () { window.print(); }, 60);
+    });
   }
 
   /* ---------- quote page: show selected items, prefill ---------- */
@@ -539,5 +658,7 @@
     if ((a = document.getElementById('listingsApp'))) initListings(a);
   });
 
+  api.getQuote = getQuote; api.setQuote = setQuote; api.toggleQuote = toggleQuote; api.inQuote = inQuote;
+  api.clearQuote = clearQuote; api.loadProducts = loadProducts;
   return api;
 });
