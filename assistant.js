@@ -204,7 +204,30 @@
       CH([['My quote list (' + count + ')', 'my quote list'], ['Find another product', 'find a product'], ['Get a quote', '__start_lead']])];
   }
 
+
+  // A visitor in the middle of a quote request may ask something else (where are you, opening hours, talk to a person).
+  // Answer it, then offer to carry on, instead of swallowing the question as their "name" or "need".
+  var INTERRUPT = /\b(where (are|is) you|your (address|location|office)|directions?|opening hours|working hours|what time do you|talk to (a )?(person|human|someone|agent)|speak (to|with) (a |someone)|call (you|us)|your (phone|whatsapp) number|your email)\b/;
+  function stepPrompt(L) {
+    if (L.step === 'need') return 'What do you need? Mention the product, the quantity and where it is going.';
+    if (L.step === 'name') return 'What is your name?';
+    if (L.step === 'phone') return 'What is the best phone number to reach you?';
+    return 'Your request is ready to send.';
+  }
   function respond(state, raw, env) {
+    var low = String(raw || '').trim().toLowerCase();
+    if (state && state.lead && low.charAt(0) !== '_' && INTERRUPT.test(low) && !/^(cancel|stop|never ?mind)/.test(low)) {
+      var saved = state.lead; state.lead = null;
+      var r = respondCore(state, raw, env);
+      state.lead = saved; r.state = state;
+      r.messages.push(T('Whenever you are ready, we can carry on with your quote. ' + stepPrompt(saved)));
+      r.messages.push(CH([['Cancel quote request', 'cancel']]));
+      return r;
+    }
+    return respondCore(state, raw, env);
+  }
+
+  function respondCore(state, raw, env) {
     state = state || {};
     env = env || {};
     var out = { messages: [], effects: [], state: state, fallback: false };
@@ -216,6 +239,12 @@
       say(lead || 'Our team can help directly. Choose how you would like to reach them.');
       add(CARD('Talk to our team', ['Messages and calls are answered by our staff.'], humanActions(cfg, state, quote)));
     }
+
+    // ---- clear the whole conversation (works at any point, even mid-quote) ----
+    if (low === '__clear_chat' || /^(please )?(clear|reset|delete|erase|wipe)( all| the| this| my)*( chat| conversation| messages| history)( please)?$|^(please )?(start over|start again|new chat|clear everything|reset everything)$/.test(low)) {
+      out.effects.push({ type: 'clear-chat' }); return out;
+    }
+    if (/^(please )?clear( my| the)?( quote)? ?(list|cart|basket)$/.test(low)) low = text = '__clear_list';
 
     // ---- lead (quote request) flow ----
     if (state.lead) {
@@ -231,7 +260,13 @@
         if (!validPhone(text)) { say('That does not look like a phone number. Please type digits only, for example 0803 123 4567.'); add(CH([['Cancel', 'cancel']])); return out; }
         L.phone = text.slice(0, 20); L.step = 'confirm'; add(leadSummary(state, env)); return out;
       }
-      if (L.step === 'confirm') { add(leadSummary(state, env)); return out; }
+      if (L.step === 'confirm') {
+        if (/^(yes|yeah|yep|ok|okay|send|send it|confirm|submit|go ahead)\b/.test(low)) {
+          if (cfg.formEndpoint) { out.effects.push({ type: 'send-lead', payload: { name: L.name, phone: L.phone, need: L.need, items: quote.map(function (i) { return i.name; }) } }); say('Sending your request…'); return out; }
+          say('Tap Send on WhatsApp below and your request will open ready to send.');
+        } else { say('Tap one of the buttons below to send your request, or type cancel to stop.'); }
+        add(leadSummary(state, env)); return out;
+      }
     }
 
     // ---- internal commands from buttons ----
@@ -248,6 +283,11 @@
     if (/\b(thanks?|thank you|thx|appreciate)\b/.test(low) && toks.length <= 6) { say('You are welcome. Is there anything else I can help with?'); add(CH(pageCtx(env.page).chips)); return out; }
     if (/\b(bye|goodbye|see you|good night)\b/.test(low) && toks.length <= 5) { say('Goodbye. We are here whenever you need us.'); return out; }
     if (/^(hi|hello|hey|hiya|howdy|yo|good (morning|afternoon|evening)|how far|sup)\b/.test(low) && toks.length <= 4) { out.messages = greeting(env); return out; }
+
+    if (/\b(are you|r u|you are) (a |an )?(real|robot|bot|ai|human|person|machine|automated)\b|\bis this (a )?(bot|robot|ai|real person)\b/.test(low)) {
+      say('I am an automated assistant, not a person. I can search products and build a quote list, and I can connect you with our team whenever you like.');
+      add(CH([['Find a product', 'find a product'], ['Talk to a person', 'talk to a person']])); return out;
+    }
 
     // ---- people ----
     if (/\b(human|real person|agent|representative|staff|someone|a person|talk to|speak to|speak with|customer (care|service|support)|manager|call me|call back|callback)\b/.test(low)) { human(); return out; }
@@ -399,7 +439,7 @@
     var page = (location.pathname.split('/').pop() || 'index.html').replace(/\.html$/, '') || 'index';
     var store = { open: false, msgs: [], state: {}, nudged: false };
     try { var saved = JSON.parse(sessionStorage.getItem(KEY) || 'null'); if (saved && Array.isArray(saved.msgs)) store = saved; } catch (e) {}
-    var state = store.state || {}, busy = false;
+    var state = store.state || {}, busy = false, gen = 0;
     var delay = A.typingDelay != null ? A.typingDelay : 450;
 
     function save() {
@@ -421,7 +461,10 @@
     var title = el('div', 'bot-title'); title.append(el('strong', null, A.name || 'Osca Assistant'), el('span', null, 'Automated guide · replies instantly'));
     var human = el('a', 'bot-human'); human.target = '_blank'; human.rel = 'noopener'; human.setAttribute('aria-label', 'Talk to a person'); human.innerHTML = PHONE; human.append(el('span', null, 'Talk to a person'));
     var closeBtn = el('button', 'bot-close'); closeBtn.type = 'button'; closeBtn.setAttribute('aria-label', 'Close chat'); closeBtn.innerHTML = CLOSE;
-    head.append(avatar, title, human, closeBtn);
+    var clearTop = el('button', 'bot-clear-top'); clearTop.type = 'button'; clearTop.setAttribute('aria-label', 'Clear chat and start again');
+    clearTop.innerHTML = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 11v5M14 11v5"/></svg>';
+    clearTop.append(el('span', null, 'Clear'));
+    head.append(avatar, title, human, clearTop, closeBtn);
     var log = el('div', 'bot-log'); log.setAttribute('role', 'log'); log.setAttribute('aria-live', 'polite');
     var form = el('form', 'bot-form');
     var lab = el('label', 'sr-only', 'Type your message'); lab.setAttribute('for', 'botInput');
@@ -429,7 +472,9 @@
     input.placeholder = 'Ask about a product, price or quote…';
     var sendBtn = el('button', 'bot-send'); sendBtn.type = 'submit'; sendBtn.setAttribute('aria-label', 'Send message'); sendBtn.innerHTML = SEND;
     form.append(lab, input, sendBtn);
-    var foot = el('p', 'bot-foot', 'Automated assistant. Your chat stays in this browser.');
+    var foot = el('div', 'bot-foot');
+    var clearBtn = el('button', 'bot-clear', 'Clear chat'); clearBtn.type = 'button'; clearBtn.title = 'Delete this conversation and start again';
+    foot.append(el('span', null, 'Automated · saved in this browser'), clearBtn);
     panel.append(head, log, form, foot);
 
     var launcher = el('button', 'bot-launcher'); launcher.type = 'button';
@@ -498,8 +543,7 @@
     }
     function scrollDown() { log.scrollTop = log.scrollHeight; }
     function append(m, persist) {
-      if (m.kind !== 'chips') Array.prototype.forEach.call(log.querySelectorAll('.bot-msg.chips'), function (n) { n.remove(); });
-      else Array.prototype.forEach.call(log.querySelectorAll('.bot-msg.chips'), function (n) { n.remove(); });
+      Array.prototype.forEach.call(log.querySelectorAll('.bot-msg.chips'), function (n) { n.remove(); });
       log.appendChild(renderMsg(m)); scrollDown();
       if (persist !== false) { store.msgs.push(m); save(); }
     }
@@ -509,17 +553,23 @@
       t.appendChild(b); t.setAttribute('aria-label', 'Assistant is typing'); log.appendChild(t); scrollDown(); return t;
     }
     function pushBot(list, done) {
-      var i = 0;
+      var i = 0, g = gen;
       (function next() {
+        if (g !== gen) return;
         if (i >= list.length) { busy = false; updateHuman(); if (done) done(); return; }
         var m = list[i++], t = (m.kind === 'chips' || delay === 0) ? null : typing();
-        setTimeout(function () { if (t) t.remove(); append(m); next(); }, t ? Math.min(delay + (m.kind === 'text' ? m.text.length * 4 : 0), 1400) : 0);
+        setTimeout(function () { if (t) t.remove(); if (g !== gen) return; append(m); next(); }, t ? Math.min(delay + (m.kind === 'text' ? m.text.length * 4 : 0), 1400) : 0);
       })();
       busy = true;
     }
+    function clearChat() {
+      gen++; busy = false; state = {}; store.msgs = []; store.state = state;
+      log.textContent = ''; save(); updateHuman();
+      pushBot(greeting(env())); input.focus();
+    }
     function updateHuman() {
       var wa = waLink(cfg, handoffText(cfg, state, Cat.getQuote()));
-      human.href = wa || 'contact.html'; if (wa) { human.target = '_blank'; }
+      human.href = wa || 'contact.html'; if (wa) { human.target = '_blank'; human.rel = 'noopener'; } else { human.removeAttribute('target'); }
     }
 
     // ---- sending ----
@@ -540,13 +590,19 @@
       fd.append('_subject', 'Chat quote request — ' + payload.name);
       return fetch(ep, { method: 'POST', body: fd, headers: { Accept: 'application/json' } }).then(function (r) { if (!r.ok) throw new Error('bad'); });
     }
-    function send(text, label) {
-      text = String(text || '').trim(); if (!text || busy) return;
+    function send(text, label, tries) {
+      text = String(text || '').trim(); if (!text) return;
+      if (busy) { if ((tries || 0) < 40) setTimeout(function () { send(text, label, (tries || 0) + 1); }, 150); return; }
       if (label || text.charAt(0) !== '_') append({ from: 'user', kind: 'text', text: (label || text).slice(0, 300) });
-      busy = true;
+      busy = true; var g = gen;
       Cat.loadProducts().catch(function () { return []; }).then(function (products) {
+        if (g !== gen) return;
         _products = products;
-        var e = env(), res = respond(state, text, e); state = res.state;
+        var res;
+        try { res = respond(state, text, env()); }
+        catch (err) { busy = false; pushBot([T('Sorry, something went wrong on my side. Please try again, or tap Clear chat to start fresh.'), CH([['Talk to a person', 'talk to a person']])]); return; }
+        state = res.state;
+        if (res.effects.some(function (fx) { return fx.type === 'clear-chat'; })) { clearChat(); return; }
         function run(msgs) {
           pushBot(msgs, function () {
             res.effects.forEach(function (fx) {
@@ -554,15 +610,15 @@
               if (fx.type === 'send-lead') {
                 busy = true;
                 sendLead(fx.payload).then(function () { if (/quote list/i.test(fx.payload.need)) Cat.clearQuote(); return true; }, function () { return false; })
-                  .then(function (ok) { pushBot(leadDone(state, ok, env())); });
+                  .then(function (ok) { if (g === gen) pushBot(leadDone(state, ok, env())); });
               }
             });
           });
         }
         if (res.fallback && A.endpoint) {
-          aiFallback(text, res).then(function (reply) { run(reply ? [T(reply), CH([['Get a quote', '__start_lead'], ['Talk to a person', 'talk to a person']])] : res.messages); });
+          aiFallback(text, res).then(function (reply) { if (g === gen) run(reply ? [T(reply), CH([['Get a quote', '__start_lead'], ['Talk to a person', 'talk to a person']])] : res.messages); });
         } else run(res.messages);
-      });
+      }).catch(function () { busy = false; });
     }
 
     // ---- open / close ----
@@ -579,6 +635,17 @@
     }
     launcher.addEventListener('click', function () { panel.hidden ? open() : close(); });
     closeBtn.addEventListener('click', close);
+    clearBtn.addEventListener('click', function () { if (busy) { gen++; busy = false; } clearChat(); });
+    var clearTimer = null;
+    clearTop.addEventListener('click', function () {
+      if (!clearTop.classList.contains('confirm')) {
+        clearTop.classList.add('confirm'); clearTop.lastChild.textContent = 'Sure?';
+        clearTimer = setTimeout(function () { clearTop.classList.remove('confirm'); clearTop.lastChild.textContent = 'Clear'; }, 3000);
+        return;
+      }
+      clearTimeout(clearTimer); clearTop.classList.remove('confirm'); clearTop.lastChild.textContent = 'Clear';
+      if (busy) { gen++; busy = false; } clearChat();
+    });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panel.hidden) close(); });
     form.addEventListener('submit', function (e) { e.preventDefault(); var v = input.value; input.value = ''; send(v); });
     nudgeText.addEventListener('click', open);

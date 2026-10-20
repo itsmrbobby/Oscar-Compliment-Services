@@ -2460,7 +2460,9 @@ body.has-quote-bar .bot { bottom: 92px; }
 .bot-form input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
 .bot-send { width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--primary); color: var(--accent-light); cursor: pointer; display: grid; place-items: center; flex-shrink: 0; }
 .bot-send svg { width: 18px; height: 18px; }
-.bot-foot { text-align: center; font-size: 11px; color: var(--muted); padding: 0 12px 9px; background: #fff; }
+.bot-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 11px; color: var(--muted); padding: 0 14px 10px; background: #fff; }
+.bot-clear { flex-shrink: 0; font: inherit; font-size: 12px; font-weight: 600; color: var(--accent-dark, #8a6410); background: none; border: 1px solid currentColor; border-radius: 999px; padding: 4px 11px; cursor: pointer; }
+.bot-clear:hover, .bot-clear:focus-visible { background: rgba(201,151,28,0.12); }
 
 @media (max-width: 600px) {
   .bot { right: 14px; bottom: 14px; }
@@ -2505,3 +2507,19 @@ input, select, textarea { max-width: 100%; }
   .nav-inner .logo { font-size: 19px; gap: 6px; }
   .nav-inner .logo svg { width: 26px; height: 26px; }
 }
+
+/* Decorative glows must never sit on top of (or swallow taps for) the content */
+.cta-section::before, .cta-section::after, .hero::before, .hero::after, .page-hero::before, .page-hero::after { pointer-events: none; }
+.cta-section > .container { position: relative; z-index: 1; }
+
+/* Chat header: clear-conversation button (tap once to arm, again to confirm) */
+.bot-clear-top { display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; font: inherit; font-size: 12px; font-weight: 600; color: #fff; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.28); border-radius: 999px; padding: 7px 11px; cursor: pointer; }
+.bot-clear-top:hover, .bot-clear-top:focus-visible { background: rgba(255,255,255,0.22); }
+.bot-clear-top.confirm { background: #b3261e; border-color: #b3261e; }
+@media (max-width: 480px) {
+  .bot-head { gap: 8px; padding-left: 12px; padding-right: 8px; }
+  .bot-clear-top:not(.confirm) span { display: none; }
+  .bot-clear-top:not(.confirm) { padding: 9px; }
+  .bot-title span { display: none; }
+}
+@media (max-width: 400px) { .bot-avatar { display: none; } .bot-title { min-width: 0; flex: 1; } }

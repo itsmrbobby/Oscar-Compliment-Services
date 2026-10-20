@@ -250,7 +250,27 @@
 
       const endpoint = (this.dataset.endpoint || (window.OSCA_CONFIG && window.OSCA_CONFIG.formEndpoint) || '').trim();
       if (!endpoint) {
-        showToast('Our online form is being connected. Please call or email us directly for now.', 'error');
+        // No form service connected yet: never dead-end. Build the message from the form and hand it to WhatsApp
+        // (or the visitor's email app) so the request still reaches the team.
+        const C = window.OSCA_CONFIG || {};
+        const lines = ['Hello ' + ((C.business && C.business.name) || '') + ', I would like to send an enquiry.'];
+        new FormData(this).forEach((val, key) => {
+          if (key === '_gotcha' || !String(val).trim()) return;
+          const lab = this.querySelector('label[for="f-' + key + '"], label[for="' + key + '"]');
+          if (key === 'selected_items') { lines.push('Quote list:\n' + String(val).trim()); return; }
+          lines.push((lab ? lab.textContent.replace(/\*/g, '').trim() : key) + ': ' + String(val).trim());
+        });
+        const body = lines.join('\n');
+        if (!this.checkValidity()) { this.reportValidity(); return; }
+        if (C.whatsappDigits) {
+          showToast('Opening WhatsApp so you can send this to our team.');
+          window.open('https://wa.me/' + C.whatsappDigits + '?text=' + encodeURIComponent(body), '_blank', 'noopener');
+        } else if (C.business && C.business.email) {
+          showToast('Opening your email app so you can send this to our team.');
+          window.location.href = 'mailto:' + C.business.email + '?subject=' + encodeURIComponent('Website enquiry') + '&body=' + encodeURIComponent(body);
+        } else {
+          showToast('Please call or email us directly to send this request.', 'error');
+        }
         return;
       }
 
