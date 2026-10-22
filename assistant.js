@@ -304,13 +304,13 @@
     }
 
     // ---- strong intents that must beat product matching ----
-    if (/\b(consult\w*|building (advice|inspection|supervision)|site supervision|bill of quantit\w*|bill of quantities|boq|quantity surveyor|plan review|feasibility)\b/.test(low)) {
+    if (/\b(consult\w*|building (advice|inspection|supervision|survey)|site supervision|bill of quantit\w*|boq|quantity surveyor|plan review|feasibility|(inspect|assess|check|supervis|survey|valuat)\w* (my |our |the |a )?(building|house|structure|property|site|plans?|project)|advice (on|about) (my |our |a )?(building|house|plans?|project))\b/.test(low)) {
       say('Yes, we offer building consultancy: independent advice before, during and after construction.');
       add(CARD('Building Consultancy', ['Pre-construction advice and feasibility', 'Plans and design review', 'Cost estimates and bills of quantities', 'Site supervision', 'Building inspection', 'Materials advice'],
         [link('Consultancy page', 'consulting.html'), act('Request a consultation', '__start_lead')]));
       state.lastNeed = 'building consultancy'; return out;
     }
-    if (/\b(laundry|laundromat|dry ?clean\w*|wash(ing)? (and|&) (dry|iron|fold)|iron(ing)?|duvets?|bedsheets?|curtains?|stain removal)\b/.test(low)) {
+    if (/\b(laundry|laundromat|dry ?clean\w*|wash(ing)? (and|&) (dry|iron|fold)|(wash|clean|iron|press)\w* (my |our |the |some )?(clothes|clothing|shirts?|suits?|garments?|native|agbada|gowns?|uniforms?|bedding|bedsheets?|duvets?|curtains?)|clothes|garments?|ironing|duvets?|bedsheets?|curtains?|stain removal)\b/.test(low) && !/\b(rods?|sheets?|angle|removal|filters?|roofing|steel|lines?|soap|detergents?|liquid|powder|machines?|buckets?|baskets?|hangers?|rails?|poles?|tracks?)\b/.test(low)) {
       say('Yes, we offer dry cleaning and laundry for homes and businesses.');
       add(CARD('Dry Cleaning & Laundry', ['Dry cleaning (suits, native wear, gowns)', 'Laundry: wash, dry and fold', 'Ironing and pressing', 'Bedding, duvets and curtains', 'Stain treatment', 'Bulk accounts for businesses'],
         [link('Laundry page', 'laundry.html'), act('Request a laundry quote', '__start_lead')]));
@@ -371,7 +371,7 @@
       say('We work across eight areas. Tap one to see more.');
       add(CARD('What we do', ['Frozen food distribution', 'Building materials', 'Water purification', 'Engineering and construction', 'Real estate and land sales', 'General supplies and distribution', 'Building consultancy', 'Dry cleaning and laundry'],
         [link('Open the price list', 'products.html'), link('Our services', 'distribution.html')]));
-      add(CH([['Frozen food', 'frozen food'], ['Building materials', 'building materials'], ['Water purification', 'water purification'], ['General supplies', 'general supplies']]));
+      add(CH([['Frozen food', 'frozen food'], ['Building materials', 'building materials'], ['Water purification', 'water purification'], ['General supplies', 'general supplies'], ['Building consultancy', 'building consultancy'], ['Dry cleaning & laundry', 'dry cleaning and laundry']]));
       return out;
     }
 

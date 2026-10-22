@@ -104,6 +104,23 @@
     revealObserver.observe(el);
   });
 
+  // Safety net: a fast scroll can skip past a section before the observer sees it. Anything at or above the
+  // bottom of the screen is shown, so no part of a page can stay blank.
+  let revealTick = false;
+  function revealPassed() {
+    revealTick = false;
+    document.querySelectorAll('.reveal:not(.visible), .stagger-children:not(.visible)').forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight) {
+        el.classList.add('visible');
+        revealObserver.unobserve(el);
+      }
+    });
+  }
+  window.addEventListener('scroll', () => {
+    if (!revealTick) { revealTick = true; requestAnimationFrame(revealPassed); }
+  }, { passive: true });
+  window.addEventListener('load', revealPassed);
+
   /* ============================================
      COUNT-UP ANIMATION FOR STATS
      ============================================ */
