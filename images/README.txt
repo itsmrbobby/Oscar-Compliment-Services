@@ -6,7 +6,6 @@ Homepage feature (800x600): team.jpg
 Projects (600x400):         project1.jpg ... project6.jpg   (project1-3 are also used on the homepage)
 Projects feature (800x600): team-equipment.jpg
 About (800x600):            about.jpg
-Leadership (square, 400x400): ceo.jpg  engineer-head.jpg  distribution-head.jpg
 Engineering (800x600):      construction-process.jpg
 Distribution (800x600):     fleet.jpg
 Contact (1200x500):         map.jpg

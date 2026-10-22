@@ -255,7 +255,8 @@
   };
   var SLUG_TO_QUOTE_OPTION = {
     frozen: 'Frozen Food Distribution', general: 'General Distribution', water: 'Water Purification',
-    materials: 'Building Materials', realestate: 'Real Estate', engineering: 'Engineering & Construction'
+    materials: 'Building Materials', realestate: 'Real Estate', engineering: 'Engineering & Construction',
+    consulting: 'Building Consultancy', laundry: 'Dry Cleaning & Laundry'
   };
 
   var api = {

@@ -119,6 +119,7 @@
     home: ['index.html', 'Home'], about: ['about.html', 'About us'], projects: ['projects.html', 'Projects'],
     contact: ['contact.html', 'Contact'], products: ['products.html', 'Products & Prices'], quote: ['quote.html', 'Quote form'],
     distribution: ['distribution.html', 'General Distribution'], engineering: ['engineering.html', 'Engineering & Construction'],
+    consulting: ['consulting.html', 'Building Consultancy'], laundry: ['laundry.html', 'Dry Cleaning & Laundry'],
     water: ['water.html', 'Water Purification'], materials: ['materials.html', 'Building Materials'],
     realestate: ['realestate.html', 'Real Estate & Land Sales'], frozen: ['frozen.html', 'Frozen Food Distribution']
   };
@@ -150,6 +151,8 @@
       water: { nudge: 'Need a water system? I can help you choose.', line: 'You are on the Water Purification page.', chips: [['Browse water equipment', 'water purification'], quote, talk] },
       realestate: { nudge: 'Looking for land or property? Ask me.', line: 'You are on the Real Estate page.', chips: [['Properties for sale', 'properties for sale'], quote, talk] },
       engineering: { nudge: 'Planning a build? Tell me about it.', line: 'You are on the Engineering page.', chips: [['Start a project enquiry', '__start_lead'], ['See our projects', 'projects'], talk] },
+      consulting: { nudge: 'Planning to build? Ask about our advice.', line: 'You are on the Building Consultancy page.', chips: [['Request a consultation', '__start_lead'], ['Engineering services', 'engineering'], talk] },
+      laundry: { nudge: 'Need dry cleaning or laundry? Ask me.', line: 'You are on the Dry Cleaning & Laundry page.', chips: [['Request a laundry quote', '__start_lead'], ['Do you do pickup?', 'do you offer laundry pickup'], talk] },
       distribution: { nudge: 'Need something supplied? Ask me.', line: 'You are on the General Distribution page.', chips: [['Browse general supplies', 'general supplies'], quote, talk] },
       products: { nudge: 'Can’t find an item? Type it and I will search.', line: 'You are on the price list.', chips: [['Help me find a product', 'find a product'], ['My quote list', 'my quote list'], quote] },
       quote: { nudge: 'I can take your quote request right here in chat.', line: 'You are on the quote page.', chips: [['Get a quote in chat', '__start_lead'], ['Find a product', 'find a product'], talk] },
@@ -293,14 +296,26 @@
     if (/\b(human|real person|agent|representative|staff|someone|a person|talk to|speak to|speak with|customer (care|service|support)|manager|call me|call back|callback)\b/.test(low)) { human(); return out; }
 
     // ---- going to a page ----
-    var nav = low.match(/\b(go to|take me to|open|show me the|navigate to|visit the)\b.*\b(home|about|projects?|contact|products?|prices?|quote|distribution|engineering|water|building materials|materials|real ?estate|frozen)\b/);
+    var nav = low.match(/\b(go to|take me to|open|show me the|navigate to|visit the)\b.*\b(home|about|projects?|contact|products?|prices?|quote|distribution|engineering|consult\w*|laundry|dry ?clean\w*|water|building materials|materials|real ?estate|frozen)\b/);
     if (nav) {
-      var w = nav[2], key = /^project/.test(w) ? 'projects' : /^product|^price/.test(w) ? 'products' : /building|materials/.test(w) ? 'materials' : /real/.test(w) ? 'realestate' : w;
+      var w = nav[2], key = /^project/.test(w) ? 'projects' : /^product|^price/.test(w) ? 'products' : /consult/.test(w) ? 'consulting' : /laundry|dry/.test(w) ? 'laundry' : /building|materials/.test(w) ? 'materials' : /real/.test(w) ? 'realestate' : w;
       var pg = PAGES[key];
       if (pg) { say('Here you go.'); add(CARD(pg[1], [], [link('Open ' + pg[1], pg[0])])); return out; }
     }
 
     // ---- strong intents that must beat product matching ----
+    if (/\b(consult\w*|building (advice|inspection|supervision)|site supervision|bill of quantit\w*|bill of quantities|boq|quantity surveyor|plan review|feasibility)\b/.test(low)) {
+      say('Yes, we offer building consultancy: independent advice before, during and after construction.');
+      add(CARD('Building Consultancy', ['Pre-construction advice and feasibility', 'Plans and design review', 'Cost estimates and bills of quantities', 'Site supervision', 'Building inspection', 'Materials advice'],
+        [link('Consultancy page', 'consulting.html'), act('Request a consultation', '__start_lead')]));
+      state.lastNeed = 'building consultancy'; return out;
+    }
+    if (/\b(laundry|laundromat|dry ?clean\w*|wash(ing)? (and|&) (dry|iron|fold)|iron(ing)?|duvets?|bedsheets?|curtains?|stain removal)\b/.test(low)) {
+      say('Yes, we offer dry cleaning and laundry for homes and businesses.');
+      add(CARD('Dry Cleaning & Laundry', ['Dry cleaning (suits, native wear, gowns)', 'Laundry: wash, dry and fold', 'Ironing and pressing', 'Bedding, duvets and curtains', 'Stain treatment', 'Bulk accounts for businesses'],
+        [link('Laundry page', 'laundry.html'), act('Request a laundry quote', '__start_lead')]));
+      state.lastNeed = 'dry cleaning / laundry'; return out;
+    }
     if (/\b(real ?estate|land|plots?|propert(y|ies)|apartments?|duplex|bungalow|for sale)\b/.test(low) && !/\b(construct|contractor)\w*/.test(low)) {
       say('We sell residential and commercial plots, developed properties and investment opportunities.');
       add(CARD('Real Estate & Land Sales', ['Land titles are verified and documentation is explained before you commit.', 'Availability, pricing and payment terms vary by property.'],
@@ -353,8 +368,8 @@
       return out;
     }
     if (/\b(what do you (sell|do|offer|supply)|what you (sell|do)|wetin you (dey )?sell|your services|services do you|your products|what products)\b/.test(low) || /^(services?|products?)$/.test(low)) {
-      say('We work across six areas. Tap one to see more.');
-      add(CARD('What we do', ['Frozen food distribution', 'Building materials', 'Water purification', 'Engineering and construction', 'Real estate and land sales', 'General supplies and distribution'],
+      say('We work across eight areas. Tap one to see more.');
+      add(CARD('What we do', ['Frozen food distribution', 'Building materials', 'Water purification', 'Engineering and construction', 'Real estate and land sales', 'General supplies and distribution', 'Building consultancy', 'Dry cleaning and laundry'],
         [link('Open the price list', 'products.html'), link('Our services', 'distribution.html')]));
       add(CH([['Frozen food', 'frozen food'], ['Building materials', 'building materials'], ['Water purification', 'water purification'], ['General supplies', 'general supplies']]));
       return out;
