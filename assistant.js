@@ -145,19 +145,19 @@
   function pageCtx(page) {
     var talk = ['Talk to a person', 'talk to a person'], quote = ['Get a quote', '__start_lead'];
     var map = {
-      index: { nudge: 'Looking for a product or a price? Ask me.', chips: [['Find a product', 'find a product'], quote, ['Our location', 'where are you located'], talk] },
+      index: { nudge: 'Looking for a product or a price? Ask me.', chips: [['Find a product', 'find a product'], ['Our services', 'what do you offer'], quote, ['Our location', 'where are you located'], talk] },
       frozen: { nudge: 'Need frozen food prices? I can help.', line: 'You are on the Frozen Food page.', chips: [['Browse frozen food', 'frozen food'], ['Do you deliver?', 'do you deliver'], quote, talk] },
       materials: { nudge: 'Need cement or steel prices? Ask me.', line: 'You are on the Building Materials page.', chips: [['Browse building materials', 'building materials'], ['Cement', 'cement'], quote, talk] },
       water: { nudge: 'Need a water system? I can help you choose.', line: 'You are on the Water Purification page.', chips: [['Browse water equipment', 'water purification'], quote, talk] },
       realestate: { nudge: 'Looking for land or property? Ask me.', line: 'You are on the Real Estate page.', chips: [['Properties for sale', 'properties for sale'], quote, talk] },
       engineering: { nudge: 'Planning a build? Tell me about it.', line: 'You are on the Engineering page.', chips: [['Start a project enquiry', '__start_lead'], ['See our projects', 'projects'], talk] },
       consulting: { nudge: 'Planning to build? Ask about our advice.', line: 'You are on the Building Consultancy page.', chips: [['Request a consultation', '__start_lead'], ['Engineering services', 'engineering'], talk] },
-      laundry: { nudge: 'Need dry cleaning or laundry? Ask me.', line: 'You are on the Dry Cleaning & Laundry page.', chips: [['Request a laundry quote', '__start_lead'], ['Do you do pickup?', 'do you offer laundry pickup'], talk] },
-      distribution: { nudge: 'Need something supplied? Ask me.', line: 'You are on the General Distribution page.', chips: [['Browse general supplies', 'general supplies'], quote, talk] },
+      laundry: { nudge: 'Need dry cleaning or laundry? Ask me.', line: 'You are on the Dry Cleaning & Laundry page.', chips: [['Request a laundry quote', '__start_lead'], ['What do you clean?', 'dry cleaning and laundry'], talk] },
+      distribution: { nudge: 'Need something supplied? Ask me.', line: 'You are on the General Distribution page.', chips: [['Browse general supplies', 'general supplies'], ['Our services', 'what do you offer'], quote, talk] },
       products: { nudge: 'Can’t find an item? Type it and I will search.', line: 'You are on the price list.', chips: [['Help me find a product', 'find a product'], ['My quote list', 'my quote list'], quote] },
       quote: { nudge: 'I can take your quote request right here in chat.', line: 'You are on the quote page.', chips: [['Get a quote in chat', '__start_lead'], ['Find a product', 'find a product'], talk] },
       contact: { nudge: 'Need directions or a quick answer?', line: 'You are on the contact page.', chips: [['Our location', 'where are you located'], ['Call or WhatsApp', 'phone number'], talk] },
-      about: { nudge: 'Questions about what we do? Ask me.', chips: [['What do you sell?', 'what do you sell'], quote, talk] },
+      about: { nudge: 'Questions about what we do? Ask me.', chips: [['Our services', 'what do you offer'], ['Building consultancy', 'building consultancy'], ['Dry cleaning & laundry', 'dry cleaning and laundry'], quote, talk] },
       projects: { nudge: 'Want to discuss a project like these?', chips: [['Start a project enquiry', '__start_lead'], ['Engineering services', 'engineering'], talk] }
     };
     return map[page] || { nudge: 'Need help? Ask me anything about our products or services.', chips: [['Find a product', 'find a product'], quote, talk] };
@@ -434,7 +434,7 @@
   /* =====================================================
      WIDGET (browser)
      ===================================================== */
-  var KEY = 'osca_bot_v1';
+  var KEY = 'osca_bot_v3'; // bump when replies change so visitors never see stale chat history
 
   function el(tag, cls, text) {
     var n = document.createElement(tag);
