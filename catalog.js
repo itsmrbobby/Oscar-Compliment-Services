@@ -324,7 +324,7 @@
   var _prodPromise = null;
   function loadProducts() {
     if (!_prodPromise) {
-      _prodPromise = loadObjects(CFG.priceSheetCsv, 'data/products.csv', 'product').then(normaliseProducts)
+      _prodPromise = loadObjects(CFG.priceSheetCsv, 'data/products.csv', 'product').then(function (objs) { var C = window.OscaCMS; return C && C.ready ? C.ready.then(function () { return C.applyProducts(objs); }) : objs; }).then(normaliseProducts)
         .catch(function (e) { _prodPromise = null; throw e; });
     }
     return _prodPromise;
@@ -541,6 +541,8 @@
     }
 
     loadObjects(CFG.priceSheetCsv, 'data/products.csv', 'product').then(function (objs) {
+      var C = window.OscaCMS; return C && C.ready ? C.ready.then(function () { return C.applyProducts(objs); }) : objs;
+    }).then(function (objs) {
       items = normaliseProducts(objs);
       if (!items.length) throw new Error('empty');
       var seen = {}; units = [];

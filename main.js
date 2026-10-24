@@ -265,6 +265,17 @@
       const btn = this.querySelector('button[type="submit"]');
       if (!btn) return;
 
+      // Also keep a copy in the admin inbox when the online database is connected
+      if (window.OscaCMS && window.OscaCMS.enabled && !this.querySelector('[name="_gotcha"]')?.value) {
+        const parts = []; let nm = '', ph = '', em = '';
+        new FormData(this).forEach((val, key) => {
+          if (key === '_gotcha' || !String(val).trim()) return;
+          if (key === 'name') nm = String(val); else if (key === 'phone') ph = String(val); else if (key === 'email') em = String(val);
+          const lab = this.querySelector('label[for="f-' + key + '"], label[for="' + key + '"]');
+          parts.push((key === 'selected_items' ? 'Quote list' : (lab ? lab.textContent.replace(/\*/g, '').trim() : key)) + ': ' + String(val).trim());
+        });
+        window.OscaCMS.saveRequest(/quote/.test(location.pathname) ? 'quote' : 'contact', { page: location.pathname.split('/').pop() || 'index.html', name: nm, phone: ph, email: em, message: parts.join('\n') });
+      }
       const endpoint = (this.dataset.endpoint || (window.OSCA_CONFIG && window.OSCA_CONFIG.formEndpoint) || '').trim();
       if (!endpoint) {
         // No form service connected yet: never dead-end. Build the message from the form and hand it to WhatsApp

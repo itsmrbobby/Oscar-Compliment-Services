@@ -185,8 +185,8 @@
     var need = L.need + (q.length && /quote list/i.test(L.need) ? ':\n' + Cat.quoteLines(q).join('\n') : '');
     var msg = ['Hello ' + bizName(cfg) + ', I would like a quote.', 'Name: ' + L.name, 'Phone: ' + L.phone, 'Need: ' + need].join('\n');
     var actions = [];
-    if (cfg.formEndpoint) actions.push(act('Send to our team', '__send_lead'));
-    var wa = waLink(cfg, msg); if (wa) actions.push(link('Send on WhatsApp', wa, true));
+    if (cfg.formEndpoint || (window.OscaCMS && window.OscaCMS.enabled)) actions.push(act('Send to our team', '__send_lead'));
+    var wa = waLink(cfg, msg); if (wa) { var wl = link('Send on WhatsApp', wa, true); wl.lead = { name: L.name, phone: L.phone, message: msg }; actions.push(wl); }
     actions.push(act('Cancel', 'cancel'));
     return CARD('Please check your request', ['Name: ' + L.name, 'Phone: ' + L.phone, 'Need: ' + (q.length && /quote list/i.test(L.need) ? L.need : L.need)], actions);
   }
@@ -265,7 +265,7 @@
       }
       if (L.step === 'confirm') {
         if (/^(yes|yeah|yep|ok|okay|send|send it|confirm|submit|go ahead)\b/.test(low)) {
-          if (cfg.formEndpoint) { out.effects.push({ type: 'send-lead', payload: { name: L.name, phone: L.phone, need: L.need, items: quote.map(function (i) { return i.name; }) } }); say('Sending your request…'); return out; }
+          if (cfg.formEndpoint || (window.OscaCMS && window.OscaCMS.enabled)) { out.effects.push({ type: 'send-lead', payload: { name: L.name, phone: L.phone, need: L.need, items: quote.map(function (i) { return i.name; }) } }); say('Sending your request…'); return out; }
           say('Tap Send on WhatsApp below and your request will open ready to send.');
         } else { say('Tap one of the buttons below to send your request, or type cancel to stop.'); }
         add(leadSummary(state, env)); return out;
@@ -504,6 +504,7 @@
     function linkNode(a) {
       var n = el('a', 'bot-btn', a.label); n.href = a.href;
       if (a.ext) { n.target = '_blank'; n.rel = 'noopener'; }
+      if (a.lead) n.addEventListener('click', function () { if (window.OscaCMS) window.OscaCMS.saveRequest('chat', { page: page, name: a.lead.name, phone: a.lead.phone, message: a.lead.message }); });
       return n;
     }
     function actionNode(a) {
@@ -598,7 +599,9 @@
         .catch(function () { if (timer) clearTimeout(timer); return null; });
     }
     function sendLead(payload) {
-      var ep = cfg.formEndpoint; if (!ep) return Promise.reject(new Error('no endpoint'));
+      var msg = 'Need: ' + payload.need + (payload.items.length ? '\nItems:\n' + payload.items.join('\n') : '');
+      var saved = window.OscaCMS && window.OscaCMS.enabled ? window.OscaCMS.saveRequest('chat', { page: page, name: payload.name, phone: payload.phone, message: msg }) : Promise.resolve(false);
+      var ep = cfg.formEndpoint; if (!ep) return saved.then(function (ok) { if (!ok) throw new Error('not saved'); });
       var fd = new FormData();
       fd.append('name', payload.name); fd.append('phone', payload.phone); fd.append('need', payload.need);
       fd.append('selected_items', payload.items.join('\n')); fd.append('source', 'Osca Assistant (website chat)');

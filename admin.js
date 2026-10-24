@@ -1,0 +1,172 @@
+const $ = (s) => document.querySelector(s);
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const show = (id, on) => $(id).classList.toggle('hide', !on);
+const note = (el, cls, t) => { el.innerHTML = t ? `<div class="msg ${cls}">${esc(t)}</div>` : ''; };
+const friendly = (e) => e.auth ? 'Your login session ended. Reload this page to sign in again.' : (e.message || 'Something went wrong.');
+const loginErr = (t) => { note($('#loginMsg'), 'err', t); };
+async function api(path, o = {}) {
+  let r; try { r = await fetch('api/admin/' + path, { method: o.method || 'GET', headers: { 'content-type': 'application/json', 'x-osca-admin': '1' }, body: o.body ? JSON.stringify(o.body) : undefined }); }
+  catch (e) { throw new Error('Could not reach the server. Check your connection and try again.'); }
+  if (r.status === 401) { showLogin('Your session ended. Please sign in again.'); throw Object.assign(new Error('Signed out'), { auth: true }); }
+  const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || 'Request failed'); return j;
+}
+function showLogin(msg) { show('#app', false); show('#setupView', false); show('#loginView', true); show('#outBtn', false); show('#siteLink', false); $('#pw').value = ''; note($('#loginMsg'), msg ? 'info' : '', msg || ''); }
+$('#loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault(); $('#loginBtn').disabled = true; note($('#loginMsg'), '', '');
+  try {
+    const r = await fetch('api/login', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ password: $('#pw').value }) });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok) { await boot(); } else loginErr(j.error || 'Could not sign in.');
+  } catch (er) { loginErr('Could not reach the server. Check your connection.'); }
+  $('#loginBtn').disabled = false;
+});
+$('#outBtn').addEventListener('click', async () => { try { await fetch('api/logout', { method: 'POST' }); } catch (e) {} location.reload(); });
+async function boot() {
+  let r; try { r = await fetch('api/admin/me'); } catch (e) { show('#setupView', true); return; }
+  if (r.status === 401) { showLogin(); return; }
+  if (!r.ok || !/json/.test(r.headers.get('content-type') || '')) { show('#setupView', true); return; }
+  show('#loginView', false); show('#setupView', false); show('#app', true); show('#outBtn', true); show('#siteLink', true); started = false; start();
+}
+
+/* ---------- tabs ---------- */
+const TABS = [['requests', 'Requests'], ['products', 'Products & prices'], ['text', 'Page text'], ['photos', 'Photos']];
+let cur = 'requests', started = false, newCount = 0;
+function start() {
+  if (started) return; started = true; drawTabs(); go('requests');
+}
+function drawTabs() {
+  $('#tabs').innerHTML = TABS.map(([k, l]) => `<button data-k="${k}" class="${k === cur ? 'on' : ''}">${l}${k === 'requests' && newCount ? `<span class="badge">${newCount}</span>` : ''}</button>`).join('');
+  $('#tabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => go(b.dataset.k)));
+}
+function go(k) { cur = k; drawTabs(); ({ requests, products, text: pageText, photos })[k](); }
+
+/* ---------- requests ---------- */
+async function requests() {
+  const p = $('#panel'); p.innerHTML = '<div class="card">Loading requests…</div>';
+  try {
+    const items = (await api('requests')).items;
+    newCount = items.filter((i) => i.status === 'new').length; drawTabs();
+    if (!items.length) { p.innerHTML = '<div class="card"><h2>No requests yet</h2><p class="mut">Quote and contact requests from the website will appear here.</p></div>'; return; }
+    p.innerHTML = '<h2>Quote &amp; contact requests</h2>' + items.map((i) => {
+      const t = i.created ? new Date(i.created).toLocaleString() : '';
+      const digits = String(i.phone || '').replace(/\D/g, '').replace(/^0/, '234');
+      return `<div class="card req ${i.status === 'done' ? 'done' : ''}" data-id="${i.id}"><h3><span class="tag">${esc(i.type)}</span>${esc(i.name || 'No name')}</h3>
+        <div class="meta">${esc(t)} · ${esc(i.phone || '')} ${i.email ? '· ' + esc(i.email) : ''}</div><pre>${esc(i.message)}</pre>
+        <div class="row">${i.phone ? `<a class="btn" href="tel:${esc(i.phone)}">Call</a><a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/${digits}">WhatsApp</a>` : ''}
+        <button class="ghost" data-a="tog">${i.status === 'done' ? 'Mark as new' : 'Mark as handled'}</button><button class="ghost" data-a="del" style="color:var(--bad)">Delete</button></div></div>`;
+    }).join('');
+    p.querySelectorAll('.req').forEach((c) => {
+      const id = c.dataset.id, it = items.find((x) => String(x.id) === id);
+      c.querySelector('[data-a=tog]').addEventListener('click', async () => { await api('requests/' + id, { method: 'PATCH', body: { status: it.status === 'done' ? 'new' : 'done' } }); requests(); });
+      c.querySelector('[data-a=del]').addEventListener('click', async () => { if (confirm('Delete this request for good?')) { await api('requests/' + id, { method: 'DELETE' }); requests(); } });
+    });
+  } catch (e) { p.innerHTML = `<div class="card"><div class="msg err">${esc(friendly(e))}</div></div>`; }
+}
+
+/* ---------- products & prices ---------- */
+function parseCSV(t) { const rows = []; let r = [], f = '', q = false; for (let i = 0; i < t.length; i++) { const c = t[i]; if (q) { if (c === '"') { if (t[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; } else if (c === '"') q = true; else if (c === ',') { r.push(f); f = ''; } else if (c === '\n') { r.push(f); rows.push(r); r = []; f = ''; } else if (c !== '\r') f += c; } if (f || r.length) { r.push(f); rows.push(r); } return rows.filter((x) => x.some((v) => v.trim())); }
+let PROD = null;
+async function loadProd() {
+  if (PROD) return PROD;
+  const csv = parseCSV(await (await fetch('data/products.csv', { cache: 'no-store' })).text()); csv.shift();
+  const d = await api('products');
+  PROD = { base: csv.map((r) => ({ sku: r[0], unit: r[1], category: r[2], name: r[3], soldby: r[4], price: r[5] || '', per: r[6] || '', status: r[7] || 'Available' })), ov: d.overrides || {}, extra: d.extra || [], dirty: false };
+  return PROD;
+}
+async function products() {
+  const p = $('#panel'); p.innerHTML = '<div class="card">Loading products…</div>';
+  let P; try { P = await loadProd(); } catch (e) { p.innerHTML = `<div class="card"><div class="msg err">${esc(friendly(e))}</div></div>`; return; }
+  const units = [...new Set(P.base.map((r) => r.unit))];
+  p.innerHTML = `<h2>Products &amp; prices</h2><div class="card"><div class="row"><input class="grow" id="q" placeholder="Search products…"><select class="grow" id="u"><option value="">All units</option>${units.map((u) => `<option>${esc(u)}</option>`).join('')}</select><button id="addBtn" class="ghost" style="color:var(--ink)">+ New product</button></div>
+    <div id="addBox" class="hide" style="margin-top:12px"><div class="row"><select class="grow" id="nu">${units.map((u) => `<option>${esc(u)}</option>`).join('')}</select><input class="grow" id="nc" placeholder="Category (e.g. Fish)"></div>
+    <div class="row" style="margin-top:8px"><input class="grow" id="nn" placeholder="Product name"><input class="grow" id="ns" placeholder="Sold by (e.g. kg, bag)"></div><div class="row" style="margin-top:8px"><button id="nsv">Add product</button></div></div></div>
+    <div id="msg"></div><div class="card" id="list"></div><div class="save"><button id="saveBtn" disabled>Save changes</button></div>`;
+  const eff = (r) => ({ ...r, ...(P.ov[r.sku] || {}) });
+  const rowsAll = () => [...P.base.map((r) => ({ ...eff(r), src: 'csv' })), ...P.extra.map((r, i) => ({ sku: r.sku, unit: r.businessunit, category: r.category, name: r.product, soldby: r.soldby, price: r.price || '', per: r.priceper || '', status: r.status || 'Available', src: 'extra', i }))];
+  function draw() {
+    const q = $('#q').value.toLowerCase(), u = $('#u').value, rows = rowsAll().filter((r) => (!u || r.unit === u) && (!q || (r.name + ' ' + r.category).toLowerCase().includes(q))).slice(0, 80);
+    $('#list').innerHTML = (rows.length ? rows.map((r) => `<div class="prod ${P.ov[r.sku] ? 'chg' : ''}" data-sku="${esc(r.sku)}"><div><div class="n">${esc(r.name)} ${r.src === 'extra' ? '<span class="tag">new</span>' : ''}</div><div class="c">${esc(r.unit)} · ${esc(r.category)} · ${esc(r.soldby)}</div></div>
+      <div class="f"><input data-f="price" inputmode="decimal" placeholder="Price ₦" value="${esc(r.price)}"><input data-f="per" placeholder="per (kg, bag…)" value="${esc(r.per)}"><select data-f="status">${['Available', 'Limited', 'Out of stock', 'Hidden'].map((s) => `<option ${s.toLowerCase() === String(r.status).toLowerCase() ? 'selected' : ''}>${s}</option>`).join('')}</select></div>${r.src === 'extra' ? `<button class="ghost danger" data-del="${r.i}" style="grid-column:1/-1;justify-self:start;color:#fff">Remove</button>` : ''}</div>`).join('') : '<p class="mut">No products match.</p>') + (rowsAll().length > 80 ? '<p class="mut">Showing the first 80 matches. Use search or pick a unit to find others.</p>' : '');
+    $('#list').querySelectorAll('.prod').forEach((el) => {
+      const sku = el.dataset.sku;
+      el.querySelectorAll('[data-f]').forEach((inp) => inp.addEventListener('change', () => {
+        const f = inp.dataset.f, v = inp.value.trim(), ex = P.extra.find((x) => x.sku === sku);
+        if (ex) { if (f === 'price') ex.price = v; else if (f === 'per') ex.priceper = v; else ex.status = v; }
+        else { const o = P.ov[sku] || (P.ov[sku] = {}); if (f === 'price') o.price = v; else if (f === 'per') o.priceper = v; else o.status = v; el.classList.add('chg'); }
+        P.dirty = true; $('#saveBtn').disabled = false;
+      }));
+    });
+    $('#list').querySelectorAll('[data-del]').forEach((b) => b.addEventListener('click', () => { if (confirm('Remove this product?')) { P.extra.splice(+b.dataset.del, 1); P.dirty = true; $('#saveBtn').disabled = false; draw(); } }));
+  }
+  $('#q').addEventListener('input', draw); $('#u').addEventListener('change', draw); draw();
+  $('#addBtn').addEventListener('click', () => $('#addBox').classList.toggle('hide'));
+  $('#nsv').addEventListener('click', () => {
+    const name = $('#nn').value.trim(); if (!name) { note($('#msg'), 'err', 'Type the product name first.'); return; }
+    P.extra.push({ sku: 'X' + Date.now().toString(36), businessunit: $('#nu').value, category: $('#nc').value.trim() || 'Other', product: name, soldby: $('#ns').value.trim(), price: '', priceper: '', status: 'Available' });
+    $('#nn').value = ''; $('#ns').value = ''; P.dirty = true; $('#saveBtn').disabled = false; $('#q').value = name; note($('#msg'), 'info', 'Added. Set its price below, then tap Save changes.'); draw();
+  });
+  $('#saveBtn').addEventListener('click', async () => {
+    $('#saveBtn').disabled = true;
+    try { await api('products', { method: 'PUT', body: { overrides: P.ov, extra: P.extra } }); P.dirty = false; note($('#msg'), 'ok', 'Saved. The website now shows these prices.'); }
+    catch (e) { note($('#msg'), 'err', friendly(e)); $('#saveBtn').disabled = false; }
+  });
+}
+
+/* ---------- page text ---------- */
+const PAGES = ['index', 'about', 'projects', 'consulting', 'laundry'];
+let TXT = null;
+async function loadText() {
+  if (TXT) return TXT;
+  const f = [];
+  for (const pg of PAGES) { try { const h = await (await fetch(pg + '.html', { cache: 'no-store' })).text(); const d = new DOMParser().parseFromString(h, 'text/html'); d.querySelectorAll('[data-cms]').forEach((el) => f.push({ key: el.dataset.cms, label: el.dataset.cmsLabel || el.dataset.cms, page: pg, def: el.textContent.trim().replace(/\s+/g, ' ') })); } catch (e) {} }
+  TXT = { fields: f, vals: (await api('text')).vals || {} }; return TXT;
+}
+async function pageText() {
+  const p = $('#panel'); p.innerHTML = '<div class="card">Loading…</div>';
+  let T; try { T = await loadText(); } catch (e) { p.innerHTML = `<div class="card"><div class="msg err">${esc(friendly(e))}</div></div>`; return; }
+  const names = { index: 'Home page', about: 'About page', projects: 'Projects page', consulting: 'Building Consultancy page', laundry: 'Dry Cleaning & Laundry page' };
+  p.innerHTML = `<h2>Page text</h2><p class="mut">Change the wording on your pages. Leave a box empty to go back to the original text.</p><div id="msg"></div>` +
+    PAGES.map((pg) => { const fs = T.fields.filter((x) => x.page === pg); return fs.length ? `<div class="card"><h3 style="margin-top:0">${names[pg]}</h3>${fs.map((x) => `<label>${esc(x.label)}</label><textarea data-k="${esc(x.key)}" placeholder="${esc(x.def)}">${esc(T.vals[x.key] || '')}</textarea>`).join('')}</div>` : ''; }).join('') +
+    '<div class="save"><button id="saveBtn">Save text</button></div>';
+  $('#saveBtn').addEventListener('click', async () => {
+    const vals = {}; p.querySelectorAll('textarea').forEach((t) => { const v = t.value.trim(); if (v) vals[t.dataset.k] = v; });
+    try { await api('text', { method: 'PUT', body: { vals } }); T.vals = vals; note($('#msg'), 'ok', 'Saved. The website now shows your wording.'); window.scrollTo(0, 0); } catch (e) { note($('#msg'), 'err', friendly(e)); }
+  });
+}
+
+/* ---------- photos ---------- */
+const SLOTS = [['Homepage cards', [['water', 'Water Purification'], ['materials', 'Building Materials'], ['engineering', 'Engineering'], ['realestate', 'Real Estate'], ['frozen', 'Frozen Food'], ['distribution', 'Distribution'], ['consulting', 'Building Consultancy'], ['laundry', 'Dry Cleaning & Laundry']]],
+  ['Homepage & About', [['team', 'Homepage team photo'], ['about', 'About page photo'], ['ceo', 'Founder & CEO']]],
+  ['Projects', [['project1', 'Project 1'], ['project2', 'Project 2'], ['project3', 'Project 3'], ['project4', 'Project 4'], ['project5', 'Project 5'], ['project6', 'Project 6'], ['team-equipment', 'Projects team / equipment']]],
+  ['Service pages', [['construction-process', 'Engineering page'], ['consulting-process', 'Consultancy page'], ['laundry-process', 'Laundry page'], ['fleet', 'Distribution page'], ['water-feature', 'Water page'], ['materials-feature', 'Materials page'], ['realestate-feature', 'Real estate page'], ['frozen-feature', 'Frozen food page']]]];
+let IDX = null;
+async function photos() {
+  const p = $('#panel'); p.innerHTML = '<div class="card">Loading…</div>';
+  try { if (!IDX) IDX = (await api('photos')).ids || {}; } catch (e) { p.innerHTML = `<div class="card"><div class="msg err">${esc(friendly(e))}</div></div>`; return; }
+  const id = (path) => path.replace(/\//g, '__');
+  const row = ([path, label]) => `<div class="ph" data-path="${esc(path)}"><div class="nop"><span>Loading</span></div><div class="grow" style="flex:1"><b>${esc(label)}</b><div class="mut" style="font-size:12px">images/${esc(path)}.jpg ${IDX[id(path)] ? '· <span style="color:var(--ok)">uploaded here</span>' : ''}</div>
+    <div class="row" style="margin-top:6px"><label class="btn" style="margin:0;padding:7px 12px">Choose photo<input type="file" accept="image/*" class="hide"></label>${IDX[id(path)] ? '<button class="ghost danger" data-rm style="color:#fff;padding:7px 12px">Remove</button>' : ''}</div></div></div>`;
+  p.innerHTML = '<h2>Photos</h2><p class="mut">Choose a photo and it replaces the one on the website. Pictures are shrunk automatically so pages stay fast.</p><div id="msg"></div>' +
+    SLOTS.map(([g, items]) => `<div class="card"><h3 style="margin-top:0">${g}</h3>${items.map(row).join('')}</div>`).join('') +
+    `<div class="card"><h3 style="margin-top:0">Other photo (advanced)</h3><p class="mut" style="margin-top:0">For product category pictures, type the path, e.g. <b>categories/frozen/fish</b></p><div class="row"><input class="grow" id="cp" placeholder="categories/frozen/fish"><label class="btn" style="margin:0">Choose photo<input type="file" accept="image/*" class="hide" id="cf"></label></div></div>`;
+  p.querySelectorAll('.ph').forEach(async (el) => {
+    const path = el.dataset.path, box = el.querySelector('.nop');
+    try { const src = IDX[id(path)] ? 'api/photo/' + id(path) + '?v=' + IDX[id(path)] : 'images/' + path + '.jpg'; const im = new Image(); im.onload = () => box.replaceWith(im); im.onerror = () => { box.innerHTML = '<span>No photo yet</span>'; }; im.src = src; } catch (e) { box.innerHTML = '<span>—</span>'; }
+    el.querySelector('input[type=file]').addEventListener('change', (e) => upload(path, e.target.files[0]));
+    const rm = el.querySelector('[data-rm]'); if (rm) rm.addEventListener('click', async () => { if (!confirm('Remove the uploaded photo? The website goes back to the file in the images folder.')) return; try { await api('photos/' + id(path), { method: 'DELETE' }); delete IDX[id(path)]; photos(); } catch (er) { note($('#msg'), 'err', friendly(er)); } });
+  });
+  $('#cf').addEventListener('change', (e) => { const v = $('#cp').value.trim().replace(/^\/+|\.[a-z]+$/gi, ''); if (!/^[a-z0-9\-_/]+$/i.test(v)) { note($('#msg'), 'err', 'Type the photo path first, using letters, numbers and dashes only.'); return; } upload(v, e.target.files[0]); });
+  async function upload(path, file) {
+    if (!file) return; note($('#msg'), 'info', 'Uploading…');
+    try {
+      const bmp = await new Promise((ok, no) => { const u = URL.createObjectURL(file), im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = u; });
+      let w = bmp.naturalWidth, h = bmp.naturalHeight; const m = Math.max(w, h) > 1400 ? 1400 / Math.max(w, h) : 1; w = Math.round(w * m); h = Math.round(h * m);
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.getContext('2d').drawImage(bmp, 0, 0, w, h);
+      let q = 0.84, data = cv.toDataURL('image/jpeg', q); while (data.length > 900000 && q > 0.4) { q -= 0.08; data = cv.toDataURL('image/jpeg', q); }
+      if (data.length > 950000) throw new Error('That photo is too large even after shrinking. Try a smaller one.');
+      const up = await api('photos/' + id(path), { method: 'PUT', body: { data } }); IDX[id(path)] = up.updated;
+      note($('#msg'), 'ok', 'Photo saved. The website now uses it.'); photos();
+    } catch (er) { note($('#msg'), 'err', friendly(er)); }
+  }
+}
+boot();

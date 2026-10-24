@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261023">
+  <link rel="stylesheet" href="style.css?v=20261024">
 <script>
 /* Photo loader: tries .jpg, .jpeg, .png, .webp (and CAPITAL versions) before giving up, so a photo saved as
    water.jpeg or Water.JPG still shows. If none exist the branded placeholder stays. */
@@ -33,7 +33,7 @@ document.addEventListener('error',function(ev){var i=ev.target;if(!i||i.tagName!
 var s=i.getAttribute('src')||'',m=s.match(/^(images\/.+)\.(jpg|jpeg|png|webp)$/i);if(!m)return;
 ev.stopImmediatePropagation();var t=i.__tried||(i.__tried=[]);t.push(s.split('.').pop());
 for(var k=0;k<E.length;k++){if(t.indexOf(E[k])<0){i.src=m[1]+'.'+E[k];return;}}
-i.remove();},true);})();
+i.style.display='none';},true);})();
 </script>
 </head>
 <body>
@@ -93,8 +93,8 @@ i.remove();},true);})();
           <img src="images/project1.jpg" alt="12-unit gated residential estate" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
-          <h4>12-Unit Residential Estate</h4>
-          <p>Full land development, foundation, and construction of a gated residential community.</p>
+          <h4 data-cms="project1_title" data-cms-label="Project 1: title">12-Unit Residential Estate</h4>
+          <p data-cms="project1_text" data-cms-label="Project 1: description">Full land development, foundation, and construction of a gated residential community.</p>
           <div class="listing-meta"><span class="listing-tag">Construction</span><span class="listing-price">Completed</span></div>
         </div>
       </div>
@@ -103,8 +103,8 @@ i.remove();},true);})();
           <img src="images/project2.jpg" alt="5,000 square meter industrial warehouse complex" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
-          <h4>5,000 sqm Warehouse Complex</h4>
-          <p>Industrial warehouse with reinforced concrete foundation, steel structure, loading bay, and office block.</p>
+          <h4 data-cms="project2_title" data-cms-label="Project 2: title">5,000 sqm Warehouse Complex</h4>
+          <p data-cms="project2_text" data-cms-label="Project 2: description">Industrial warehouse with reinforced concrete foundation, steel structure, loading bay, and office block.</p>
           <div class="listing-meta"><span class="listing-tag">Construction</span><span class="listing-price">Completed</span></div>
         </div>
       </div>
@@ -113,8 +113,8 @@ i.remove();},true);})();
           <img src="images/project3.jpg" alt="40-plot residential land subdivision" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
-          <h4>40-Plot Land Subdivision</h4>
-          <p>Land clearing, road construction, drainage, and utility installation for a residential development.</p>
+          <h4 data-cms="project3_title" data-cms-label="Project 3: title">40-Plot Land Subdivision</h4>
+          <p data-cms="project3_text" data-cms-label="Project 3: description">Land clearing, road construction, drainage, and utility installation for a residential development.</p>
           <div class="listing-meta"><span class="listing-tag">Real Estate</span><span class="listing-price">Ongoing</span></div>
         </div>
       </div>
@@ -123,8 +123,8 @@ i.remove();},true);})();
           <img src="images/project4.jpg" alt="Three-story commercial plaza with retail and office space" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
-          <h4>Commercial Plaza</h4>
-          <p>Three-story commercial building with retail spaces, offices, and parking. Foundation to handover.</p>
+          <h4 data-cms="project4_title" data-cms-label="Project 4: title">Commercial Plaza</h4>
+          <p data-cms="project4_text" data-cms-label="Project 4: description">Three-story commercial building with retail spaces, offices, and parking. Foundation to handover.</p>
           <div class="listing-meta"><span class="listing-tag">Construction</span><span class="listing-price">Completed</span></div>
         </div>
       </div>
@@ -133,8 +133,8 @@ i.remove();},true);})();
           <img src="images/project5.jpg" alt="Four-unit semi-detached duplex construction" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
-          <h4>Duplex Construction (4 units)</h4>
-          <p>Semi-detached duplexes with modern architecture, full MEP, and landscaped compounds.</p>
+          <h4 data-cms="project5_title" data-cms-label="Project 5: title">Duplex Construction (4 units)</h4>
+          <p data-cms="project5_text" data-cms-label="Project 5: description">Semi-detached duplexes with modern architecture, full MEP, and landscaped compounds.</p>
           <div class="listing-meta"><span class="listing-tag">Construction</span><span class="listing-price">Completed</span></div>
         </div>
       </div>
@@ -143,8 +143,8 @@ i.remove();},true);})();
           <img src="images/project6.jpg" alt="Access road and stormwater drainage civil works" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
         </div>
         <div class="listing-body">
-          <h4>Access Road & Drainage</h4>
-          <p>Civil works including 2km access road, culverts, and stormwater drainage for a new estate.</p>
+          <h4 data-cms="project6_title" data-cms-label="Project 6: title">Access Road & Drainage</h4>
+          <p data-cms="project6_text" data-cms-label="Project 6: description">Civil works including 2km access road, culverts, and stormwater drainage for a new estate.</p>
           <div class="listing-meta"><span class="listing-tag">Engineering</span><span class="listing-price">Completed</span></div>
         </div>
       </div>
@@ -226,15 +226,16 @@ i.remove();},true);})();
       </div>
     </div>
     <div class="footer-bottom">
-      <span>Osca Complement Services. All rights reserved.</span>
+      <span>Osca Complement Services. All rights reserved. · <a href="admin.html" rel="nofollow" style="opacity:.7">Staff login</a></span>
       <span>Designed by <a href="mailto:vr@vibrantrevolve.com" class="credit-link">VibrantRevolve</a></span>
     </div>
   </div>
 </footer>
 
-<script src="config.js?v=20261023" defer></script>
-<script src="catalog.js?v=20261023" defer></script>
-<script src="assistant.js?v=20261023" defer></script>
-<script src="main.js?v=20261023" defer></script>
+<script src="config.js?v=20261024" defer></script>
+<script src="cms.js?v=20261024" defer></script>
+<script src="catalog.js?v=20261024" defer></script>
+<script src="assistant.js?v=20261024" defer></script>
+<script src="main.js?v=20261024" defer></script>
 </body>
 </html>

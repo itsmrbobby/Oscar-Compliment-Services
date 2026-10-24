@@ -24,7 +24,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261023">
+  <link rel="stylesheet" href="style.css?v=20261024">
 <script>
 /* Photo loader: tries .jpg, .jpeg, .png, .webp (and CAPITAL versions) before giving up, so a photo saved as
    water.jpeg or Water.JPG still shows. If none exist the branded placeholder stays. */
@@ -33,7 +33,7 @@ document.addEventListener('error',function(ev){var i=ev.target;if(!i||i.tagName!
 var s=i.getAttribute('src')||'',m=s.match(/^(images\/.+)\.(jpg|jpeg|png|webp)$/i);if(!m)return;
 ev.stopImmediatePropagation();var t=i.__tried||(i.__tried=[]);t.push(s.split('.').pop());
 for(var k=0;k<E.length;k++){if(t.indexOf(E[k])<0){i.src=m[1]+'.'+E[k];return;}}
-i.remove();},true);})();
+i.style.display='none';},true);})();
 </script>
 </head>
 <body>
@@ -148,9 +148,9 @@ i.remove();},true);})();
       </div>
       <div class="founder-text">
         <div class="section-label">Founder &amp; CEO</div>
-        <h3>Awhangonu Olusegun Christopher</h3>
-        <p class="founder-origin">From Obanigbe Isale, Ipokia, Ward 1</p>
-        <p>Osca Complement Services is led by its founder, who personally oversees every business unit, including distribution and construction. That means one point of accountability, quick decisions, and the same standard of reliability and quality across everything we do.</p>
+        <h3 data-cms="about_founder_name" data-cms-label="Founder name">Awhangonu Olusegun Christopher</h3>
+        <p class="founder-origin" data-cms="about_founder_origin" data-cms-label="Founder: where he is from">From Obanigbe Isale, Ipokia, Ward 1</p>
+        <p data-cms="about_founder_text" data-cms-label="Founder: paragraph">Osca Complement Services is led by its founder, who personally oversees every business unit, including distribution and construction. That means one point of accountability, quick decisions, and the same standard of reliability and quality across everything we do.</p>
         <a href="contact.html" class="btn btn-primary">Get in touch</a>
       </div>
     </div>
@@ -216,15 +216,16 @@ i.remove();},true);})();
       </div>
     </div>
     <div class="footer-bottom">
-      <span>Osca Complement Services. All rights reserved.</span>
+      <span>Osca Complement Services. All rights reserved. · <a href="admin.html" rel="nofollow" style="opacity:.7">Staff login</a></span>
       <span>Designed by <a href="mailto:vr@vibrantrevolve.com" class="credit-link">VibrantRevolve</a></span>
     </div>
   </div>
 </footer>
 
-<script src="config.js?v=20261023" defer></script>
-<script src="catalog.js?v=20261023" defer></script>
-<script src="assistant.js?v=20261023" defer></script>
-<script src="main.js?v=20261023" defer></script>
+<script src="config.js?v=20261024" defer></script>
+<script src="cms.js?v=20261024" defer></script>
+<script src="catalog.js?v=20261024" defer></script>
+<script src="assistant.js?v=20261024" defer></script>
+<script src="main.js?v=20261024" defer></script>
 </body>
 </html>

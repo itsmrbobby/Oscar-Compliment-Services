@@ -1,0 +1,29 @@
+# Browser caching rules for Cloudflare Pages.
+# Photos are kept for 7 days (and may be shown for up to 30 more days while a fresh copy loads quietly),
+# so visitors do not wait for the same pictures on every page.
+/images/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+
+# Product list: refreshed every few minutes
+/data/*
+  Cache-Control: public, max-age=300
+
+# Site code is versioned (?v=...), so it can be kept for an hour
+/style.css
+  Cache-Control: public, max-age=3600
+/main.js
+  Cache-Control: public, max-age=3600
+/catalog.js
+  Cache-Control: public, max-age=3600
+/assistant.js
+  Cache-Control: public, max-age=3600
+/cms.js
+  Cache-Control: public, max-age=3600
+/config.js
+  Cache-Control: public, max-age=3600
+
+# The admin pages must never be kept
+/admin.html
+  Cache-Control: no-store
+/admin.js
+  Cache-Control: no-store
