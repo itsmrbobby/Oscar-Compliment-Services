@@ -8,26 +8,26 @@ You keep using **GitHub** for the code. **Cloudflare** hosts the site and runs t
 After this, at `/admin.html` you can see quote and contact requests, change product prices, edit page text and replace photos from your phone.
 Until you finish, the site works as normal and the admin page says it is not connected.
 
-## 1. Publish the site on Cloudflare Pages
+## 1. Publish the site from GitHub
 1. Sign in (or sign up, free) at https://dash.cloudflare.com
-2. **Workers & Pages → Create → Pages → Connect to Git** → choose your website repo.
-3. Framework preset: **None**. Build command: leave empty. Build output directory: the folder that contains `index.html` (use `/` if `index.html` is at the top of your repo).
-4. **Save and Deploy**. You get an address like `osca-complement.pages.dev`.
+2. **Workers & Pages → Create application → Import a repository** (Git) → choose your website repo.
+3. Leave the build command empty. The deploy command `npx wrangler deploy` is correct. These files already include `wrangler.jsonc`, which tells Cloudflare everything it needs.
+4. Save and deploy. You get an address like `oscar-compliment-services.YOURNAME.workers.dev`.
 
-> The `functions` folder must sit next to `index.html` in the repo. It is already that way in these files, so just upload everything.
+> Put **all** the files at the top of the repo, next to `index.html`: including `worker.js`, `wrangler.jsonc`, `.assetsignore` and the `functions` folder. `.assetsignore` keeps the code, the `.git` folder and these guides from being published as web pages.
+> If Cloudflare offered "Pages" instead of a Worker, that also works, but then ignore `worker.js`, `wrangler.jsonc` and `.assetsignore`, and use the Pages database binding in step 3.
 
 ## 2. Create the database
 1. **Storage & Databases → D1 → Create database** → name it `osca-db`.
-2. Open it → **Console** tab → paste the whole contents of **schema.sql** → **Execute**.
+2. Open it → **Console** tab → paste the SQL from **schema.sql** into the box → **Execute**. (Type `/tables` afterwards to check four tables exist.)
 
 ## 3. Connect the database to the site
-1. **Workers & Pages →** your Pages project **→ Settings → Bindings → Add → D1 database**.
-2. Variable name: **DB** (exactly, capitals). Database: `osca-db`. Save.
+`wrangler.jsonc` already connects it, using the name `DB` and the database named `osca-db`. If you created a **new** database, open `wrangler.jsonc` and replace the `database_id` with the one shown on the database's **Overview** page. Do not add a second binding in the dashboard, because the file is the one that counts.
 
 ## 4. Set the admin password
 1. Pick a **long passphrase** that nobody could guess (at least 12 characters; three or four random words works well). The site refuses anything shorter than 10.
-2. **Pages project → Settings → Variables and Secrets → Add**, type **Secret**, name `ADMIN_PASSWORD`, value = your passphrase. Save.
-3. **Deployments → Retry deployment** (or push any change to GitHub) so the setting takes effect.
+2. Open your Worker (**Workers & Pages →** your project **→ Settings → Variables and Secrets → Add**), type **Secret**, name `ADMIN_PASSWORD`, value = your passphrase. Save and deploy.
+3. If it was not added as a *Secret* (encrypted), add it again that way, because plain settings are wiped on each deploy.
 
 ## 5. Use it
 Open `https://YOUR-SITE/admin.html`, type the password, and the admin screen opens. There is also a small "Staff login" link in the website footer. You stay signed in for 12 hours on that device.
@@ -42,7 +42,7 @@ Open `https://YOUR-SITE/admin.html`, type the password, and the admin screen ope
 
 ## Good to know
 - **Photo caching:** the file `_headers` tells browsers to keep photos for 7 days so pages load faster. If you replace a photo by uploading a new file with the *same name* through GitHub, some visitors may see the old one for up to a week. Replacing it from the admin Photos tab updates it straight away.
-- **Custom domain later?** Add it to the Pages project. Nothing else to change.
+- **Custom domain later?** Add it to the Worker under Settings → Domains & Routes. Nothing else to change.
 - Uploaded photos are shrunk automatically and stored in the database. Removing one goes back to the file in the `images/` folder. Empty text boxes go back to the original wording.
 - Free limits (100,000 requests a day on Pages Functions, 5 million database reads a day) are far above what this site needs.
 - Quote and contact form messages are saved in the admin inbox **and** still open WhatsApp as before.

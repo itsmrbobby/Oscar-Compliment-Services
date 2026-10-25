@@ -1,0 +1,11 @@
+# Files that must NOT be published as part of the website
+.git
+.github
+.gitignore
+node_modules
+functions
+worker.js
+wrangler.jsonc
+.assetsignore
+schema.sql
+*.md
