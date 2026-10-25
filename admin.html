@@ -4,54 +4,108 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex, nofollow">
-<title>Staff area — Osca Complement Services</title>
+<meta name="theme-color" content="#0b1226">
+<title>Admin — Osca Complement Services</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
-:root{--navy:#0b1226;--navy2:#15203f;--gold:#c99a1f;--gold2:#e0b13a;--bg:#f6f2e9;--card:#fff;--line:#e6dfcf;--ink:#171a24;--mut:#6b6757;--ok:#13793a;--bad:#b3261e}
-*{box-sizing:border-box}html,body{margin:0}body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5;padding-bottom:env(safe-area-inset-bottom)}
-header{background:var(--navy);color:#fff;padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:20}
-header b{font-size:15px;white-space:nowrap}header .btn,header button{font-size:13px;padding:7px 11px!important;white-space:nowrap}header{gap:8px;min-width:0}header b{overflow:hidden;text-overflow:ellipsis}@media(max-width:600px){#who{display:none}header b em{display:none}}header b span{color:var(--gold2)}header .sp{flex:1}
-button,.btn{font:inherit;font-weight:600;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a1405;text-decoration:none;display:inline-block}
-button.ghost,.btn.ghost{background:transparent;color:inherit;border:1px solid rgba(128,128,128,.45)}header button.ghost{color:#fff;border-color:rgba(255,255,255,.4);padding:7px 12px}
-button.danger{background:var(--bad);color:#fff}button:disabled{opacity:.5;cursor:default}
-main{max-width:980px;margin:0 auto;padding:16px 16px 90px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
-.login{max-width:400px;margin:8vh auto 0}.login h1{margin:0 0 4px;font-size:22px}.login p{color:var(--mut);margin:0 0 14px}
-label{display:block;font-weight:600;font-size:13px;margin:10px 0 4px}
-input,select,textarea{width:100%;font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}textarea{min-height:90px;resize:vertical}
-nav.tabs{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 0;max-width:980px;margin:0 auto;scrollbar-width:none}
-nav.tabs button{background:#fff;color:var(--ink);border:1px solid var(--line);white-space:nowrap;padding:9px 14px}nav.tabs button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
-.badge{background:var(--bad);color:#fff;border-radius:99px;font-size:11px;padding:1px 7px;margin-left:6px}
-.msg{padding:10px 12px;border-radius:10px;margin:10px 0;font-size:14px}.msg.err{background:#fde8e6;color:var(--bad)}.msg.ok{background:#e4f5ea;color:var(--ok)}.msg.info{background:#fff6dc;color:#6a5208}
+:root{--navy:#0b1226;--navy2:#141f3d;--navy3:#1d2b52;--gold:#c99a1f;--gold2:#e2b13a;--bg:#f3f0e8;--card:#fff;--line:#e7e1d2;--ink:#161a26;--mut:#6a6a73;--ok:#12803d;--okbg:#e5f5ea;--bad:#b3261e;--badbg:#fde9e7;--warn:#8a6a0e;--warnbg:#fff4d6;--r:14px;--sh:0 1px 2px rgba(11,18,38,.05),0 6px 20px rgba(11,18,38,.06)}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.hide{display:none!important}svg{flex:none}
+/* top bar */
+.top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;height:58px;padding:0 16px;padding-top:env(safe-area-inset-top);background:var(--navy);color:#fff;border-bottom:1px solid rgba(255,255,255,.07)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}.brand b{font-size:16px;white-space:nowrap;letter-spacing:-.01em}.brand b span{color:var(--gold2)}
+.brand em{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(226,177,58,.16);color:var(--gold2);border-radius:6px;padding:3px 8px}
+.sp{flex:1}.top .btn,.top button{white-space:nowrap}.top .brand{flex:0 1 auto;overflow:hidden}@media(max-width:420px){.top{gap:6px;padding:0 10px}.top .brand b{font-size:15px}.top .btn.ghost,.top button.ghost{padding:6px 9px;font-size:12px}}
+/* buttons */
+.btn,button{font:inherit;font-weight:600;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a1405;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .08s,box-shadow .15s,opacity .15s;line-height:1.2}
+.btn:hover,button:hover{box-shadow:0 4px 14px rgba(201,154,31,.35)}.btn:active,button:active{transform:translateY(1px)}
+.btn.ghost,button.ghost{background:transparent;color:inherit;border:1px solid var(--line);box-shadow:none}
+.top .btn.ghost,.top button.ghost{color:#fff;border-color:rgba(255,255,255,.25);padding:7px 12px;font-size:13px}.top .btn.ghost:hover{background:rgba(255,255,255,.08)}
+button.danger,.btn.danger{background:var(--bad);color:#fff}button:disabled{opacity:.45;cursor:default;box-shadow:none}
+.btn.s{padding:7px 12px;font-size:13px}
+/* shell */
+.shell{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:calc(100vh - 58px)}
+.side{background:var(--navy);padding:16px 12px;display:flex;flex-direction:column;gap:4px;position:sticky;top:58px;height:calc(100vh - 58px);align-self:start}
+.side button{background:transparent;color:#aeb7d1;justify-content:flex-start;padding:11px 12px;border-radius:10px;font-weight:600;width:100%;box-shadow:none}
+.side button:hover{background:rgba(255,255,255,.06);color:#fff;box-shadow:none}.side button.on{background:var(--navy3);color:#fff;box-shadow:inset 3px 0 0 var(--gold2)}
+.side .badge,.bottom .badge{margin-left:auto}
+.badge{background:var(--bad);color:#fff;border-radius:99px;font-size:11px;font-weight:700;padding:1px 7px;min-width:20px;text-align:center}
+#panel{max-width:1000px;width:100%;margin:0 auto;padding:24px 24px 110px}
+.bottom{display:none;position:fixed;left:0;right:0;bottom:0;z-index:30;background:#fff;border-top:1px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));box-shadow:0 -6px 20px rgba(11,18,38,.08)}
+.bottom button{flex:1;flex-direction:column;gap:3px;background:transparent;color:var(--mut);font-size:11px;padding:7px 2px;position:relative;box-shadow:none;border-radius:10px}
+.bottom button.on{color:var(--navy);background:var(--warnbg)}.bottom .badge{position:absolute;top:2px;right:calc(50% - 22px);margin:0;font-size:10px;padding:0 5px;min-width:16px}
+@media(max-width:899px){.shell{display:block}.side{display:none}.bottom.on{display:flex}#panel{padding:18px 14px 120px}.top .brand em{display:none}}
+/* page header + cards */
+h1.pt{margin:2px 0 2px;font-size:24px;letter-spacing:-.02em}p.ps{margin:0 0 18px;color:var(--mut)}
+h2{margin:0 0 4px;font-size:22px;letter-spacing:-.02em}h3{margin:0 0 10px;font-size:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:14px;box-shadow:var(--sh)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:2px}
+.kpi .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--warnbg);color:var(--warn);margin-bottom:8px}.kpi.alert .ic{background:var(--badbg);color:var(--bad)}.kpi.good .ic{background:var(--okbg);color:var(--ok)}
+.kpi b{font-size:28px;line-height:1.1;letter-spacing:-.02em}.kpi span{color:var(--mut);font-size:13px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.row>*{flex:0 0 auto}.grow{flex:1 1 160px!important}
-.req{border-left:4px solid var(--gold)}.req.done{border-left-color:#b8b3a2;opacity:.75}.req h3{margin:0 0 2px;font-size:16px}.req .meta{color:var(--mut);font-size:13px}.req pre{white-space:pre-wrap;word-break:break-word;font:inherit;background:#faf7ef;border-radius:8px;padding:10px;margin:8px 0}
-.tag{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--navy2);color:#fff;border-radius:6px;padding:2px 7px;margin-right:6px}
-.prod{display:grid;grid-template-columns:1fr;gap:6px;padding:10px 0;border-bottom:1px solid var(--line)}.prod:last-child{border:0}.prod .n{font-weight:600}.prod .c{color:var(--mut);font-size:12px}.prod .f{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:6px}.prod.chg{background:#fff9e6;margin:0 -8px;padding:10px 8px;border-radius:8px}
-.ph{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}.ph img,.ph .nop{width:84px;height:64px;object-fit:cover;border-radius:8px;background:#ece6d6;flex:none;display:grid;place-items:center;font-size:11px;color:var(--mut);text-align:center}
-.save{position:sticky;bottom:10px;z-index:10;display:flex;justify-content:flex-end}.save button{box-shadow:0 8px 24px rgba(0,0,0,.25)}
-h2{margin:6px 0 10px;font-size:19px}small,.mut{color:var(--mut)}.hide{display:none!important}
+.mut,small{color:var(--mut)}.empty{text-align:center;padding:34px 10px;color:var(--mut)}.empty svg{opacity:.5;margin-bottom:8px}
+/* forms */
+label{display:block;font-weight:600;font-size:13px;margin:12px 0 5px;color:#30343f}
+input,select,textarea{width:100%;font:inherit;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink);transition:border-color .15s,box-shadow .15s}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-shadow:0 0 0 3px rgba(226,177,58,.25)}textarea{min-height:96px;resize:vertical}
+/* messages */
+.msg{padding:11px 13px;border-radius:10px;margin:10px 0;font-size:14px}.msg.err{background:var(--badbg);color:var(--bad)}.msg.ok{background:var(--okbg);color:var(--ok)}.msg.info{background:var(--warnbg);color:var(--warn)}
+#toast{position:fixed;left:50%;bottom:92px;transform:translate(-50%,20px);background:var(--navy);color:#fff;padding:12px 18px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.3);opacity:0;pointer-events:none;transition:.25s;z-index:60;max-width:90vw;font-weight:600;display:flex;gap:10px;align-items:center}
+#toast.on{opacity:1;transform:translate(-50%,0)}#toast i{width:20px;height:20px;border-radius:50%;background:var(--ok);display:grid;place-items:center;font-style:normal;font-size:13px}
+@media(min-width:900px){#toast{bottom:30px}}
+/* requests */
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;border-radius:99px;padding:3px 10px;text-transform:uppercase;letter-spacing:.04em}.pill.new{background:var(--warnbg);color:var(--warn)}.pill.done{background:var(--okbg);color:var(--ok)}
+.tag{display:inline-block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;background:var(--navy2);color:#fff;border-radius:6px;padding:2px 7px}
+.req{border-left:4px solid var(--gold)}.req.done{border-left-color:#c9c4b3}.req.done .body{opacity:.75}
+.req .top2{display:flex;gap:10px;align-items:flex-start;justify-content:space-between;flex-wrap:wrap}.req h3{margin:0}.req .meta{color:var(--mut);font-size:13px;margin-top:2px}
+.req pre{white-space:pre-wrap;word-break:break-word;font:inherit;background:#faf8f2;border:1px solid var(--line);border-radius:10px;padding:12px;margin:12px 0}
+.mini{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.mini:last-child{border:0}.mini .av{width:38px;height:38px;border-radius:50%;background:var(--navy2);color:var(--gold2);display:grid;place-items:center;font-weight:700;flex:none}.mini .tx{min-width:0;flex:1}.mini .tx b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mini .tx span{color:var(--mut);font-size:13px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* products */
+.prod{display:grid;grid-template-columns:1fr;gap:8px;padding:12px 0;border-bottom:1px solid var(--line)}.prod:last-child{border:0}.prod .n{font-weight:600}.prod .c{color:var(--mut);font-size:12px}.prod .f{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:6px}.prod.chg{background:var(--warnbg);margin:0 -10px;padding:12px 10px;border-radius:10px}
 @media(min-width:700px){.prod{grid-template-columns:1.6fr 2fr;align-items:center}}
+/* photos */
+.ph{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}.ph:last-child{border:0}
+.ph img,.ph .nop{width:92px;height:68px;object-fit:cover;border-radius:10px;background:#ece6d6;flex:none;display:grid;place-items:center;font-size:11px;color:var(--mut);text-align:center;border:1px solid var(--line)}
+.save{position:sticky;bottom:calc(86px + env(safe-area-inset-bottom));z-index:10;display:flex;justify-content:flex-end;pointer-events:none}.save button{pointer-events:auto;box-shadow:0 10px 28px rgba(11,18,38,.3);padding:12px 22px}
+@media(min-width:900px){.save{bottom:20px}}
+/* login */
+.loginwrap{min-height:calc(100vh - 58px);display:grid;place-items:center;padding:20px;background:radial-gradient(900px 400px at 80% -10%,rgba(226,177,58,.18),transparent),var(--bg)}
+.login{width:100%;max-width:400px;padding:28px}.login .lg{width:52px;height:52px;border-radius:14px;background:var(--navy);display:grid;place-items:center;margin-bottom:14px}.login h1{margin:0 0 4px;font-size:24px;letter-spacing:-.02em}.login p{color:var(--mut);margin:0 0 6px}
+.skel{height:76px;border-radius:var(--r);background:linear-gradient(90deg,#ece7da 25%,#f6f3ea 37%,#ece7da 63%);background-size:400% 100%;animation:sk 1.2s ease infinite;margin-bottom:12px}@keyframes sk{0%{background-position:100% 0}100%{background-position:0 0}}
 </style>
 </head>
 <body>
-<header><b>Osca <span>Complement</span><em style="font-style:normal"> · Staff</em></b><span class="sp"></span><a class="btn ghost hide" id="siteLink" href="index.html" style="padding:7px 12px">View site</a><button class="ghost hide" id="outBtn">Sign out</button></header>
+<header class="top">
+  <div class="brand">
+    <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="none" stroke="#e2b13a" stroke-width="2"/><path d="M16 2a14 14 0 0 1 0 28 7 7 0 0 1 0-14 7 7 0 0 0 0-14z" fill="#e2b13a"/><circle cx="16" cy="9" r="2" fill="#0b1226"/><circle cx="16" cy="23" r="2" fill="#e2b13a"/></svg>
+    <b>Osca <span>Complement</span></b><em>Admin</em>
+  </div>
+  <span class="sp"></span>
+  <a class="btn ghost s hide" id="siteLink" href="index.html" target="_blank" rel="noopener">View site</a>
+  <button class="ghost s hide" id="outBtn">Sign out</button>
+</header>
 
-<main id="loginView" class="hide">
+<main id="loginView" class="hide loginwrap">
   <div class="card login">
-    <h1>Staff login</h1><p>For authorised staff only.</p>
-    <form id="loginForm"><label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" required>
+    <div class="lg"><svg width="30" height="30" viewBox="0 0 32 32"><circle cx="16" cy="16" r="14" fill="none" stroke="#e2b13a" stroke-width="2"/><path d="M16 2a14 14 0 0 1 0 28 7 7 0 0 1 0-14 7 7 0 0 0 0-14z" fill="#e2b13a"/><circle cx="16" cy="9" r="2" fill="#0b1226"/><circle cx="16" cy="23" r="2" fill="#e2b13a"/></svg></div>
+    <h1>Welcome back</h1><p>Sign in to manage your website.</p>
+    <form id="loginForm"><label for="pw">Admin password</label><input id="pw" type="password" autocomplete="current-password" placeholder="Enter your password" required>
       <div id="loginMsg"></div>
-      <div class="row" style="margin-top:14px"><button type="submit" id="loginBtn">Sign in</button></div>
+      <button type="submit" id="loginBtn" style="width:100%;margin-top:14px">Sign in</button>
     </form>
   </div>
 </main>
 
-<main id="setupView" class="hide"><div class="card"><h2>Admin area is not connected yet</h2><p>This page needs the Cloudflare backend. Open <b>CLOUDFLARE-SETUP.md</b> (in the website files) and follow the steps, including the database connection and the admin password.</p></div></main>
+<main id="setupView" class="hide loginwrap"><div class="card login"><h1>Admin is not connected yet</h1><p>This page needs the Cloudflare backend. Open <b>CLOUDFLARE-SETUP.md</b> in the website files and follow the steps, including the database connection and the admin password.</p></div></main>
 
-<div id="app" class="hide">
-  <nav class="tabs" id="tabs"></nav>
+<div id="app" class="shell hide">
+  <nav class="side" id="tabs"></nav>
   <main id="panel"></main>
 </div>
-<script type="module" src="admin.js?v=20261025"></script>
+<nav class="bottom" id="btabs"></nav>
+<div id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="admin.js?v=20261026"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
 Static website for **Osca Complement Services**: distribution, water purification,
 building materials, engineering & construction, real estate, and frozen food.
 
-Live: https://itsmrbobby.github.io/Oscar-Compliment-Services/
+Live: https://oscar-compliment-services.oscarcomplementservices.workers.dev/
 
 ## Structure
 - `index.html`, `about.html`, `projects.html`, `distribution.html`, `contact.html`, `quote.html`

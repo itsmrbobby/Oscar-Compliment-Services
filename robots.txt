@@ -3,4 +3,4 @@ Allow: /
 Disallow: /admin.html
 Disallow: /api/
 
-Sitemap: https://itsmrbobby.github.io/Oscar-Compliment-Services/sitemap.xml
+Sitemap: https://oscar-compliment-services.oscarcomplementservices.workers.dev/sitemap.xml

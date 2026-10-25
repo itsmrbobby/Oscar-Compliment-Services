@@ -1,7 +1,18 @@
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const show = (id, on) => $(id).classList.toggle('hide', !on);
-const note = (el, cls, t) => { el.innerHTML = t ? `<div class="msg ${cls}">${esc(t)}</div>` : ''; };
+let toastT = null;
+function toast(t) { const el = $('#toast'); el.innerHTML = '<i>✓</i><span></span>'; el.lastChild.textContent = t; el.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('on'), 3200); }
+const note = (el, cls, t) => { if (cls === 'ok' && t) { el.innerHTML = ''; toast(t); return; } el.innerHTML = t ? `<div class="msg ${cls}">${esc(t)}</div>` : ''; };
+const skel = (n = 3) => '<div class="skel"></div>'.repeat(n);
+const ICON = {
+  dashboard: '<path d="M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z"/>',
+  requests: '<path d="M4 4h16v13H8l-4 4z"/><path d="M8 9h8M8 13h5"/>',
+  products: '<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
+  text: '<path d="M4 6V4h16v2M9 20h6M12 4v16"/>',
+  photos: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/>'
+};
+const ico = (k, s = 20) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
 const friendly = (e) => e.auth ? 'Your login session ended. Reload this page to sign in again.' : (e.message || 'Something went wrong.');
 const loginErr = (t) => { note($('#loginMsg'), 'err', t); };
 async function api(path, o = {}) {
@@ -10,7 +21,7 @@ async function api(path, o = {}) {
   if (r.status === 401) { showLogin('Your session ended. Please sign in again.'); throw Object.assign(new Error('Signed out'), { auth: true }); }
   const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || 'Request failed'); return j;
 }
-function showLogin(msg) { show('#app', false); show('#setupView', false); show('#loginView', true); show('#outBtn', false); show('#siteLink', false); $('#pw').value = ''; note($('#loginMsg'), msg ? 'info' : '', msg || ''); }
+function showLogin(msg) { show('#app', false); show('#setupView', false); show('#loginView', true); $('#btabs').classList.remove('on'); show('#outBtn', false); show('#siteLink', false); $('#pw').value = ''; note($('#loginMsg'), msg ? 'info' : '', msg || ''); }
 $('#loginForm').addEventListener('submit', async (e) => {
   e.preventDefault(); $('#loginBtn').disabled = true; note($('#loginMsg'), '', '');
   try {
@@ -29,31 +40,50 @@ async function boot() {
 }
 
 /* ---------- tabs ---------- */
-const TABS = [['requests', 'Requests'], ['products', 'Products & prices'], ['text', 'Page text'], ['photos', 'Photos']];
-let cur = 'requests', started = false, newCount = 0;
-function start() {
-  if (started) return; started = true; drawTabs(); go('requests');
-}
+const TABS = [['dashboard', 'Dashboard', 'Home'], ['requests', 'Requests', 'Requests'], ['products', 'Products & prices', 'Prices'], ['text', 'Page text', 'Text'], ['photos', 'Photos', 'Photos']];
+let cur = 'dashboard', started = false, newCount = 0;
+function start() { if (started) return; started = true; drawTabs(); go('dashboard'); }
 function drawTabs() {
-  $('#tabs').innerHTML = TABS.map(([k, l]) => `<button data-k="${k}" class="${k === cur ? 'on' : ''}">${l}${k === 'requests' && newCount ? `<span class="badge">${newCount}</span>` : ''}</button>`).join('');
-  $('#tabs').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => go(b.dataset.k)));
+  const badge = (k) => (k === 'requests' && newCount ? `<span class="badge">${newCount}</span>` : '');
+  $('#tabs').innerHTML = TABS.map(([k, l]) => `<button data-k="${k}" class="${k === cur ? 'on' : ''}">${ico(k)}<span>${l}</span>${badge(k)}</button>`).join('');
+  $('#btabs').innerHTML = TABS.map(([k, , s]) => `<button data-k="${k}" class="${k === cur ? 'on' : ''}">${ico(k, 22)}<span>${s}</span>${badge(k)}</button>`).join('');
+  $('#btabs').classList.add('on');
+  document.querySelectorAll('#tabs button,#btabs button').forEach((b) => b.addEventListener('click', () => go(b.dataset.k)));
 }
-function go(k) { cur = k; drawTabs(); ({ requests, products, text: pageText, photos })[k](); }
+function go(k) { cur = k; drawTabs(); window.scrollTo(0, 0); ({ dashboard, requests, products, text: pageText, photos })[k](); }
+
+/* ---------- dashboard ---------- */
+async function dashboard() {
+  const p = $('#panel'); p.innerHTML = '<h1 class="pt">Dashboard</h1><p class="ps">Welcome back. Here is how your website is doing.</p>' + skel(3);
+  try {
+    const [rq, pr, tx, ph] = await Promise.all([api('requests'), api('products'), api('text'), api('photos')]);
+    const items = rq.items || [], fresh = items.filter((i) => i.status === 'new');
+    newCount = fresh.length; drawTabs();
+    const prices = Object.keys(pr.overrides || {}).length + (pr.extra || []).length, texts = Object.keys(tx.vals || {}).length, photos = Object.keys(ph.ids || {}).length;
+    const kpi = (k, n, l, cls = '') => `<div class="kpi ${cls}"><div class="ic">${ico(k)}</div><b>${n}</b><span>${l}</span></div>`;
+    const latest = items.slice(0, 5).map((i) => `<div class="mini"><div class="av">${esc((i.name || '?').trim().charAt(0).toUpperCase())}</div><div class="tx"><b>${esc(i.name || 'No name')}</b><span>${esc(String(i.message || '').replace(/\s+/g, ' ').slice(0, 90))}</span></div><span class="pill ${i.status === 'done' ? 'done' : 'new'}">${i.status === 'done' ? 'Handled' : 'New'}</span></div>`).join('');
+    p.innerHTML = `<h1 class="pt">Dashboard</h1><p class="ps">Welcome back. Here is how your website is doing.</p>
+      <div class="kpis">${kpi('requests', fresh.length, 'New requests', fresh.length ? 'alert' : 'good')}${kpi('requests', items.length, 'Total requests')}${kpi('products', prices, 'Price changes')}${kpi('text', texts, 'Edited texts')}${kpi('photos', photos, 'Uploaded photos')}</div>
+      <div class="card"><div class="row" style="justify-content:space-between;margin-bottom:6px"><h3 style="margin:0">Latest requests</h3><button class="ghost s" data-go="requests" style="padding:7px 12px;font-size:13px">View all</button></div>${latest || '<div class="empty">No requests yet. Quote and contact requests from your website will show up here.</div>'}</div>
+      <div class="card"><h3>Quick actions</h3><div class="row"><button data-go="products">${ico('products', 18)} Update prices</button><button class="ghost" data-go="photos">${ico('photos', 18)} Change a photo</button><button class="ghost" data-go="text">${ico('text', 18)} Edit page text</button></div></div>`;
+    p.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
+  } catch (e) { p.innerHTML = `<h1 class="pt">Dashboard</h1><div class="card"><div class="msg err">${esc(friendly(e))}</div></div>`; }
+}
 
 /* ---------- requests ---------- */
 async function requests() {
-  const p = $('#panel'); p.innerHTML = '<div class="card">Loading requests…</div>';
+  const p = $('#panel'); p.innerHTML = '<h1 class="pt">Requests</h1><p class="ps">Quote, contact and chat requests from your website.</p>' + skel(3);
   try {
     const items = (await api('requests')).items;
     newCount = items.filter((i) => i.status === 'new').length; drawTabs();
-    if (!items.length) { p.innerHTML = '<div class="card"><h2>No requests yet</h2><p class="mut">Quote and contact requests from the website will appear here.</p></div>'; return; }
-    p.innerHTML = '<h2>Quote &amp; contact requests</h2>' + items.map((i) => {
+    if (!items.length) { p.innerHTML = '<h1 class="pt">Requests</h1><div class="card"><div class="empty">No requests yet.<br>Quote and contact requests from your website will appear here.</div></div>'; return; }
+    p.innerHTML = '<h1 class="pt">Requests</h1><p class="ps">' + (newCount ? newCount + ' new · ' : '') + items.length + ' in total</p>' + items.map((i) => {
       const t = i.created ? new Date(i.created).toLocaleString() : '';
       const digits = String(i.phone || '').replace(/\D/g, '').replace(/^0/, '234');
-      return `<div class="card req ${i.status === 'done' ? 'done' : ''}" data-id="${i.id}"><h3><span class="tag">${esc(i.type)}</span>${esc(i.name || 'No name')}</h3>
-        <div class="meta">${esc(t)} · ${esc(i.phone || '')} ${i.email ? '· ' + esc(i.email) : ''}</div><pre>${esc(i.message)}</pre>
-        <div class="row">${i.phone ? `<a class="btn" href="tel:${esc(i.phone)}">Call</a><a class="btn ghost" target="_blank" rel="noopener" href="https://wa.me/${digits}">WhatsApp</a>` : ''}
-        <button class="ghost" data-a="tog">${i.status === 'done' ? 'Mark as new' : 'Mark as handled'}</button><button class="ghost" data-a="del" style="color:var(--bad)">Delete</button></div></div>`;
+      return `<div class="card req ${i.status === 'done' ? 'done' : ''}" data-id="${i.id}"><div class="top2"><div><h3><span class="tag">${esc(i.type)}</span> ${esc(i.name || 'No name')}</h3>
+        <div class="meta">${esc(t)} · ${esc(i.phone || '')} ${i.email ? '· ' + esc(i.email) : ''}</div></div><span class="pill ${i.status === 'done' ? 'done' : 'new'}">${i.status === 'done' ? 'Handled' : 'New'}</span></div><pre>${esc(i.message)}</pre>
+        <div class="row">${i.phone ? `<a class="btn s" href="tel:${esc(i.phone)}">Call</a><a class="btn s ghost" target="_blank" rel="noopener" href="https://wa.me/${digits}">WhatsApp</a>` : ''}
+        <button class="ghost s" data-a="tog" style="padding:7px 12px;font-size:13px">${i.status === 'done' ? 'Mark as new' : 'Mark as handled'}</button><button class="ghost s" data-a="del" style="color:var(--bad);padding:7px 12px;font-size:13px">Delete</button></div></div>`;
     }).join('');
     p.querySelectorAll('.req').forEach((c) => {
       const id = c.dataset.id, it = items.find((x) => String(x.id) === id);
@@ -74,10 +104,10 @@ async function loadProd() {
   return PROD;
 }
 async function products() {
-  const p = $('#panel'); p.innerHTML = '<div class="card">Loading products…</div>';
+  const p = $('#panel'); p.innerHTML = '<h1 class="pt">Products &amp; prices</h1>' + skel(3);
   let P; try { P = await loadProd(); } catch (e) { p.innerHTML = `<div class="card"><div class="msg err">${esc(friendly(e))}</div></div>`; return; }
   const units = [...new Set(P.base.map((r) => r.unit))];
-  p.innerHTML = `<h2>Products &amp; prices</h2><div class="card"><div class="row"><input class="grow" id="q" placeholder="Search products…"><select class="grow" id="u"><option value="">All units</option>${units.map((u) => `<option>${esc(u)}</option>`).join('')}</select><button id="addBtn" class="ghost" style="color:var(--ink)">+ New product</button></div>
+  p.innerHTML = `<h1 class="pt">Products &amp; prices</h1><p class="ps">Change a price or availability, then tap Save. The website updates straight away.</p><div class="card"><div class="row"><input class="grow" id="q" placeholder="Search products…"><select class="grow" id="u"><option value="">All units</option>${units.map((u) => `<option>${esc(u)}</option>`).join('')}</select><button id="addBtn" class="ghost" style="color:var(--ink)">+ New product</button></div>
     <div id="addBox" class="hide" style="margin-top:12px"><div class="row"><select class="grow" id="nu">${units.map((u) => `<option>${esc(u)}</option>`).join('')}</select><input class="grow" id="nc" placeholder="Category (e.g. Fish)"></div>
     <div class="row" style="margin-top:8px"><input class="grow" id="nn" placeholder="Product name"><input class="grow" id="ns" placeholder="Sold by (e.g. kg, bag)"></div><div class="row" style="margin-top:8px"><button id="nsv">Add product</button></div></div></div>
     <div id="msg"></div><div class="card" id="list"></div><div class="save"><button id="saveBtn" disabled>Save changes</button></div>`;
@@ -122,10 +152,10 @@ async function loadText() {
   TXT = { fields: f, vals: (await api('text')).vals || {} }; return TXT;
 }
 async function pageText() {
-  const p = $('#panel'); p.innerHTML = '<div class="card">Loading…</div>';
+  const p = $('#panel'); p.innerHTML = skel(3);
   let T; try { T = await loadText(); } catch (e) { p.innerHTML = `<div class="card"><div class="msg err">${esc(friendly(e))}</div></div>`; return; }
   const names = { index: 'Home page', about: 'About page', projects: 'Projects page', consulting: 'Building Consultancy page', laundry: 'Dry Cleaning & Laundry page' };
-  p.innerHTML = `<h2>Page text</h2><p class="mut">Change the wording on your pages. Leave a box empty to go back to the original text.</p><div id="msg"></div>` +
+  p.innerHTML = `<h1 class="pt">Page text</h1><p class="ps">Change the wording on your pages. Leave a box empty to go back to the original text.</p><div id="msg"></div>` +
     PAGES.map((pg) => { const fs = T.fields.filter((x) => x.page === pg); return fs.length ? `<div class="card"><h3 style="margin-top:0">${names[pg]}</h3>${fs.map((x) => `<label>${esc(x.label)}</label><textarea data-k="${esc(x.key)}" placeholder="${esc(x.def)}">${esc(T.vals[x.key] || '')}</textarea>`).join('')}</div>` : ''; }).join('') +
     '<div class="save"><button id="saveBtn">Save text</button></div>';
   $('#saveBtn').addEventListener('click', async () => {
@@ -141,12 +171,12 @@ const SLOTS = [['Homepage cards', [['water', 'Water Purification'], ['materials'
   ['Service pages', [['construction-process', 'Engineering page'], ['consulting-process', 'Consultancy page'], ['laundry-process', 'Laundry page'], ['fleet', 'Distribution page'], ['water-feature', 'Water page'], ['materials-feature', 'Materials page'], ['realestate-feature', 'Real estate page'], ['frozen-feature', 'Frozen food page']]]];
 let IDX = null;
 async function photos() {
-  const p = $('#panel'); p.innerHTML = '<div class="card">Loading…</div>';
+  const p = $('#panel'); p.innerHTML = skel(3);
   try { if (!IDX) IDX = (await api('photos')).ids || {}; } catch (e) { p.innerHTML = `<div class="card"><div class="msg err">${esc(friendly(e))}</div></div>`; return; }
   const id = (path) => path.replace(/\//g, '__');
   const row = ([path, label]) => `<div class="ph" data-path="${esc(path)}"><div class="nop"><span>Loading</span></div><div class="grow" style="flex:1"><b>${esc(label)}</b><div class="mut" style="font-size:12px">images/${esc(path)}.jpg ${IDX[id(path)] ? '· <span style="color:var(--ok)">uploaded here</span>' : ''}</div>
     <div class="row" style="margin-top:6px"><label class="btn" style="margin:0;padding:7px 12px">Choose photo<input type="file" accept="image/*" class="hide"></label>${IDX[id(path)] ? '<button class="ghost danger" data-rm style="color:#fff;padding:7px 12px">Remove</button>' : ''}</div></div></div>`;
-  p.innerHTML = '<h2>Photos</h2><p class="mut">Choose a photo and it replaces the one on the website. Pictures are shrunk automatically so pages stay fast.</p><div id="msg"></div>' +
+  p.innerHTML = '<h1 class="pt">Photos</h1><p class="ps">Choose a photo and it replaces the one on the website. Pictures are shrunk automatically so pages stay fast.</p><div id="msg"></div>' +
     SLOTS.map(([g, items]) => `<div class="card"><h3 style="margin-top:0">${g}</h3>${items.map(row).join('')}</div>`).join('') +
     `<div class="card"><h3 style="margin-top:0">Other photo (advanced)</h3><p class="mut" style="margin-top:0">For product category pictures, type the path, e.g. <b>categories/frozen/fish</b></p><div class="row"><input class="grow" id="cp" placeholder="categories/frozen/fish"><label class="btn" style="margin:0">Choose photo<input type="file" accept="image/*" class="hide" id="cf"></label></div></div>`;
   p.querySelectorAll('.ph').forEach(async (el) => {

@@ -17,3 +17,5 @@ Link-preview image:         og-cover.jpg  (1200x630, already provided)
 Tip: export photos as JPG, under ~250 KB each, so pages stay fast on mobile data.
 
 Category tile pictures (Products page): see  categories/README.txt  — 37 exact filenames.
+
+Product photos (800x533): images/products/<SKU>.jpg  e.g. FF031.jpg  (73 frozen-food photos already added: turkey, beef, goat & sheep, seafood, ready meals, fruits, vegetables)
