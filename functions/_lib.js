@@ -6,8 +6,10 @@ async function hmac(key, msg) { const k = await crypto.subtle.importKey('raw', e
 const hex = (u) => [...u].map((b) => b.toString(16).padStart(2, '0')).join('');
 // Constant-time comparison (hashes both sides first, so length and content leak nothing through timing)
 export async function safeEqual(a, b, key) { const x = await hmac(key, String(a)), y = await hmac(key, String(b)); let d = 0; for (let i = 0; i < x.length; i++) d |= x[i] ^ y[i]; return d === 0; }
-export const pwOk = (env) => typeof env.ADMIN_PASSWORD === 'string' && env.ADMIN_PASSWORD.length >= 10;
-export async function makeSession(env, ttl = 12 * 3600e3) { const exp = Date.now() + ttl; return exp + '.' + hex(await hmac('session:' + env.ADMIN_PASSWORD, String(exp))); }
+// The password the site expects (stray spaces from copy and paste are ignored)
+export const adminPw = (env) => String(env.ADMIN_PASSWORD == null ? '' : env.ADMIN_PASSWORD).trim();
+export const pwOk = (env) => adminPw(env).length >= 10;
+export async function makeSession(env, ttl = 12 * 3600e3) { const exp = Date.now() + ttl; return exp + '.' + hex(await hmac('session:' + adminPw(env), String(exp))); }
 export const sessionCookie = (v, maxAge) => `osca_admin=${v}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=${maxAge}`;
 
 // Returns 'admin' if the request carries a valid, unexpired login cookie, otherwise null.
@@ -17,8 +19,8 @@ export async function adminSession(request, env) {
     if (!pwOk(env)) return null;
     const c = (request.headers.get('cookie') || '').match(/(?:^|;\s*)osca_admin=([^;]+)/); if (!c) return null;
     const [exp, sig] = c[1].split('.'); if (!exp || !sig || !(+exp > Date.now())) return null;
-    const want = hex(await hmac('session:' + env.ADMIN_PASSWORD, exp));
-    return (await safeEqual(sig, want, 'cmp:' + env.ADMIN_PASSWORD)) ? 'admin' : null;
+    const want = hex(await hmac('session:' + adminPw(env), exp));
+    return (await safeEqual(sig, want, 'cmp:' + adminPw(env))) ? 'admin' : null;
   } catch (e) { return null; }
 }
 export const kvGet = async (db, key, dflt) => { const r = await db.prepare('SELECT value FROM kv WHERE key = ?').bind(key).first(); try { return r ? JSON.parse(r.value) : dflt; } catch (e) { return dflt; } };
