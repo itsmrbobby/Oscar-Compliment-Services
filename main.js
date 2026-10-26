@@ -419,3 +419,22 @@
   }
 
 })();
+
+/* Photo gallery lightbox (projects page) */
+(function () {
+  var box;
+  function open(src, alt) {
+    if (!box) {
+      box = document.createElement('div'); box.className = 'lightbox'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true');
+      box.innerHTML = '<button type="button" class="lightbox-close" aria-label="Close photo">&times;</button><img alt="">';
+      document.body.appendChild(box);
+      box.addEventListener('click', function () { box.classList.remove('open'); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape') box.classList.remove('open'); });
+    }
+    var im = box.querySelector('img'); im.src = src; im.alt = alt || ''; box.classList.add('open');
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-lightbox]'); if (!b) return;
+    open(b.getAttribute('data-lightbox'), (b.querySelector('img') || {}).alt);
+  });
+})();

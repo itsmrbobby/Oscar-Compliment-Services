@@ -2560,3 +2560,103 @@ input, select, textarea { max-width: 100%; }
 .proj-filter button.on { background: #0b1226; color: #fff; border-color: #0b1226; }
 .listing-card.is-hidden { display: none; }
 .proj-empty { grid-column: 1 / -1; text-align: center; color: #6a6a73; padding: 30px 10px; }
+
+/* ============================================
+   STAFF LOGIN (nav + footer)
+   ============================================ */
+.nav-links .nav-staff a { display: inline-flex; align-items: center; gap: 8px; }
+.nav-links .nav-staff a::after { display: none; }
+.nav-links .nav-staff .staff-ico { flex-shrink: 0; }
+
+/* Desktop: a small lock button at the end of the menu */
+@media (min-width: 901px) {
+  .nav-links .nav-staff a {
+    width: 36px; height: 36px; justify-content: center; padding: 0;
+    border: 1px solid rgba(255,255,255,0.18); border-radius: 50%;
+    color: rgba(255,255,255,0.65);
+  }
+  .nav-links .nav-staff a span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .nav-links .nav-staff a:hover, .nav-links .nav-staff a:focus-visible { color: var(--accent-light); border-color: var(--accent); }
+}
+
+/* Mobile: a clear gold-outlined button below Contact */
+@media (max-width: 900px) {
+  .nav-links.open li:nth-child(7) { transition-delay: 0.44s; }
+  .nav-links li.nav-staff { margin-top: 28px; }
+  .nav-links .nav-staff a {
+    display: flex; justify-content: center; gap: 10px; width: 100%;
+    padding: 15px 18px; font-size: 16px; font-weight: 600;
+    color: var(--accent-light);
+    background: rgba(226,177,58,0.08);
+    border: 1px solid rgba(226,177,58,0.45); border-radius: 12px;
+  }
+  .nav-links .nav-staff a:hover, .nav-links .nav-staff a:active { padding-left: 18px; background: rgba(226,177,58,0.16); }
+  .nav-links .nav-staff .staff-ico { width: 18px; height: 18px; }
+}
+
+/* ============================================
+   HOME HERO — laptop & desktop: headline, search and buttons on top,
+   the truck animation along the bottom at a larger size, all within the first screen
+   ============================================ */
+@media (min-width: 901px) {
+  .hero { min-height: 100vh; min-height: 100svh; padding: 98px 0 18px; align-items: stretch; }
+  .hero-inner { display: flex; flex-direction: column; align-self: stretch; max-width: var(--max-width); margin-left: auto; margin-right: auto; }
+  .hero-label { align-self: flex-start; margin-bottom: 14px; padding: 7px 18px; }
+  .hero h1 { font-size: clamp(34px, min(4vw, 6.6vh), 62px); max-width: 960px; margin-bottom: 12px; letter-spacing: -1.4px; }
+  .hero p { font-size: 16.5px; line-height: 1.6; max-width: 600px; margin-bottom: 16px; }
+  .hero-search { margin-bottom: 12px; }
+  .hero-btns .btn { padding: 13px 30px; }
+  .truck-scene { order: 10; margin: auto 0 0; padding-top: 8px; height: clamp(205px, 29vh, 330px); flex-shrink: 0; }
+
+  .truck-1 .truck-svg { width: 420px; }
+  .truck-shadow-1 { width: 420px; }
+  .truck-2 .truck-svg { width: 250px; }
+  .truck-shadow-2 { width: 250px; }
+  .truck-3 .truck-svg { width: 160px; }
+  .truck-shadow-3 { width: 160px; }
+  .truck-1, .truck-shadow-1 { animation-name: truckDrive1L; }
+  .truck-shadow-1 { animation-name: shadowMove1L; }
+}
+@keyframes truckDrive1L { 0% { left: -470px; } 100% { left: calc(100% + 60px); } }
+@keyframes shadowMove1L { 0% { left: -470px; } 100% { left: calc(100% + 60px); } }
+
+@media (min-width: 1500px) {
+  .truck-1 .truck-svg { width: 540px; }
+  .truck-shadow-1 { width: 540px; }
+  .truck-2 .truck-svg { width: 320px; }
+  .truck-shadow-2 { width: 320px; }
+  .truck-3 .truck-svg { width: 200px; }
+  .truck-shadow-3 { width: 200px; }
+  .truck-1 { animation-name: truckDrive1XL; }
+  .truck-shadow-1 { animation-name: shadowMove1XL; }
+  .truck-2 { animation-name: truckDrive2XL; }
+  .truck-shadow-2 { animation-name: shadowMove2XL; }
+  .truck-scene { height: clamp(260px, 32vh, 380px); }
+}
+@keyframes truckDrive1XL { 0% { left: -600px; } 100% { left: calc(100% + 60px); } }
+@keyframes shadowMove1XL { 0% { left: -600px; } 100% { left: calc(100% + 60px); } }
+@keyframes truckDrive2XL { 0% { left: -340px; } 100% { left: calc(100% + 40px); } }
+@keyframes shadowMove2XL { 0% { left: -340px; } 100% { left: calc(100% + 40px); } }
+
+/* The road runs the full width of the screen */
+@media (min-width: 901px) {
+  .hero .truck-scene { width: 100vw; margin-left: calc(50% - 50vw); }
+}
+
+/* ---- Site photo gallery, lightbox and truck video (added) ---- */
+.site-gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (min-width: 901px) { .site-gallery { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; } }
+.site-gallery figure { margin: 0; }
+.site-gallery button { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: 14px; overflow: hidden; position: relative; aspect-ratio: 3 / 2; box-shadow: var(--shadow-sm, 0 2px 8px rgba(11,18,38,.08)); }
+.site-gallery img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .5s ease; }
+.site-gallery button:hover img { transform: scale(1.05); }
+.site-gallery figcaption { font-size: 13px; color: var(--muted, #5b6173); margin-top: 8px; line-height: 1.4; }
+.lightbox { position: fixed; inset: 0; z-index: 9999; background: rgba(8,12,26,.92); display: none; align-items: center; justify-content: center; padding: 18px; }
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 100%; max-height: 90vh; border-radius: 10px; }
+.lightbox-close { position: absolute; top: 14px; right: 14px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(255,255,255,.14); color: #fff; font-size: 26px; line-height: 1; cursor: pointer; }
+.video-frame { width: 100%; max-width: 340px; margin: 0 auto; border-radius: 18px; overflow: hidden; background: #0b1226; box-shadow: var(--shadow-lg, 0 18px 40px rgba(11,18,38,.25)); }
+.video-frame video { display: block; width: 100%; height: auto; max-height: 78vh; background: #0b1226; }
+.portrait-img { width: 100%; max-width: 380px; margin: 0 auto; border-radius: 18px; overflow: hidden; box-shadow: var(--shadow-lg, 0 18px 40px rgba(11,18,38,.25)); }
+.portrait-img img { display: block; width: 100%; height: auto; }
+.media-col { display: flex; align-items: center; justify-content: center; }

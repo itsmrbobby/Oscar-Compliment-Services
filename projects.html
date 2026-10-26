@@ -28,7 +28,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=20261029">
+  <link rel="stylesheet" href="style.css?v=20261026r3">
 <script>
 /* Photo loader: tries .jpg, .jpeg, .png, .webp (and CAPITAL versions) before giving up, so a photo saved as
    water.jpeg or Water.JPG still shows. If none exist the branded placeholder stays. */
@@ -69,6 +69,7 @@ i.style.display='none';},true);})();
       <li><a href="distribution.html">Distribution</a></li>
       <li><a href="products.html">Products</a></li>
       <li><a href="contact.html">Contact</a></li>
+      <li class="nav-staff"><a href="admin.html" rel="nofollow" aria-label="Staff login"><svg class="staff-ico" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg><span>Staff login</span></a></li>
     </ul>
     <a href="quote.html" class="nav-cta">Get a quote</a>
     <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu" aria-expanded="false">
@@ -99,6 +100,16 @@ i.style.display='none';},true);})();
       <button type="button" data-f="completed">Completed</button>
     </div>
     <div class="card-grid card-grid-3 reveal" data-projects>
+      <div class="listing-card" data-status="ongoing">
+        <div class="listing-img">
+          <img src="images/roofing-2-thumb.jpg" alt="Two-storey residential building with timber roof trusses installed" loading="lazy" width="800" height="533" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
+        </div>
+        <div class="listing-body">
+          <h4>Residential Building: Roofing Stage</h4>
+          <p>Block walls and ring beams complete, timber roof trusses and purlins now going on.</p>
+          <div class="listing-meta"><span class="listing-tag">Construction</span><span class="listing-price ongoing">Ongoing</span></div>
+        </div>
+      </div>
       <div class="listing-card" data-status="completed">
         <div class="listing-img">
           <img src="images/project1.jpg" alt="12-unit gated residential estate" loading="lazy" width="600" height="400" style="width:100%;height:100%;object-fit:cover;position:absolute;inset:0;">
@@ -165,6 +176,22 @@ i.style.display='none';},true);})();
 
 <section class="section section-alt">
   <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Site Progress</div>
+      <h2>Roofing stage, <span class="gradient-text">live from site.</span></h2>
+      <p>Recent photos from buildings currently at roof-truss stage. Tap a photo to enlarge it.</p>
+    </div>
+    <div class="site-gallery reveal">
+      <figure><button type="button" data-lightbox="images/roofing-1.jpg" aria-label="Enlarge photo: roof trusses on a two-storey building"><img src="images/roofing-1-thumb.jpg" alt="Timber roof trusses on a two-storey building, roofing stage" loading="lazy" width="800" height="533"></button><figcaption>Hip roof trusses in place</figcaption></figure>
+      <figure><button type="button" data-lightbox="images/roofing-2.jpg" aria-label="Enlarge photo: two roof sections under construction"><img src="images/roofing-2-thumb.jpg" alt="Two roof sections under construction beside bamboo scaffolding" loading="lazy" width="800" height="533"></button><figcaption>Two roof sections going up</figcaption></figure>
+      <figure><button type="button" data-lightbox="images/roofing-3.jpg" aria-label="Enlarge photo: building seen from the front"><img src="images/roofing-3-thumb.jpg" alt="Block building with roof framing and surrounding scaffold" loading="lazy" width="800" height="533"></button><figcaption>Full building, front view</figcaption></figure>
+      <figure><button type="button" data-lightbox="images/roofing-4.jpg" aria-label="Enlarge photo: neighbouring buildings at roofing stage"><img src="images/roofing-4-thumb.jpg" alt="Neighbouring buildings with roof framing and scaffolding" loading="lazy" width="800" height="533"></button><figcaption>Neighbouring units at roofing</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt">
+  <div class="container">
     <div class="feature-row reveal">
       <div class="feature-content">
         <div class="section-label">Capabilities</div>
@@ -224,6 +251,7 @@ i.style.display='none';},true);})();
           <li><a href="products.html">Products &amp; prices</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="quote.html">Get a quote</a></li>
+          <li><a href="admin.html" rel="nofollow">Staff login</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -243,10 +271,10 @@ i.style.display='none';},true);})();
   </div>
 </footer>
 
-<script src="config.js?v=20261029" defer></script>
-<script src="cms.js?v=20261029" defer></script>
-<script src="catalog.js?v=20261029" defer></script>
-<script src="assistant.js?v=20261029" defer></script>
-<script src="main.js?v=20261029" defer></script>
+<script src="config.js?v=20261026r3" defer></script>
+<script src="cms.js?v=20261026r3" defer></script>
+<script src="catalog.js?v=20261026r3" defer></script>
+<script src="assistant.js?v=20261026r3" defer></script>
+<script src="main.js?v=20261026r3" defer></script>
 </body>
 </html>

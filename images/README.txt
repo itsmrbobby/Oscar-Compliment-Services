@@ -19,3 +19,11 @@ Tip: export photos as JPG, under ~250 KB each, so pages stay fast on mobile data
 Category tile pictures (Products page): see  categories/README.txt  — 37 exact filenames.
 
 Product photos (800x533): images/products/<SKU>.jpg  e.g. FF031.jpg  (73 frozen-food photos already added: turkey, beef, goat & sheep, seafood, ready meals, fruits, vegetables)
+
+ADDED 26 Oct 2026 (site photos & video, already in place):
+roofing-1..4.jpg (+ -thumb.jpg)  Projects page "Site Progress" gallery (tap-to-enlarge)
+construction-process.jpg         Engineering page (roofing-stage building)
+materials-feature.jpg            Materials page (stacked roofing sheets)
+sand-delivery.jpg                Materials page "Bulk Delivery" section
+fleet.jpg                        Distribution page (tipper truck)
+../videos/osca-trucks.mp4        Distribution page video (+ osca-trucks-poster.jpg)

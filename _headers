@@ -1,8 +1,8 @@
-# Browser caching rules for Cloudflare Pages.
-# Photos are kept for 7 days (and may be shown for up to 30 more days while a fresh copy loads quietly),
-# so visitors do not wait for the same pictures on every page.
+# Browser caching rules for Cloudflare.
+# Photos are re-checked on every visit (a quick "has it changed?" question, so unchanged photos cost almost nothing),
+# which means a replaced or newly added picture always reaches visitors. The phone's photo helper (sw.js) keeps them instant.
 /images/*
-  Cache-Control: public, max-age=604800, stale-while-revalidate=2592000
+  Cache-Control: public, no-cache
 
 # Product list: refreshed every few minutes
 /data/*
@@ -31,3 +31,7 @@
 # The photo-cache helper must always be re-checked so updates reach visitors
 /sw.js
   Cache-Control: no-cache
+
+# Videos: kept for a day on the visitor's phone
+/videos/*
+  Cache-Control: public, max-age=86400
