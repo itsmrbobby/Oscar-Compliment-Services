@@ -1,0 +1,34 @@
+name: Optimise images
+
+# Shrinks big photos automatically whenever you add or change pictures in the images/ folder.
+# You can also run it by hand: GitHub -> Actions tab -> "Optimise images" -> Run workflow.
+on:
+  push:
+    paths:
+      - 'images/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  optimise:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pillow
+      - run: python tools/optimize_images.py
+      - name: Save the smaller pictures back to the repo
+        run: |
+          git config user.name "image-optimiser"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A images
+          if git diff --cached --quiet; then
+            echo "Nothing to shrink."
+          else
+            git commit -m "Optimise images"
+            git push
+          fi

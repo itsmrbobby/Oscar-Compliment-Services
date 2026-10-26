@@ -16,7 +16,7 @@ body{font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;back
 .top{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:10px;height:58px;padding:0 16px;padding-top:env(safe-area-inset-top);background:var(--navy);color:#fff;border-bottom:1px solid rgba(255,255,255,.07)}
 .brand{display:flex;align-items:center;gap:10px;min-width:0}.brand b{font-size:16px;white-space:nowrap;letter-spacing:-.01em}.brand b span{color:var(--gold2)}
 .brand em{font-style:normal;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:rgba(226,177,58,.16);color:var(--gold2);border-radius:6px;padding:3px 8px}
-.sp{flex:1}.top .btn,.top button{white-space:nowrap}.top .brand{flex:0 1 auto;overflow:hidden}@media(max-width:420px){.top{gap:6px;padding:0 10px}.top .brand b{font-size:15px}.top .btn.ghost,.top button.ghost{padding:6px 9px;font-size:12px}}
+.sp{flex:1}.top .btn,.top button{white-space:nowrap}.top .brand{flex:0 1 auto;overflow:hidden}@media(max-width:560px){#siteLink{display:none!important}}@media(max-width:420px){.top{gap:6px;padding:0 10px}.top .brand b{font-size:15px}.top .btn.ghost,.top button.ghost{padding:6px 9px;font-size:12px}}
 /* buttons */
 .btn,button{font:inherit;font-weight:600;border:0;border-radius:10px;padding:10px 16px;cursor:pointer;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a1405;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .08s,box-shadow .15s,opacity .15s;line-height:1.2}
 .btn:hover,button:hover{box-shadow:0 4px 14px rgba(201,154,31,.35)}.btn:active,button:active{transform:translateY(1px)}
@@ -70,6 +70,11 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-s
 .ph img,.ph .nop{width:92px;height:68px;object-fit:cover;border-radius:10px;background:#ece6d6;flex:none;display:grid;place-items:center;font-size:11px;color:var(--mut);text-align:center;border:1px solid var(--line)}
 .save{position:sticky;bottom:calc(86px + env(safe-area-inset-bottom));z-index:10;display:flex;justify-content:flex-end;pointer-events:none}.save button{pointer-events:auto;box-shadow:0 10px 28px rgba(11,18,38,.3);padding:12px 22px}
 @media(min-width:900px){.save{bottom:20px}}
+/* segmented switch + project cards */
+.seg{display:inline-flex;background:#ece7da;border-radius:12px;padding:3px;gap:2px}.seg button{background:transparent;color:#4a4a52;box-shadow:none;padding:8px 14px;border-radius:9px;font-size:14px}.seg button:hover{box-shadow:none;color:#000}.seg button.on{background:#fff;color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.18)}
+.seg .cnt{background:rgba(11,18,38,.08);border-radius:99px;padding:0 7px;font-size:12px}.seg.sm button{padding:7px 12px;font-size:13px}.seg.sm button.on.ongoing{background:var(--warnbg);color:var(--warn)}.seg.sm button.on.completed{background:var(--okbg);color:var(--ok)}
+.pjrow{display:flex;gap:14px}.thumb{width:96px;height:72px;border-radius:10px;background:#ece6d6;flex:none;overflow:hidden;display:grid;place-items:center;font-size:11px;color:var(--mut);border:1px solid var(--line)}.thumb img{width:100%;height:100%;object-fit:cover}.nop.thumb{width:110px;height:80px}
+.pjmain{min-width:0}.pjmain h3{margin:0 0 4px}.pjmain .meta{font-size:13px;color:var(--mut)}.pjmain p{margin:6px 0 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 /* login */
 .loginwrap{min-height:calc(100vh - 58px);display:grid;place-items:center;padding:20px;background:radial-gradient(900px 400px at 80% -10%,rgba(226,177,58,.18),transparent),var(--bg)}
 .login{width:100%;max-width:400px;padding:28px}.login .lg{width:52px;height:52px;border-radius:14px;background:var(--navy);display:grid;place-items:center;margin-bottom:14px}.login h1{margin:0 0 4px;font-size:24px;letter-spacing:-.02em}.login p{color:var(--mut);margin:0 0 6px}
@@ -106,6 +111,6 @@ input:focus,select:focus,textarea:focus{outline:0;border-color:var(--gold);box-s
 </div>
 <nav class="bottom" id="btabs"></nav>
 <div id="toast" role="status" aria-live="polite"></div>
-<script type="module" src="admin.js?v=20261026"></script>
+<script type="module" src="admin.js?v=20261028"></script>
 </body>
 </html>

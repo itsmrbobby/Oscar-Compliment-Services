@@ -27,3 +27,7 @@
   Cache-Control: no-store
 /admin.js
   Cache-Control: no-store
+
+# The photo-cache helper must always be re-checked so updates reach visitors
+/sw.js
+  Cache-Control: no-cache

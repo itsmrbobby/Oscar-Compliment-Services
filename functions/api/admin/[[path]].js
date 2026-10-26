@@ -21,6 +21,19 @@ export async function onRequest({ request, env, params }) {
     if (m === 'GET') return json(await kvGet(db, 'products', {}));
     if (m === 'PUT') { await kvSet(db, 'products', { overrides: body.overrides || {}, extra: Array.isArray(body.extra) ? body.extra.slice(0, 500) : [] }); return json({ ok: true }); }
   }
+  if (area === 'projects') {
+    if (m === 'GET') return json({ items: await kvGet(db, 'projects', null) });
+    if (m === 'PUT') {
+      const clip = (v, n) => String(v == null ? '' : v).slice(0, n).trim();
+      const items = (Array.isArray(body.items) ? body.items : []).slice(0, 60).map((p) => ({
+        id: /^[a-z0-9_-]{1,40}$/i.test(p.id || '') ? p.id : 'n' + Math.random().toString(36).slice(2, 9),
+        title: clip(p.title, 120), text: clip(p.text, 600), tag: clip(p.tag, 40) || 'Construction',
+        status: p.status === 'ongoing' ? 'ongoing' : 'completed', when: clip(p.when, 40),
+        image: /^images\/[a-z0-9_\/-]+\.(jpg|jpeg|png|webp)$/i.test(p.image || '') ? p.image : ''
+      })).filter((p) => p.title);
+      await kvSet(db, 'projects', items); return json({ ok: true, items });
+    }
+  }
   if (area === 'text') {
     if (m === 'GET') return json({ vals: await kvGet(db, 'text', {}) });
     if (m === 'PUT') { const v = {}; Object.entries(body.vals || {}).forEach(([k, x]) => { if (/^[a-z0-9_]{1,60}$/i.test(k) && typeof x === 'string' && x.trim()) v[k] = x.slice(0, 2000); }); await kvSet(db, 'text', v); return json({ ok: true }); }

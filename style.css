@@ -2550,3 +2550,13 @@ input, select, textarea { max-width: 100%; }
 /* Reveal animation: every child shows, however many there are (the first six keep their staggered delays) */
 .stagger-children.visible > * { opacity: 1; transform: translateY(0); }
 .stagger-children.visible > *:nth-child(n+7) { transition-delay: 0.6s; }
+
+/* Projects: status badges + filter */
+.listing-price.completed { color: #12803d; background: #e5f5ea; border-radius: 99px; padding: 3px 10px; font-size: 12px; font-weight: 700; }
+.listing-price.ongoing { color: #8a6a0e; background: #fff1c9; border-radius: 99px; padding: 3px 10px; font-size: 12px; font-weight: 700; }
+.proj-filter { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 0 0 26px; }
+.proj-filter button { font: inherit; font-weight: 600; font-size: 14px; padding: 9px 18px; border-radius: 999px; border: 1px solid var(--border, #e7e1d2); background: #fff; color: var(--text, #171a26); cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
+.proj-filter button:hover { border-color: #c99a1f; }
+.proj-filter button.on { background: #0b1226; color: #fff; border-color: #0b1226; }
+.listing-card.is-hidden { display: none; }
+.proj-empty { grid-column: 1 / -1; text-align: center; color: #6a6a73; padding: 30px 10px; }

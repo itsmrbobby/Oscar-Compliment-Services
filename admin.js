@@ -10,6 +10,7 @@ const ICON = {
   requests: '<path d="M4 4h16v13H8l-4 4z"/><path d="M8 9h8M8 13h5"/>',
   products: '<path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>',
   text: '<path d="M4 6V4h16v2M9 20h6M12 4v16"/>',
+  projects: '<path d="M3 21h18M5 21V7l7-4 7 4v14M9 9h1M9 13h1M9 17h1M14 9h1M14 13h1M14 17h1"/>',
   photos: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="M21 16l-5-5-9 9"/>'
 };
 const ico = (k, s = 20) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
@@ -40,7 +41,7 @@ async function boot() {
 }
 
 /* ---------- tabs ---------- */
-const TABS = [['dashboard', 'Dashboard', 'Home'], ['requests', 'Requests', 'Requests'], ['products', 'Products & prices', 'Prices'], ['text', 'Page text', 'Text'], ['photos', 'Photos', 'Photos']];
+const TABS = [['dashboard', 'Dashboard', 'Home'], ['requests', 'Requests', 'Requests'], ['products', 'Products & prices', 'Prices'], ['projects', 'Projects', 'Projects'], ['text', 'Page text', 'Text'], ['photos', 'Photos', 'Photos']];
 let cur = 'dashboard', started = false, newCount = 0;
 function start() { if (started) return; started = true; drawTabs(); go('dashboard'); }
 function drawTabs() {
@@ -50,22 +51,22 @@ function drawTabs() {
   $('#btabs').classList.add('on');
   document.querySelectorAll('#tabs button,#btabs button').forEach((b) => b.addEventListener('click', () => go(b.dataset.k)));
 }
-function go(k) { cur = k; drawTabs(); window.scrollTo(0, 0); ({ dashboard, requests, products, text: pageText, photos })[k](); }
+function go(k) { cur = k; drawTabs(); window.scrollTo(0, 0); ({ dashboard, requests, products, projects, text: pageText, photos })[k](); }
 
 /* ---------- dashboard ---------- */
 async function dashboard() {
   const p = $('#panel'); p.innerHTML = '<h1 class="pt">Dashboard</h1><p class="ps">Welcome back. Here is how your website is doing.</p>' + skel(3);
   try {
-    const [rq, pr, tx, ph] = await Promise.all([api('requests'), api('products'), api('text'), api('photos')]);
+    const [rq, pr, ph] = await Promise.all([api('requests'), api('products'), api('photos')]); let pj = { items: [] }; try { pj = await loadProj(); } catch (e) {}
     const items = rq.items || [], fresh = items.filter((i) => i.status === 'new');
     newCount = fresh.length; drawTabs();
-    const prices = Object.keys(pr.overrides || {}).length + (pr.extra || []).length, texts = Object.keys(tx.vals || {}).length, photos = Object.keys(ph.ids || {}).length;
+    const prices = Object.keys(pr.overrides || {}).length + (pr.extra || []).length, photos = Object.keys(ph.ids || {}).length, ong = pj.items.filter((x) => x.status === 'ongoing').length, don = pj.items.length - ong;
     const kpi = (k, n, l, cls = '') => `<div class="kpi ${cls}"><div class="ic">${ico(k)}</div><b>${n}</b><span>${l}</span></div>`;
     const latest = items.slice(0, 5).map((i) => `<div class="mini"><div class="av">${esc((i.name || '?').trim().charAt(0).toUpperCase())}</div><div class="tx"><b>${esc(i.name || 'No name')}</b><span>${esc(String(i.message || '').replace(/\s+/g, ' ').slice(0, 90))}</span></div><span class="pill ${i.status === 'done' ? 'done' : 'new'}">${i.status === 'done' ? 'Handled' : 'New'}</span></div>`).join('');
     p.innerHTML = `<h1 class="pt">Dashboard</h1><p class="ps">Welcome back. Here is how your website is doing.</p>
-      <div class="kpis">${kpi('requests', fresh.length, 'New requests', fresh.length ? 'alert' : 'good')}${kpi('requests', items.length, 'Total requests')}${kpi('products', prices, 'Price changes')}${kpi('text', texts, 'Edited texts')}${kpi('photos', photos, 'Uploaded photos')}</div>
+      <div class="kpis">${kpi('requests', fresh.length, 'New requests', fresh.length ? 'alert' : 'good')}${kpi('requests', items.length, 'Total requests')}${kpi('projects', ong, 'Ongoing projects')}${kpi('projects', don, 'Completed projects', 'good')}${kpi('products', prices, 'Price changes')}${kpi('photos', photos, 'Uploaded photos')}</div>
       <div class="card"><div class="row" style="justify-content:space-between;margin-bottom:6px"><h3 style="margin:0">Latest requests</h3><button class="ghost s" data-go="requests" style="padding:7px 12px;font-size:13px">View all</button></div>${latest || '<div class="empty">No requests yet. Quote and contact requests from your website will show up here.</div>'}</div>
-      <div class="card"><h3>Quick actions</h3><div class="row"><button data-go="products">${ico('products', 18)} Update prices</button><button class="ghost" data-go="photos">${ico('photos', 18)} Change a photo</button><button class="ghost" data-go="text">${ico('text', 18)} Edit page text</button></div></div>`;
+      <div class="card"><h3>Quick actions</h3><div class="row"><button data-go="products">${ico('products', 18)} Update prices</button><button class="ghost" data-go="photos">${ico('photos', 18)} Change a photo</button><button class="ghost" data-go="projects">${ico('projects', 18)} Manage projects</button><button class="ghost" data-go="text">${ico('text', 18)} Edit page text</button><a class="btn ghost" href="index.html" target="_blank" rel="noopener">View website</a></div></div>`;
     p.querySelectorAll('[data-go]').forEach((b) => b.addEventListener('click', () => go(b.dataset.go)));
   } catch (e) { p.innerHTML = `<h1 class="pt">Dashboard</h1><div class="card"><div class="msg err">${esc(friendly(e))}</div></div>`; }
 }
@@ -142,6 +143,75 @@ async function products() {
   });
 }
 
+
+let IDX = null;
+/* ---------- projects (ongoing / completed) ---------- */
+const PTYPES = ['Construction', 'Engineering', 'Real Estate', 'Renovation', 'Consultancy', 'Other'];
+let PROJ = null;
+async function loadProj() {
+  if (PROJ) return PROJ;
+  const r = await api('projects'); let items = r.items, fromSite = false;
+  if (!Array.isArray(items)) { // first time: start from the projects already on the website
+    fromSite = true;
+    try {
+      const d = new DOMParser().parseFromString(await (await fetch('projects.html', { cache: 'no-store' })).text(), 'text/html');
+      items = [...d.querySelectorAll('[data-projects] .listing-card')].map((c, i) => ({ id: 'p' + (i + 1), title: (c.querySelector('h4') || {}).textContent?.trim() || '', text: (c.querySelector('p') || {}).textContent?.trim() || '', tag: (c.querySelector('.listing-tag') || {}).textContent?.trim() || 'Construction', status: c.dataset.status === 'ongoing' ? 'ongoing' : 'completed', when: '', image: (c.querySelector('img') || {}).getAttribute?.('src') || '' }));
+    } catch (e) { items = []; }
+  }
+  PROJ = { items, dirty: false, fromSite, filter: 'all', edit: null }; return PROJ;
+}
+async function compress(file) {
+  const bmp = await new Promise((ok, no) => { const u = URL.createObjectURL(file), im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = u; });
+  let w = bmp.naturalWidth, h = bmp.naturalHeight; const m = Math.max(w, h) > 1400 ? 1400 / Math.max(w, h) : 1; w = Math.round(w * m); h = Math.round(h * m);
+  const cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.getContext('2d').drawImage(bmp, 0, 0, w, h);
+  let q = 0.84, data = cv.toDataURL('image/jpeg', q); while (data.length > 900000 && q > 0.4) { q -= 0.08; data = cv.toDataURL('image/jpeg', q); }
+  if (data.length > 950000) throw new Error('That photo is too large even after shrinking. Try a smaller one.'); return data;
+}
+async function projects() {
+  const p = $('#panel'); p.innerHTML = '<h1 class="pt">Projects</h1>' + skel(3);
+  let P; try { P = await loadProj(); if (!IDX) IDX = (await api('photos')).ids || {}; } catch (e) { p.innerHTML = `<h1 class="pt">Projects</h1><div class="card"><div class="msg err">${esc(friendly(e))}</div></div>`; return; }
+  const thumb = (x) => (IDX['project-' + x.id] ? 'api/photo/project-' + x.id + '?v=' + IDX['project-' + x.id] : x.image || '');
+  const count = (s) => P.items.filter((x) => s === 'all' || x.status === s).length;
+  function draw() {
+    const list = P.items.filter((x) => P.filter === 'all' || x.status === P.filter), e = P.edit;
+    p.innerHTML = `<h1 class="pt">Projects</h1><p class="ps">Add your projects and mark each one Ongoing or Completed. The website updates when you tap Save.</p><div id="msg"></div>
+      ${P.fromSite && !P.saved ? '<div class="msg info">These are the sample projects currently on your website. Edit or replace them with your real projects, then tap Save projects.</div>' : ''}
+      <div class="row" style="margin-bottom:14px"><div class="seg" id="flt">${[['all', 'All'], ['ongoing', 'Ongoing'], ['completed', 'Completed']].map(([k, l]) => `<button data-f="${k}" class="${P.filter === k ? 'on' : ''}">${l} <span class="cnt">${count(k)}</span></button>`).join('')}</div><span class="sp"></span><button id="addP">+ Add project</button></div>
+      ${e ? `<div class="card" id="pform"><h3>${e.isNew ? 'New project' : 'Edit project'}</h3>
+        <label>Project title</label><input id="pjTitle" value="${esc(e.title)}" placeholder="e.g. 12-unit residential estate">
+        <label>Short description</label><textarea id="pjText" placeholder="What is the project about?">${esc(e.text)}</textarea>
+        <div class="row" style="align-items:flex-start"><div class="grow"><label>Type</label><select id="pjType">${PTYPES.map((t) => `<option ${t === e.tag ? 'selected' : ''}>${t}</option>`).join('')}${PTYPES.includes(e.tag) ? '' : `<option selected>${esc(e.tag)}</option>`}</select></div>
+        <div class="grow"><label>Year or date (optional)</label><input id="pjWhen" value="${esc(e.when)}" placeholder="2025, or Expected Dec 2026"></div></div>
+        <label>Status</label><div class="seg" id="pst"><button type="button" data-s="ongoing" class="${e.status === 'ongoing' ? 'on' : ''}">Ongoing</button><button type="button" data-s="completed" class="${e.status === 'completed' ? 'on' : ''}">Completed</button></div>
+        <label>Photo</label><div class="row"><div class="nop thumb">${thumb(e) ? `<img src="${esc(thumb(e))}" alt="" onerror="this.replaceWith(document.createTextNode('No photo'))">` : 'No photo'}</div><label class="btn s ghost" style="margin:0;color:var(--ink)">Choose photo<input type="file" accept="image/*" class="hide" id="pfile"></label></div>
+        <div class="row" style="margin-top:16px"><button id="pok">${e.isNew ? 'Add project' : 'Apply changes'}</button><button class="ghost" id="pcancel">Cancel</button></div></div>` : ''}
+      ${list.length ? list.map((x) => `<div class="card pj" data-id="${esc(x.id)}"><div class="pjrow"><div class="thumb">${thumb(x) ? `<img src="${esc(thumb(x))}" alt="" onerror="this.replaceWith(document.createTextNode('No photo'))">` : '<span>No photo</span>'}</div>
+        <div class="pjmain"><h3>${esc(x.title)}</h3><div class="meta"><span class="tag">${esc(x.tag)}</span> ${x.when ? esc(x.when) : ''}</div><p class="mut">${esc(x.text)}</p></div></div>
+        <div class="row" style="margin-top:12px"><div class="seg sm" data-st>${['ongoing', 'completed'].map((s) => `<button data-s="${s}" class="${x.status === s ? 'on ' + s : ''}">${s === 'ongoing' ? 'Ongoing' : 'Completed'}</button>`).join('')}</div><span class="sp"></span>
+        <button class="ghost s" data-a="up" title="Move up" style="padding:7px 10px">▲</button><button class="ghost s" data-a="down" title="Move down" style="padding:7px 10px">▼</button><button class="ghost s" data-a="edit" style="padding:7px 12px;font-size:13px">Edit</button><button class="ghost s" data-a="del" style="color:var(--bad);padding:7px 12px;font-size:13px">Delete</button></div></div>`).join('') : '<div class="card"><div class="empty">No projects here yet. Tap “+ Add project”.</div></div>'}
+      <div class="save"><button id="saveBtn" ${P.dirty ? '' : 'disabled'}>Save projects</button></div>`;
+    p.querySelectorAll('#flt button').forEach((b) => b.addEventListener('click', () => { P.filter = b.dataset.f; draw(); }));
+    $('#addP').addEventListener('click', () => { P.edit = { id: 'n' + Date.now().toString(36), title: '', text: '', tag: 'Construction', status: 'ongoing', when: '', image: '', isNew: true }; draw(); $('#pform').scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+    if (e) {
+      p.querySelectorAll('#pst button').forEach((b) => b.addEventListener('click', () => { e.status = b.dataset.s; p.querySelectorAll('#pst button').forEach((x) => x.classList.toggle('on', x === b)); }));
+      $('#pcancel').addEventListener('click', () => { P.edit = null; draw(); });
+      const grab = () => { e.title = $('#pjTitle').value.trim(); e.text = $('#pjText').value.trim(); e.tag = $('#pjType').value; e.when = $('#pjWhen').value.trim(); };
+      $('#pfile').addEventListener('change', async (ev) => { const f = ev.target.files[0]; if (!f) return; grab(); try { note($('#msg'), 'info', 'Uploading photo…'); const data = await compress(f); const up = await api('photos/project-' + e.id, { method: 'PUT', body: { data } }); IDX['project-' + e.id] = up.updated; note($('#msg'), 'ok', 'Photo saved.'); draw(); } catch (er) { note($('#msg'), 'err', friendly(er)); } });
+      $('#pok').addEventListener('click', () => { grab(); if (!e.title) { note($('#msg'), 'err', 'Please type the project title.'); $('#pjTitle').focus(); return; } const { isNew, ...clean } = e; if (isNew) P.items.unshift(clean); else P.items = P.items.map((x) => (x.id === clean.id ? clean : x)); P.edit = null; P.dirty = true; draw(); });
+    }
+    p.querySelectorAll('.pj').forEach((c) => {
+      const id = c.dataset.id, i = P.items.findIndex((x) => x.id === id), it = P.items[i];
+      c.querySelectorAll('[data-st] button').forEach((b) => b.addEventListener('click', () => { if (it.status === b.dataset.s) return; it.status = b.dataset.s; P.dirty = true; draw(); }));
+      c.querySelector('[data-a=edit]').addEventListener('click', () => { P.edit = { ...it }; draw(); $('#pform').scrollIntoView({ behavior: 'smooth', block: 'center' }); });
+      c.querySelector('[data-a=del]').addEventListener('click', async () => { if (!confirm('Delete “' + it.title + '”?')) return; P.items.splice(i, 1); P.dirty = true; if (IDX['project-' + id]) { try { await api('photos/project-' + id, { method: 'DELETE' }); delete IDX['project-' + id]; } catch (er) {} } draw(); });
+      c.querySelector('[data-a=up]').addEventListener('click', () => { if (i > 0) { [P.items[i - 1], P.items[i]] = [P.items[i], P.items[i - 1]]; P.dirty = true; draw(); } });
+      c.querySelector('[data-a=down]').addEventListener('click', () => { if (i < P.items.length - 1) { [P.items[i + 1], P.items[i]] = [P.items[i], P.items[i + 1]]; P.dirty = true; draw(); } });
+    });
+    $('#saveBtn').addEventListener('click', async () => { $('#saveBtn').disabled = true; try { const r = await api('projects', { method: 'PUT', body: { items: P.items } }); P.items = r.items; P.dirty = false; P.fromSite = false; note($('#msg'), 'ok', 'Saved. Your website now shows these projects.'); draw(); } catch (er) { note($('#msg'), 'err', friendly(er)); $('#saveBtn').disabled = false; } });
+  }
+  draw();
+}
+
 /* ---------- page text ---------- */
 const PAGES = ['index', 'about', 'projects', 'consulting', 'laundry'];
 let TXT = null;
@@ -169,7 +239,6 @@ const SLOTS = [['Homepage cards', [['water', 'Water Purification'], ['materials'
   ['Homepage & About', [['team', 'Homepage team photo'], ['about', 'About page photo'], ['ceo', 'Founder & CEO']]],
   ['Projects', [['project1', 'Project 1'], ['project2', 'Project 2'], ['project3', 'Project 3'], ['project4', 'Project 4'], ['project5', 'Project 5'], ['project6', 'Project 6'], ['team-equipment', 'Projects team / equipment']]],
   ['Service pages', [['construction-process', 'Engineering page'], ['consulting-process', 'Consultancy page'], ['laundry-process', 'Laundry page'], ['fleet', 'Distribution page'], ['water-feature', 'Water page'], ['materials-feature', 'Materials page'], ['realestate-feature', 'Real estate page'], ['frozen-feature', 'Frozen food page']]]];
-let IDX = null;
 async function photos() {
   const p = $('#panel'); p.innerHTML = skel(3);
   try { if (!IDX) IDX = (await api('photos')).ids || {}; } catch (e) { p.innerHTML = `<div class="card"><div class="msg err">${esc(friendly(e))}</div></div>`; return; }

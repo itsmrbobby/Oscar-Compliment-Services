@@ -395,4 +395,27 @@
     }, { passive: true });
   }
 
+
+  /* Projects page: All / Ongoing / Completed filter */
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.proj-filter button'); if (!b) return;
+    var bar = b.parentElement; bar.querySelectorAll('button').forEach(function (x) { x.classList.toggle('on', x === b); });
+    applyProjectFilter(b.getAttribute('data-f'));
+  });
+  function applyProjectFilter(f) {
+    var shown = 0; document.querySelectorAll('.proj-filter ~ [data-projects] .listing-card, [data-projects] .listing-card').forEach(function (c) {
+      var ok = f === 'all' || c.getAttribute('data-status') === f; c.classList.toggle('is-hidden', !ok); if (ok) shown++;
+    });
+    var box = document.querySelector('[data-projects]'); if (!box) return;
+    var old = box.querySelector('.proj-none'); if (old) old.remove();
+    if (!shown && document.querySelector('.proj-filter')) { var p = document.createElement('p'); p.className = 'proj-empty proj-none'; p.textContent = 'No ' + f + ' projects to show right now.'; box.appendChild(p); }
+  }
+  document.addEventListener('osca:projects', function () { var on = document.querySelector('.proj-filter button.on'); if (on) applyProjectFilter(on.getAttribute('data-f')); });
+
+
+  /* Photo cache: keep pictures on the phone after the first visit */
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+  }
+
 })();

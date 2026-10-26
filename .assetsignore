@@ -9,3 +9,4 @@ wrangler.jsonc
 .assetsignore
 schema.sql
 *.md
+tools
