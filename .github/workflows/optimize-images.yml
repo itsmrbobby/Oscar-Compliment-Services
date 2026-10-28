@@ -21,11 +21,12 @@ jobs:
           python-version: '3.12'
       - run: pip install pillow
       - run: python tools/optimize_images.py
+      - run: python tools/to_webp.py
       - name: Save the smaller pictures back to the repo
         run: |
           git config user.name "image-optimiser"
           git config user.email "actions@users.noreply.github.com"
-          git add -A images
+          git add -A images *.html
           if git diff --cached --quiet; then
             echo "Nothing to shrink."
           else

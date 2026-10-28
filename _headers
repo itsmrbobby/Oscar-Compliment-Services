@@ -1,3 +1,8 @@
+# Security headers on every page and file
+/*
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  X-Content-Type-Options: nosniff
+
 # Browser caching rules for Cloudflare.
 # Photos are re-checked on every visit (a quick "has it changed?" question, so unchanged photos cost almost nothing),
 # which means a replaced or newly added picture always reaches visitors. The phone's photo helper (sw.js) keeps them instant.

@@ -164,7 +164,7 @@ async function compress(file) {
   const bmp = await new Promise((ok, no) => { const u = URL.createObjectURL(file), im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = u; });
   let w = bmp.naturalWidth, h = bmp.naturalHeight; const m = Math.max(w, h) > 1400 ? 1400 / Math.max(w, h) : 1; w = Math.round(w * m); h = Math.round(h * m);
   const cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.getContext('2d').drawImage(bmp, 0, 0, w, h);
-  let q = 0.84, data = cv.toDataURL('image/jpeg', q); while (data.length > 900000 && q > 0.4) { q -= 0.08; data = cv.toDataURL('image/jpeg', q); }
+  let q = 0.82, mt = 'image/webp', data = cv.toDataURL(mt, q); if (data.indexOf('data:image/webp') !== 0) { mt = 'image/jpeg'; q = 0.84; data = cv.toDataURL(mt, q); } while (data.length > 900000 && q > 0.4) { q -= 0.08; data = cv.toDataURL(mt, q); }
   if (data.length > 950000) throw new Error('That photo is too large even after shrinking. Try a smaller one.'); return data;
 }
 async function projects() {
@@ -250,7 +250,7 @@ async function photos() {
     `<div class="card"><h3 style="margin-top:0">Other photo (advanced)</h3><p class="mut" style="margin-top:0">For product category pictures, type the path, e.g. <b>categories/frozen/fish</b></p><div class="row"><input class="grow" id="cp" placeholder="categories/frozen/fish"><label class="btn" style="margin:0">Choose photo<input type="file" accept="image/*" class="hide" id="cf"></label></div></div>`;
   p.querySelectorAll('.ph').forEach(async (el) => {
     const path = el.dataset.path, box = el.querySelector('.nop');
-    try { const src = IDX[id(path)] ? 'api/photo/' + id(path) + '?v=' + IDX[id(path)] : 'images/' + path + '.jpg'; const im = new Image(); im.onload = () => box.replaceWith(im); im.onerror = () => { box.innerHTML = '<span>No photo yet</span>'; }; im.src = src; } catch (e) { box.innerHTML = '<span>—</span>'; }
+    try { const src = IDX[id(path)] ? 'api/photo/' + id(path) + '?v=' + IDX[id(path)] : 'images/' + path + '.webp'; const im = new Image(); im.onload = () => box.replaceWith(im); im.onerror = () => { if (!im.dataset.t && !IDX[id(path)]) { im.dataset.t = 1; im.src = 'images/' + path + '.jpg'; } else box.innerHTML = '<span>No photo yet</span>'; }; im.src = src; } catch (e) { box.innerHTML = '<span>—</span>'; }
     el.querySelector('input[type=file]').addEventListener('change', (e) => upload(path, e.target.files[0]));
     const rm = el.querySelector('[data-rm]'); if (rm) rm.addEventListener('click', async () => { if (!confirm('Remove the uploaded photo? The website goes back to the file in the images folder.')) return; try { await api('photos/' + id(path), { method: 'DELETE' }); delete IDX[id(path)]; photos(); } catch (er) { note($('#msg'), 'err', friendly(er)); } });
   });
@@ -261,7 +261,7 @@ async function photos() {
       const bmp = await new Promise((ok, no) => { const u = URL.createObjectURL(file), im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = u; });
       let w = bmp.naturalWidth, h = bmp.naturalHeight; const m = Math.max(w, h) > 1400 ? 1400 / Math.max(w, h) : 1; w = Math.round(w * m); h = Math.round(h * m);
       const cv = document.createElement('canvas'); cv.width = w; cv.height = h; cv.getContext('2d').drawImage(bmp, 0, 0, w, h);
-      let q = 0.84, data = cv.toDataURL('image/jpeg', q); while (data.length > 900000 && q > 0.4) { q -= 0.08; data = cv.toDataURL('image/jpeg', q); }
+      let q = 0.82, mt = 'image/webp', data = cv.toDataURL(mt, q); if (data.indexOf('data:image/webp') !== 0) { mt = 'image/jpeg'; q = 0.84; data = cv.toDataURL(mt, q); } while (data.length > 900000 && q > 0.4) { q -= 0.08; data = cv.toDataURL(mt, q); }
       if (data.length > 950000) throw new Error('That photo is too large even after shrinking. Try a smaller one.');
       const up = await api('photos/' + id(path), { method: 'PUT', body: { data } }); IDX[id(path)] = up.updated;
       note($('#msg'), 'ok', 'Photo saved. The website now uses it.'); photos();
