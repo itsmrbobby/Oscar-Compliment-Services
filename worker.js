@@ -12,7 +12,7 @@ const bad = () => new Response(JSON.stringify({ error: 'Method not allowed' }), 
 // Security headers for the API responses (static pages get theirs from _headers).
 const SEC = { 'strict-transport-security': 'max-age=31536000; includeSubDomains', 'x-content-type-options': 'nosniff' };
 
-async function handle(req, env) {
+async function handle(req, env, ctx) {
     const url = new URL(req.url);
     if (!url.pathname.startsWith('/api/')) return env.ASSETS.fetch(req);
     const seg = url.pathname.slice(5).split('/').filter(Boolean), m = req.method;
@@ -20,7 +20,7 @@ async function handle(req, env) {
       switch (seg[0]) {
         case 'content': return m === 'GET' ? content.onRequestGet({ env, request: req }) : bad();
         case 'photo': return m === 'GET' && seg[1] ? photo.onRequestGet({ env, request: req, params: { id: seg[1] } }) : nf();
-        case 'request': return m === 'POST' ? request.onRequestPost({ env, request: req }) : bad();
+        case 'request': return m === 'POST' ? request.onRequestPost({ env, request: req, ctx }) : bad();
         case 'login': return m === 'POST' ? login.onRequestPost({ env, request: req }) : bad();
         case 'logout': return m === 'POST' ? logout.onRequestPost({ env, request: req }) : bad();
         case 'admin': return admin.onRequest({ env, request: req, params: { path: seg.slice(1) } });
@@ -32,8 +32,8 @@ async function handle(req, env) {
 }
 
 export default {
-  async fetch(req, env) {
-    const res = await handle(req, env);
+  async fetch(req, env, ctx) {
+    const res = await handle(req, env, ctx);
     if (!new URL(req.url).pathname.startsWith('/api/')) return res;
     const out = new Response(res.body, res);
     for (const k in SEC) out.headers.set(k, SEC[k]);

@@ -1,7 +1,8 @@
 import { json } from '../_lib.js';
+import { notifyNewRequest } from '../_notify.js';
 // Public: the quote form, contact form and chat bot post new requests here.
 const clip = (v, n) => String(v == null ? '' : v).slice(0, n);
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost({ request, env, ctx }) {
   if (!env.DB) return json({ error: 'database not connected' }, 503);
   let b; try { b = await request.json(); } catch (e) { return json({ error: 'bad request' }, 400); }
   const type = ['quote', 'contact', 'chat'].includes(b.type) ? b.type : 'contact';
@@ -12,5 +13,7 @@ export async function onRequestPost({ request, env }) {
   if (recent && recent.n >= 8) return json({ error: 'too many requests, try again later' }, 429);
   await env.DB.prepare('INSERT INTO requests (type, page, name, phone, email, message, status, ip, created) VALUES (?, ?, ?, ?, ?, ?, \'new\', ?, ?)')
     .bind(type, clip(b.page, 60), name, clip(b.phone, 60), clip(b.email, 150), message, ip, now).run();
+  const rec = { type, page: clip(b.page, 60), name, phone: clip(b.phone, 60), email: clip(b.email, 150), message };
+  if (ctx && ctx.waitUntil) ctx.waitUntil(notifyNewRequest(env, rec)); else await notifyNewRequest(env, rec);
   return json({ ok: true });
 }

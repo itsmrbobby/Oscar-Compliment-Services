@@ -47,3 +47,13 @@ Open `https://YOUR-SITE/admin.html`, type the password, and the admin screen ope
 - Free limits (100,000 requests a day on Pages Functions, 5 million database reads a day) are far above what this site needs.
 - Quote and contact form messages are saved in the admin inbox **and** still open WhatsApp as before.
 - If you ever want one-time email codes instead of a password, Cloudflare Access can be added later (it needs a card on file, with no charge on the free plan).
+
+## Email alerts for new requests (optional)
+New quote, contact and chat requests always land in the admin inbox. To also get an email each time:
+1. Make a free account at resend.com, create an API key.
+2. In Cloudflare open your Worker, Settings, Variables and Secrets, and add:
+   - `RESEND_API_KEY` as a **Secret** (the key from Resend)
+   - `NOTIFY_EMAIL` as text: the address that should receive alerts (several allowed, separated by commas)
+   - `NOTIFY_FROM` (optional): e.g. `Osca Website <alerts@yourdomain.com>` once your domain is verified in Resend
+3. Deploy again.
+Until you verify your own domain in Resend, alerts are sent from Resend's test address and can only go to the email you used to open the Resend account. If the settings are missing, the site simply skips the email and everything else works as before.
